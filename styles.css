@@ -2,8 +2,23 @@
 body, html {
     margin: 0;
     padding: 0;
+    height: 100%;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+    background-color:#111
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  p {
+    color:aliceblue;
   }
   
   /* Navbar */
@@ -134,7 +149,6 @@ footer {
   color: white;
   text-decoration: none;
   font-size: 1rem;
-  font-weight: bold;
   letter-spacing: 2px;
   transition: color 0.3s ease;
 }

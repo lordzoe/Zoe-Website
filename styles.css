@@ -5,7 +5,8 @@ body, html {
     height: 100%;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-    background-color:#111
+    background-color:#111;
+    overflow-x: hidden;
   }
 
   body {
@@ -163,5 +164,109 @@ footer {
   letter-spacing: 1px;
 }
 
+/* Main Content Container */
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+}
 
+/* Individual Content Box */
+.content-box {
+  position: relative;
+  width: 300px;
+  height: 400px;
+  overflow: hidden;
+  background-color: #222;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.content-box:hover {
+  transform: scale(1.05);
+  background-color: #333;
+}
+
+.content-image img {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+}
+
+.content-info {
+  padding: 10px;
+  text-align: center;
+}
+
+.content-info h2 {
+  margin: 10px 0 5px;
+  font-size: 1.3rem;
+}
+
+.content-info p {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Blur Overlay */
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  display: none;
+  z-index: 10;
+}
+
+.blur-overlay.active {
+  display: block;
+}
+
+/* Expanded Box Styling */
+.content-box.expanded {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  z-index: 1000;
+  background-color: #222;
+  transform: scale(1);
+  overflow-y: auto;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.content-details {
+  display: none;
+  padding: 20px;
+}
+
+.content-box.expanded .content-details {
+  display: block;
+}
+
+.content-box.expanded img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.content-box.expanded h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.content-box.expanded p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
   

@@ -281,3 +281,76 @@ footer {
   z-index: 0; /* Ensures it stays behind other content */
   pointer-events: none; /* Allows clicks to pass through */
 }
+
+/* About Page Container */
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Headshot Image */
+.about-image {
+  position: absolute;
+  top: 110px; 
+  left: 30px; 
+  width: 350px; 
+  height: 350px; 
+  border-radius: 50%; 
+  border: 8px solid #ffffff; 
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3); 
+}
+
+.about-image img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  object-position: 65% center; 
+}
+
+/* About Header Title */
+.about-header {
+  position: absolute; /* Allows precise positioning */
+  top: 110px; /* Moves the header up */
+  left: 475px; /* Moves the header to the left */
+  text-align: left; 
+}
+
+.about-header h1 {
+  font-size: 3rem; 
+  color: #fff;
+  margin: 0;
+}
+
+/* About Text */
+.about-text {
+  position: absolute; /* Allows precise positioning relative to the page */
+  top: 190px; /* Places it below the About Me header */
+  left: 475px; /* Aligns with the header */
+  text-align: justify; /* Align text to the left */
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  max-width: 920px;
+  line-height: 1.6;
+
+  /* Box Styling */
+  background-color: #222; /* Same background color as content boxes */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  padding: 0px 20px;
+  line-height: 1.2;
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover Effect (Optional) */
+.about-text:hover {
+  transform: scale(1.05); /* Slight zoom effect */
+  background-color: #333; /* Darker background on hover */
+}

@@ -6,7 +6,6 @@ body, html {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     background-color:#111;
-    overflow-x: hidden;
   }
 
   body {
@@ -64,17 +63,13 @@ body, html {
     height: 100%;
     background-color: #111;
     display: flex;
-    justify-content: flex-start; /* Align items to the left */
-    align-items: flex-start; /* Align items to the top */
-    padding-left: 20%; /* Move items a quarter way from the left */
-    padding-top: 10%; /* Raise items by adding space from the top */
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    padding-left: 20%; 
+    padding-top: 10%; 
     transform: translateY(-100%);
     transition: transform 0.5s ease;
     z-index: 5;
-  }
-  
-  .nav-links {
-    text-align: center;
   }
   
   .nav-links a {

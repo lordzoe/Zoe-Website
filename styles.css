@@ -268,8 +268,8 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; /* Ensures it stays behind other content */
-  pointer-events: none; /* Allows clicks to pass through */
+  z-index: 0; 
+  pointer-events: none; 
 }
 
 /* About Page Container */
@@ -307,9 +307,9 @@ footer {
 
 /* About Header Title */
 .about-header {
-  position: absolute; /* Allows precise positioning */
-  top: 110px; /* Moves the header up */
-  left: 475px; /* Moves the header to the left */
+  position: absolute; 
+  top: 110px; 
+  left: 475px; 
   text-align: left; 
 }
 
@@ -321,22 +321,22 @@ footer {
 
 /* About Text */
 .about-text {
-  position: absolute; /* Allows precise positioning relative to the page */
-  top: 190px; /* Places it below the About Me header */
-  left: 475px; /* Aligns with the header */
-  text-align: justify; /* Align text to the left */
+  position: absolute; 
+  top: 190px; 
+  left: 475px; 
+  text-align: justify; 
   font-size: 1.2rem;
   color: #f0f0f0;
   max-width: 920px;
   line-height: 1.6;
 
   /* Box Styling */
-  background-color: #222; /* Same background color as content boxes */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  background-color: #222; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
   padding: 0px 20px;
   line-height: 1.2;
-  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth hover effect */
+  transition: transform 0.3s ease, background-color 0.3s ease; 
 }
 
 /* Hover Effect */
@@ -458,4 +458,79 @@ footer {
   display: none; 
 }
 
+/* Speaking Page Container */
+.speaking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 50px 50px;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+/* Speaking Header Title */
+.speaking-header {
+  position: absolute; 
+  top: 110px; 
+  left: 50px;  
+  text-align: left; 
+}
+
+.speaking-header h1 {
+  font-size: 3rem; 
+  color: #fff;
+  margin: 0;
+}
+
+.speaking-text {
+  position: absolute;
+  top: 190px; 
+  left: 50px;
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  max-width: 1300px;
+  line-height: 1.6;
+  background-color: #222; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+  padding: 0px 20px;
+  line-height: 1.2;
+  transition: transform 0.3s ease, background-color 0.3s ease; 
+}
+
+/* List Styling */
+.speaking-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 40px;
+}
+
+.speaking-list li {
+  background-color: #222;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  padding: 20px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.speaking-list li p {
+  margin: 5px 0;
+  color: #f0f0f0;
+}
+
+.speaking-list li p strong {
+  color: #fff; 
+}
+
+.speaking-list a {
+  color: #f0f0f0;
+  text-decoration: underline;
+  word-break: break-all; 
+}
+
+.speaking-list a:hover {
+  color: #f39c12;
+}

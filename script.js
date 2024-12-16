@@ -155,3 +155,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const banner = document.getElementById("navbar-banner");
+  let lastScrollTop = 0;
+
+  window.addEventListener("scroll", function () {
+    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+    if (scrollTop > lastScrollTop) {
+      // Scroll Down: Hide Banner
+      banner.classList.add("hidden");
+    } else {
+      // Scroll Up: Show Banner
+      banner.classList.remove("hidden");
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Prevent negative values
+  });
+});

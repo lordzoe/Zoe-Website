@@ -16,7 +16,7 @@
 
     <!-- Main Content -->
     <main>
-        <div class="index-header">
+        <div class="news-header">
             <h1>In the News</h1>
         </div>
         <section class="content-container">

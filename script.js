@@ -125,3 +125,33 @@ function closeBox() {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
   document.querySelector('.blur-overlay').classList.remove('active');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Get the lightbox elements
+  const lightbox = document.getElementById('image-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  // Get all mosaic images
+  const mosaicImages = document.querySelectorAll('.image-mosaic img');
+
+  // Add click event to each mosaic image to open the lightbox
+  mosaicImages.forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src; // Set the clicked image URL
+      lightbox.classList.add('active');
+    });
+  });
+
+  // Close the lightbox when clicking on the close button
+  lightboxClose.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
+
+  // Optional: Close the lightbox when clicking outside the image
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      lightbox.classList.remove('active');
+    }
+  });
+});

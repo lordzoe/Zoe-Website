@@ -24,16 +24,18 @@
             <img src="images/homepage_image.jpg" alt="Zoé Victoria Lord">
         </div>
 
-        <!-- Right Text Section -->
-        <div class="index-text">
-            <h1>Welcome to my space. My name is</h1>
-            <h2>Zoé Victoria Lord</h2>
-            <p>
-                Ever since I was young, I have been fascinated by the complexities of science, engineering, 
-                and exploration. Driven by curiosity and ambition, I strive to learn, grow, and contribute 
-                to fields that inspire humanity to look beyond. Please enjoy exploring my page and learning 
-                more about my journey.
-            </p>
+    <!-- Right Text Section -->
+        <div class="index-content">
+            <div class="index-text">
+                <h1>Welcome to my space. My name is</h1>
+                <h2>Zoé Victoria Lord</h2>
+                <p>
+                    Ever since I was young, I have been fascinated by the complexities of science, engineering, 
+                    and exploration. Driven by curiosity and ambition, I strive to learn, grow, and contribute 
+                    to fields that inspire humanity to look beyond. Please enjoy exploring my page and learning 
+                    more about my journey.
+                </p>
+            </div>
         </div>
     </main>
 

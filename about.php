@@ -17,7 +17,7 @@
     <main class="about-container">
     <!-- Headshot Image -->
     <div class="about-image">
-        <img src="headshot_image.jpg" alt="Zoé Victoria Lord">
+        <img src="images/headshot_image.jpg" alt="Zoé Victoria Lord">
     </div>
 
     <!-- Header Title -->

@@ -64,8 +64,10 @@ body, html {
     height: 100%;
     background-color: #111;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start; /* Align items to the left */
+    align-items: flex-start; /* Align items to the top */
+    padding-left: 20%; /* Move items a quarter way from the left */
+    padding-top: 10%; /* Raise items by adding space from the top */
     transform: translateY(-100%);
     transition: transform 0.5s ease;
     z-index: 5;
@@ -349,8 +351,104 @@ footer {
   transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth hover effect */
 }
 
-/* Hover Effect (Optional) */
+/* Hover Effect */
 .about-text:hover {
-  transform: scale(1.05); /* Slight zoom effect */
-  background-color: #333; /* Darker background on hover */
+  transform: scale(1.05); 
+  background-color: #333; 
 }
+
+/* Contact Page Container */
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Contact Headshot Image */
+.contact-image {
+  position: absolute;
+  top: 110px; 
+  left: 30px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  border: 8px solid #ffffff;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
+}
+
+.contact-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 65% center;
+}
+
+/* Contact Header */
+.contact-header {
+  position: absolute;
+  top: 110px; 
+  left: 475px;
+  text-align: left;
+}
+
+.contact-header h1 {
+  font-size: 3rem;
+  color: #fff;
+  margin: 0;
+}
+
+/* Contact Text */
+.contact-box {
+  position: absolute;
+  top: 190px; 
+  left: 475px;
+  text-align: justify;
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  max-width: 920px;
+  line-height: 1.6;
+}
+
+.contact-box p {
+  margin: 10px 0; 
+}
+
+/* Center Email Address */
+.contact-box p strong {
+  display: block; 
+  text-align: center; 
+  margin: 15px 0; 
+  font-size: 1.4rem; 
+  color: #ffffff; 
+}
+
+/* Social Container */
+.contact-social-container {
+  position: absolute;
+  top: 350px; 
+  left: 475px; 
+  display: flex; 
+  flex-direction: row; 
+  gap: 20px; 
+}
+
+/* Social Logos */
+.contact-social-logo {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.contact-social-logo:hover {
+  transform: scale(1.2); /* Slight zoom on hover */
+}
+
+
+

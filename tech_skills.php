@@ -16,8 +16,8 @@
 
     <!-- Main Content -->
     <main>
-        <div class="index-header">
-            <h1>Research and Activities</h1>
+        <div class="tech-header">
+            <h1>Technical Skills</h1>
         </div>
     </main>
 

@@ -16,9 +16,9 @@
 
     <!-- Main Content -->
     <main>
-        <h2>Welcome to Zoé Victoria Lord's website</h2>
-        <p>Here you will find information about me and my projects.</p>
-
+        <div class="index-header">
+            <h1>Research and Activities</h1>
+        </div>
         <section class="content-container">
 
             <!-- Content Box 1 -->

@@ -130,13 +130,6 @@ footer {
   z-index: 5;
 }
 
-.footer-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-  background-color: black; /* Placeholder Image */
-}
-
 .footer-panel {
   background-color: #0f4c75;
   padding: 10px 0;
@@ -447,8 +440,27 @@ footer {
 }
 
 .contact-social-logo:hover {
-  transform: scale(1.2); /* Slight zoom on hover */
+  transform: scale(1.2); 
 }
 
+/* Index Page Header Title */
+.index-header {
+  position: relative; 
+  margin: 110px 0 20px; 
+  text-align: left; 
+  left: 50px; 
+  z-index: 2; 
+}
+
+.index-header h1 {
+  font-size: 3rem; 
+  color: #fff; 
+  margin: 0; 
+  padding: 10px 0; 
+}
+
+.fullscreen-nav.active ~ main .index-header {
+  display: none; 
+}
 
 

@@ -10,6 +10,9 @@
     <!-- Navigation -->
     <?php include 'navigation.html'; ?>
 
+    <!-- Animated Background -->
+    <canvas id="orb-canvas"></canvas>
+
     <!-- About Section -->
     <main>
         <h1>About Me</h1>

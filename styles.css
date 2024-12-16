@@ -183,10 +183,17 @@ footer {
   background-color: #333;
 }
 
-.content-image img {
+.content-image {
   width: 100%;
-  height: 60%;
+  height: 60%; 
+  overflow: hidden; 
+}
+
+.content-image img, .content-image video {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 0; 
 }
 
 .content-info {
@@ -339,26 +346,31 @@ footer {
 .about-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; 
-  position: relative;
-  margin: 0;
-  padding: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
   box-sizing: border-box;
+  margin: 50px; /* Adds spacing around content similar to the speaking page */
+  padding-top: 110px; /* Simulates original top spacing for image/header */
+}
+
+/* Layout Wrapper for Image and Text */
+.about-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px; /* Space between image and text content */
+  width: 100%;
+  max-width: 1300px; /* Adjust if you want a narrower content area */
 }
 
 /* Headshot Image */
 .about-image {
-  position: absolute;
-  top: 110px; 
-  left: 30px; 
   width: 350px; 
   height: 350px; 
   border-radius: 50%; 
   border: 8px solid #ffffff; 
   overflow: hidden;
-  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
+  flex-shrink: 0; /* Keeps image from shrinking */
 }
 
 .about-image img {
@@ -368,37 +380,38 @@ footer {
   object-position: 65% center; 
 }
 
+/* About Details (Header + Text) */
+.about-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 920px;
+  color: #fff;
+}
+
 /* About Header Title */
 .about-header {
-  position: absolute; 
-  top: 110px; 
-  left: 475px; 
-  text-align: left; 
+  text-align: left;
+  margin-bottom: 30px; /* Space between the header and the text box */
 }
 
 .about-header h1 {
-  font-size: 3rem; 
+  font-size: 3rem;
   color: #fff;
   margin: 0;
 }
 
 /* About Text */
 .about-text {
-  position: absolute; 
-  top: 190px; 
-  left: 475px; 
   text-align: justify; 
   font-size: 1.2rem;
   color: #f0f0f0;
-  max-width: 920px;
-  line-height: 1.6;
-
-  /* Box Styling */
+  line-height: 1.2;
+  
   background-color: #222; 
   border-radius: 10px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
-  padding: 0px 20px;
-  line-height: 1.2;
+  padding: 0px 20px; 
   transition: transform 0.3s ease, background-color 0.3s ease; 
 }
 
@@ -412,26 +425,32 @@ footer {
 .contact-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* Full viewport height */
+  align-items: flex-start;
+  justify-content: flex-start;
   position: relative;
-  margin: 0;
-  padding: 0;
+  margin: 50px; /* Add some outer spacing similar to about/speaking pages */
+  padding-top: 110px; /* Simulate the original vertical offset */
   box-sizing: border-box;
+}
+
+/* Layout wrapper for image and contact details */
+.contact-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px; /* Space between image and details */
+  width: 100%;
+  max-width: 1300px;
 }
 
 /* Contact Headshot Image */
 .contact-image {
-  position: absolute;
-  top: 110px; 
-  left: 30px;
   width: 350px;
   height: 350px;
   border-radius: 50%;
   border: 8px solid #ffffff;
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
+  flex-shrink: 0; /* Keeps image from shrinking */
 }
 
 .contact-image img {
@@ -441,12 +460,19 @@ footer {
   object-position: 65% center;
 }
 
+/* Contact Details (Header, Text, Social Links) */
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 920px;
+  color: #fff;
+}
+
 /* Contact Header */
 .contact-header {
-  position: absolute;
-  top: 110px; 
-  left: 475px;
   text-align: left;
+  margin-bottom: 30px; /* Space between header and contact box */
 }
 
 .contact-header h1 {
@@ -455,42 +481,35 @@ footer {
   margin: 0;
 }
 
-/* Contact Text */
+/* Contact Text Box */
 .contact-box {
-  position: absolute;
-  top: 190px; 
-  left: 475px;
   text-align: justify;
   font-size: 1.2rem;
   color: #f0f0f0;
-  max-width: 920px;
   line-height: 1.6;
+  margin-bottom: 30px; /* Space between the text and social container */
 }
 
 .contact-box p {
-  margin: 10px 0; 
+  margin: 10px 0;
 }
 
 /* Center Email Address */
 .contact-box p strong {
-  display: block; 
-  text-align: center; 
-  margin: 15px 0; 
-  font-size: 1.4rem; 
-  color: #ffffff; 
+  display: block;
+  text-align: center;
+  margin: 15px 0;
+  font-size: 1.4rem;
+  color: #ffffff;
 }
 
 /* Social Container */
 .contact-social-container {
-  position: absolute;
-  top: 350px; 
-  left: 475px; 
-  display: flex; 
-  flex-direction: row; 
-  gap: 20px; 
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
-/* Social Logos */
 .contact-social-logo {
   width: 50px;
   height: 50px;
@@ -498,7 +517,7 @@ footer {
 }
 
 .contact-social-logo:hover {
-  transform: scale(1.2); 
+  transform: scale(1.2);
 }
 
 /* Index Page Header Title */
@@ -525,42 +544,45 @@ footer {
 .speaking-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start; /* Keep content aligned to the left as before */
+  justify-content: flex-start;
   position: relative;
-  margin: 50px 50px;
-  padding: 0;
+  margin: 50px;       /* Retain horizontal spacing */
+  padding-top: 180px; /* Push content down to simulate original top positioning */
   box-sizing: border-box;
 }
 
 /* Speaking Header Title */
 .speaking-header {
-  position: absolute; 
-  top: 110px; 
-  left: 50px;  
-  text-align: left; 
+  /* Removed position:absolute and top/left */
+  /* The container's padding and margins now control vertical positioning */
+  text-align: left;
+  max-width: 1300px; /* Same content width as speaking-text for consistency */
+  width: 100%;
+  margin-bottom: 80px; /* Space between header and text, simulating original gap */
+  margin-top: -110px;
 }
 
 .speaking-header h1 {
-  font-size: 3rem; 
+  font-size: 3rem;
   color: #fff;
   margin: 0;
 }
 
+/* Speaking Text */
 .speaking-text {
-  position: absolute;
-  top: 190px; 
-  left: 50px;
+  /* Removed position:absolute and top/left */
+  /* Now it flows naturally below the header */
   font-size: 1.2rem;
   color: #f0f0f0;
   max-width: 1300px;
   line-height: 1.6;
-  background-color: #222; 
-  border-radius: 10px; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
-  padding: 0px 20px;
-  line-height: 1.2;
-  transition: transform 0.3s ease, background-color 0.3s ease; 
+  background-color: #222;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px; /* Added padding to ensure nice spacing inside the box */
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  margin: 0;     /* Start right below header due to margin-bottom on header */
 }
 
 /* List Styling */
@@ -591,7 +613,7 @@ footer {
 .speaking-list a {
   color: #f0f0f0;
   text-decoration: underline;
-  word-break: break-all; 
+  word-break: break-all;
 }
 
 .speaking-list a:hover {

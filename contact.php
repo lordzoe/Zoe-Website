@@ -12,36 +12,39 @@
 
     <!-- Contact Page Content -->
     <main class="contact-container">
-        <!-- Headshot Image -->
-        <div class="contact-image">
-            <img src="images/headshot_image.jpg" alt="Zoé Victoria Lord Headshot">
+        <div class="contact-content">
+            <!-- Headshot Image -->
+            <div class="contact-image">
+                <img src="images/headshot_image.jpg" alt="Zoé Victoria Lord Headshot">
+            </div>
+
+            <!-- Contact Details -->
+            <div class="contact-details">
+                <!-- Contact Header -->
+                <div class="contact-header">
+                    <h1>Contact Me</h1>
+                </div>
+
+                <!-- Contact Text -->
+                <div class="contact-box">
+                    <p>If you'd like to get in touch, feel free to email me at:</p>
+                    <p><strong>22zvl@queensu.ca</strong></p>
+                    <p>Connect with me here:</p>
+                </div>
+
+                <div class="contact-social-container">
+                    <!-- LinkedIn Logo -->
+                    <a href="https://www.linkedin.com/in/lordzoe/" target="_blank">
+                        <img src="images/linkedin_logo.png" alt="LinkedIn Logo" class="contact-social-logo">
+                    </a>
+
+                    <!-- GitHub Logo -->
+                    <a href="https://github.com/lordzoe" target="_blank">
+                        <img src="images/github_logo.png" alt="GitHub Logo" class="contact-social-logo">
+                    </a>
+                </div>
+            </div>
         </div>
-
-        <!-- Contact Header -->
-        <div class="contact-header">
-            <h1>Contact Me</h1>
-        </div>
-
-        <!-- Contact Text -->
-        <div class="contact-box">
-            <p>If you'd like to get in touch, feel free to email me at:</p>
-            <p><strong>22zvl@queensu.ca</strong></p>
-            <p>Connect with me on LinkedIn:</p>
-        </div>
-
-        <div class="contact-social-container">
-            
-            <!-- LinkedIn Logo -->
-            <a href="https://www.linkedin.com/in/lordzoe/" target="_blank">
-                <img src="images/linkedin_logo.png" alt="LinkedIn Logo" class="contact-social-logo">
-            </a>
-
-            <!-- GitHub Logo -->
-            <a href="https://github.com/lordzoe" target="_blank">
-                <img src="images/github_logo.png" alt="GitHub Logo" class="contact-social-logo">
-            </a>
-        </div>
-
     </main>
 
     <!-- Footer -->

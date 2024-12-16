@@ -38,14 +38,17 @@
             <!-- Content Box 2 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="image.png" alt="Hew Locke">
+                    <video autoplay muted loop>
+                        <source src="videos/eva_2024_1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
                 <div class="content-info">
-                    <h2>Hew Locke</h2>
+                    <h2>EVA Space Suit Evaluation Course 2024</h2>
                     <p>Exhibition: 17 October 2024 – 9 February 2025</p>
                 </div>
                 <div class="content-details">
-                    <?php include('hew_locke.html'); ?>
+                    <?php include('eva_2024.html'); ?>
                 </div>
             </div>
 

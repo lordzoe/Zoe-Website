@@ -24,14 +24,14 @@
             <!-- Content Box 1 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="image.png" alt="Silk Roads">
+                    <img src="images/iac_2024_1.png" alt="IAC Conference 2024">
                 </div>
                 <div class="content-info">
-                    <h2>Silk Roads</h2>
+                    <h2>IAC Conference 2024</h2>
                     <p>Exhibition: 26 September 2024 – 23 February 2025</p>
                 </div>
                 <div class="content-details">
-                    <?php include('silk_roads.html'); ?>
+                    <?php include('iac_2024.html'); ?>
                 </div>
             </div>
 

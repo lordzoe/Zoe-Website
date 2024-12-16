@@ -125,6 +125,7 @@ footer {
   color: white;
   text-align: center;
   font-family: Arial, sans-serif;
+  z-index: 5;
 }
 
 .footer-image img {
@@ -269,4 +270,14 @@ footer {
   font-size: 1rem;
   line-height: 1.5;
 }
-  
+
+/* Canvas Background */
+#orb-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Ensures it stays behind other content */
+  pointer-events: none; /* Allows clicks to pass through */
+}

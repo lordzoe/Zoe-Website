@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoé Victoria Lord - Home</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-
 </head>
 <body>
     <!-- Navigation -->
@@ -17,24 +16,13 @@
     <!-- Animated Background -->
     <canvas id="orb-canvas"></canvas>
 
-    <!-- Main Content -->
+    <!-- Main Index Section -->
     <main class="index-container">
-        <!-- Left Image -->
-        <div class="index-image">
-            <img src="images/homepage_image.jpg" alt="Zoé Victoria Lord">
-        </div>
-
-    <!-- Right Text Section -->
-        <div class="index-content">
-            <div class="index-text">
-                <h1>Welcome to my space. My name is</h1>
-                <h2>Zoé Victoria Lord</h2>
-                <p>
-                    Ever since I was young, I have been fascinated by the complexities of science, engineering, 
-                    and exploration. Driven by curiosity and ambition, I strive to learn, grow, and contribute 
-                    to fields that inspire humanity to look beyond. Please enjoy exploring my page and learning 
-                    more about my journey.
-                </p>
+        <div class="index-overlay">
+            <div class="index-content">
+                <h1>Exploring the Frontiers of Science and Engineering</h1>
+                <p>Dive into a journey of interdisciplinary research, from neuroscience in spaceflight environments to innovative EVA systems. Discover how curiosity and persistence push us towards new horizons in understanding and exploration.</p>
+                <a href="about.php" class="index-button">Learn More</a>
             </div>
         </div>
     </main>

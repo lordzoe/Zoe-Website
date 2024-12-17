@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = window.innerHeight;
 
   const orbs = [];
-  const numOrbs = 150; // Total number of orbs
-  const maxOrbRadius = 8; // Maximum size for orbs
-  const fadeDistance = 50; // Distance near edges where orbs fade
+  const numOrbs = 150; 
+  const maxOrbRadius = 8; 
+  const fadeDistance = 50; 
 
   // Initialize orbs
   function createOrbs() {
@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Determine the maximum orb size based on distance (closer to center = larger size)
         const maxPerspectiveSize = Math.max(
-            maxOrbRadius * (1 - (distanceFromCenter / (canvas.width * 0.6))), // Adjust perspective scale
-            1.5 // Minimum size
+            maxOrbRadius * (1 - (distanceFromCenter / (canvas.width * 0.6))), 
+            1.5 
         );
 
         orb.radius = Math.min(orb.radius + orb.growth, maxPerspectiveSize);
@@ -114,7 +114,6 @@ menuIcon.addEventListener('click', () => {
   fullscreenNav.classList.toggle('active');
 });
 
-
 function expandBox(box) {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
   box.classList.add('expanded');
@@ -127,33 +126,60 @@ function closeBox() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Get the lightbox elements
   const lightbox = document.getElementById('image-lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
   const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxContent = document.getElementById('lightbox-content');
 
-  // Get all mosaic images
-  const mosaicImages = document.querySelectorAll('.image-mosaic img');
+  let currentMedia = null;
 
-  // Add click event to each mosaic image to open the lightbox
-  mosaicImages.forEach(img => {
-    img.addEventListener('click', () => {
-      lightboxImg.src = img.src; // Set the clicked image URL
+  const mosaicElements = document.querySelectorAll('.image-mosaic img, .image-mosaic video');
+
+  mosaicElements.forEach(el => {
+    el.addEventListener('click', () => {
+      lightboxContent.innerHTML = '';
+
+      if (el.tagName === 'VIDEO') {
+        const videoSrc = el.querySelector('source') ? el.querySelector('source').src : el.src;
+
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.controls = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true; 
+        video.style.maxWidth = '80vw';
+        video.style.maxHeight = '80vh';
+
+        lightboxContent.appendChild(video);
+        currentMedia = video;
+      } else if (el.tagName === 'IMG') {
+        const img = document.createElement('img');
+        img.src = el.src;
+        img.style.maxWidth = '80vw';
+        img.style.maxHeight = '80vh';
+        img.style.objectFit = 'contain';
+
+        lightboxContent.appendChild(img);
+        currentMedia = null;
+      }
+
       lightbox.classList.add('active');
     });
   });
 
-  // Close the lightbox when clicking on the close button
-  lightboxClose.addEventListener('click', () => {
-    lightbox.classList.remove('active');
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
   });
 
-  // Optional: Close the lightbox when clicking outside the image
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      lightbox.classList.remove('active');
+  function closeLightbox() {
+    if (currentMedia && currentMedia.tagName === 'VIDEO') {
+      currentMedia.pause();
+      currentMedia.currentTime = 0;
     }
-  });
+    lightbox.classList.remove('active');
+    lightboxContent.innerHTML = '';
+  }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -171,6 +197,6 @@ document.addEventListener("DOMContentLoaded", function () {
       banner.classList.remove("hidden");
     }
 
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Prevent negative values
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
   });
 });

@@ -75,8 +75,10 @@
     <!-- Image Lightbox Overlay -->
     <div class="image-lightbox" id="image-lightbox">
         <span class="lightbox-close" id="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Enlarged Image">
+        <div id="lightbox-content" style="display: flex; justify-content: center; align-items: center;"></div>
     </div>
+
+
 
     <!-- JavaScript -->
     <script src="script.js"></script>

@@ -295,12 +295,6 @@ footer {
   display: block;
 }
 
-.content-box.expanded img {
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-}
-
 .content-box.expanded h2 {
   font-size: 2rem;
   text-align: center;
@@ -320,15 +314,23 @@ footer {
   margin-top: 20px;
 }
 
-.content-box.expanded .image-mosaic img {
+.content-box.expanded .content-details > img {
   width: 100%;
+  height: auto; 
+  margin-bottom: 20px;
+}
+
+.content-box.expanded .image-mosaic img,
+.content-box.expanded .image-mosaic video {
+  width: 90%;
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
   transition: transform 0.3s ease-in-out;
 }
 
-.image-mosaic img:hover {
+.image-mosaic img:hover,
+.image-mosaic video:hover {
   transform: scale(1.05); 
 }
 

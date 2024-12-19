@@ -49,7 +49,7 @@ body, html {
     display: block;
     width: 100%;
     height: 4px;
-    background-color: white;
+    background-color: #ddd;
     border-radius: 2px;
     transition: all 0.3s ease;
   }
@@ -74,7 +74,7 @@ body, html {
   
   .nav-links a {
     text-decoration: none;
-    color: white;
+    color: #ddd;
     font-size: 2rem;
     display: block;
     margin: 20px 0;
@@ -125,10 +125,10 @@ body, html {
     text-align: center;
     font-size: 2.6rem; 
     font-weight: 400; 
-    color: white; 
+    color: #ddd; 
     font-family: 'Lato', Arial, sans-serif;
     letter-spacing: 3px; 
-    padding-right: 3.5%;
+    padding-right: 3.2%;
   }
   
   .navbar-name a {
@@ -144,7 +144,7 @@ body, html {
   width: 100%;
   text-align: center;
   background-color: #333; 
-  color: white; 
+  color: #ddd; 
   font-size: 1rem; 
   font-family: 'Lato', Arial, sans-serif;
   letter-spacing: 2px;
@@ -161,7 +161,7 @@ body, html {
 /* Footer Styles */
 footer {
   background-color: #0f4c75;
-  color: white;
+  color: #ddd;
   text-align: center;
   font-family: Arial, sans-serif;
   z-index: 5;
@@ -183,7 +183,7 @@ footer {
 }
 
 .footer-links a {
-  color: white;
+  color: #ddd;
   text-decoration: none;
   font-size: 1.4rem;
   letter-spacing: 2px;
@@ -207,7 +207,7 @@ footer {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  padding: 40px 20px;
+  padding: 30px 20px;
 }
 
 /* Individual Content Box */
@@ -245,7 +245,7 @@ footer {
 .content-info {
   padding: 10px;
   text-align: center;
-  color: white;
+  color: #ddd;
 }
 
 .content-info h2 {
@@ -470,7 +470,7 @@ footer {
   background-color: #333; 
 }
 
-/* About Page Fade-In Animation */
+/* Page Fade-In Animation */
 @keyframes aboutFadeIn {
   from { 
     opacity: 0; 
@@ -693,7 +693,7 @@ footer {
   justify-content: center;
   overflow: hidden;
   z-index: 1;
-  padding: 0 20px;
+  padding: 0px 0px;
 }
 
 /* Dark Overlay */
@@ -737,6 +737,8 @@ footer {
 }
 
 .index-button {
+  justify-content: center;
+  align-items: center;
   display: inline-block;
   padding: 12px 30px;
   font-size: 1.2rem;
@@ -909,6 +911,13 @@ footer {
     padding: 0px 20px;
   }
 
+  @media (max-width: 600px) {
+    .about-text:hover {
+      transform: none;
+      background-color: inherit;
+    }
+  }
+
   .contact-box p strong {
     font-size: 1.8rem; 
   }
@@ -958,6 +967,7 @@ footer {
     padding-top: 100px; 
     overflow-y: auto;
     transform: translateX(-5%);
+    padding: 0px 20px;
   }
 
   .index-content {

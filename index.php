@@ -22,7 +22,7 @@
             <div class="index-content">
                 <h1>Exploring the Frontiers of Science and Engineering</h1>
                 <p>Dive into a journey of interdisciplinary research, from neuroscience in spaceflight environments to innovative EVA systems. Discover how curiosity and persistence push us towards new horizons in understanding and exploration.</p>
-                <a href="about.php" class="index-button">Learn More</a>
+                <a href="in_the_news.php" class="index-button">Learn More</a>
             </div>
         </div>
     </main>

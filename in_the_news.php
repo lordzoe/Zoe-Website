@@ -78,8 +78,6 @@
         <div id="lightbox-content" style="display: flex; justify-content: center; align-items: center;"></div>
     </div>
 
-
-
     <!-- JavaScript -->
     <script src="script.js"></script>
 

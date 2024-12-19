@@ -65,7 +65,7 @@ body, html {
     display: flex;
     justify-content: flex-start; 
     align-items: flex-start; 
-    padding-left: 20%; 
+    padding-left: 10%; 
     padding-top: 10%; 
     transform: translateY(-100%);
     transition: transform 0.5s ease;
@@ -153,7 +153,6 @@ body, html {
   transition: transform 0.3s ease-in-out;
 }
 
-/* Hidden State (Disappears on Scroll) */
 .navbar-banner.hidden {
   transform: translateY(-100%);
 }
@@ -453,7 +452,7 @@ footer {
   font-size: 1.4rem;
   color: #ddd;
   line-height: 1.6;
-  background: rgba(0,0,0,0.3); /* Semi-transparent background */
+  background: rgba(0,0,0,0.3); 
   border-radius: 10px; 
   box-shadow: 0 4px 20px rgba(0,0,0,0.5); 
   padding: 10px 40px; 
@@ -491,7 +490,7 @@ footer {
   animation: aboutFadeIn 1s ease both;
 }
 
-/* Layout wrapper for image and contact details */
+/* Layout wrapper for Image and Contact Details */
 .contact-content {
   display: flex;
   align-items: flex-start;
@@ -669,7 +668,7 @@ footer {
   color: #fff; 
 }
 
-/* Hover effect on li */
+/* Hover Effect on li */
 .speaking-list li:hover {
   transform: scale(1.05);
   background-color: #f39c12; 
@@ -692,14 +691,14 @@ footer {
   padding: 0 20px;
 }
 
-/* Dark Overlay for Text Readability */
+/* Dark Overlay */
 .index-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(17, 17, 17, 0.6); /* Slightly transparent dark overlay */
+  background: rgba(17, 17, 17, 0.6); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -753,3 +752,172 @@ footer {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Responsive Styles for Small Screens */
+@media (max-width: 600px) {
+
+  body, html {
+    padding: 0;
+    margin: 0;
+  }
+
+  .navbar {
+    height: auto;
+    min-height: 50px;
+    padding: 0 10px;
+  }
+
+  .navbar-name {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+
+  .navbar-banner {
+    font-size: 0.9rem;
+    padding: 5px 0;
+  }
+
+  .fullscreen-nav {
+    padding-top: 80px; 
+  }
+
+  .menu-icon {
+    width: 30px;
+    height: 24px;
+  }
+
+  .menu-icon span {
+    height: 3px;
+  }
+
+  .nav-links a {
+    font-size: 1.6rem;
+  }
+
+  /* Footer */
+  .footer-links a {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  /* Content Boxes */
+  .content-container {
+    padding: 20px 10px;
+    gap: 10px;
+  }
+
+  .content-box {
+    width: 90%;
+    height: auto;
+    min-height: 300px; 
+  }
+
+  .content-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .content-info p {
+    font-size: 0.9rem;
+  }
+
+  /* Expanded Boxes */
+  .content-box.expanded {
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+    padding: 10px;
+  }
+
+  .content-box.expanded h2 {
+    font-size: 1.6rem;
+  }
+
+  .content-box.expanded p {
+    font-size: 1.2rem;
+  }
+
+  .content-box.expanded .image-mosaic {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-rows: 150px;
+  }
+
+  /* About and Contact Pages */
+  .about-container,
+  .contact-container {
+    margin: 20px;
+    padding-top: 70px; 
+  }
+
+  .about-content,
+  .contact-content {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .about-image,
+  .contact-image {
+    width: 250px;
+    height: 250px;
+  }
+
+  .about-header h1,
+  .contact-header h1,
+  .news-header h1,
+  .speaking-header h1,
+  .index-content h1 {
+    font-size: 2.5rem;
+    padding: 10px 20px;
+  }
+
+  .about-text,
+  .contact-box,
+  .speaking-text,
+  .index-content p {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+  }
+
+  .contact-box p strong {
+    font-size: 1.8rem; 
+  }
+
+  /* Speaking Page List */
+  .speaking-list li a {
+    padding: 15px;
+    font-size: 1rem;
+  }
+
+  /* Index Page */
+  .index-container {
+    padding: 0 10px;
+  }
+
+  .index-content {
+    padding: 20px;
+  }
+
+  .index-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .index-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  /* Social Media Logos */
+  .contact-social-logo {
+    width: 50px;
+    height: 50px;
+    padding: 0px 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .contact-social-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+}

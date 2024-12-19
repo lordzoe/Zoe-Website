@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxOrbRadius = 8; 
   const fadeDistance = 50; 
 
-  // Initialize orbs
+  // Initialize Orbs
   function createOrbs() {
       for (let i = 0; i < numOrbs; i++) {
           const distance = Math.random() * canvas.width * 0.5;
@@ -36,16 +36,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const centerY = canvas.height / 2;
 
     orbs.forEach((orb, index) => {
-        // Move orb
+        // Move Orb
         orb.x += Math.cos(orb.angle) * orb.speed;
         orb.y += Math.sin(orb.angle) * orb.speed;
 
-        // Calculate distance from center of the screen
+        // Calculate Distance from Center of the Screen
         const distanceFromCenter = Math.sqrt(
             Math.pow(orb.x - centerX, 2) + Math.pow(orb.y - centerY, 2)
         );
 
-        // Determine the maximum orb size based on distance (closer to center = larger size)
+        // Determine the Maximum Orb Size Based on Distance (Closer to Center = Larger Size)
         const maxPerspectiveSize = Math.max(
             maxOrbRadius * (1 - (distanceFromCenter / (canvas.width * 0.6))), 
             1.5 
@@ -53,13 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         orb.radius = Math.min(orb.radius + orb.growth, maxPerspectiveSize);
 
-        // Fade near edges
+        // Fade Near Edges
         const fadeX = Math.min(orb.x, canvas.width - orb.x);
         const fadeY = Math.min(orb.y, canvas.height - orb.y);
         const distanceToEdge = Math.min(fadeX, fadeY);
         orb.opacity = Math.max(0, distanceToEdge / fadeDistance);
 
-        // Draw orb
+        // Draw Orb
         ctx.save();
         ctx.globalAlpha = orb.opacity;
         ctx.beginPath();
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fill();
         ctx.restore();
 
-        // Reset orb if it fades out
+        // Reset Orb if it Fades Out
         if (orb.opacity <= 0) {
             const distance = Math.random() * canvas.width * 0.5;
             const angle = Math.random() * Math.PI * 2;
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animateOrbs);
 }
 
-  // Responsive canvas resizing
+  // Responsive Canvas Resizing
   window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;

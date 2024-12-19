@@ -27,7 +27,7 @@
             <ul class="speaking-list">
                 <li>
                     <a href="https://iafastro.directory/iac/paper/id/86069/abstract-pdf/IAC-24,A1,7,4,x86069.brief.pdf?2024-03-26.17:16:15" target="_blank">
-                        <p><strong>[ Oct 2024 ] Milano, Italia</strong></p>
+                        <p><strong>[ October 2024 ] Milano, Italia</strong></p>
                         <p><strong>Oral Presentation at the International Astronautical Congress (IAC 2024)</strong></p> 
                         <p><em>Ergonomic Evaluation of Extravehicular Activity (EVA) Systems on Musculoskeletal Strain and Fatigue During Extended Lunar Surface EVAs</em></p>
                     </a>
@@ -35,7 +35,7 @@
 
                 <li>
                     <a href="https://iafastro.directory/iac/paper/id/86302/abstract-pdf/IAC-24,A1,3,6,x86302.brief.pdf?2024-03-28.08:18:55" target="_blank">
-                        <p><strong>[ Oct 2024 ] Milano, Italia </strong></p>
+                        <p><strong>[ October 2024 ] Milano, Italia </strong></p>
                         <p><strong>Oral Presentation at the International Astronautical Congress (IAC 2024)</strong></p> 
                         <p><em>The Pursuit for a Gold Standard Cardiopulmonary Resuscitation (CPR) Method for Human Spaceflight: A Novel CPR Testing Platform</em></p>
                     </a>
@@ -43,7 +43,7 @@
 
                 <li>
                     <a target="_blank">
-                        <p><strong>[ Oct 2024 ] Annapolis, Maryland, USA</strong></p>
+                        <p><strong>[ October 2024 ] Annapolis, Maryland, USA</strong></p>
                         <p><strong>Guest Speaker at United States Naval Academy</strong></p>
                         <p><em>The Road to Space</em></p>
                     </a>

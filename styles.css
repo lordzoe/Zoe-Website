@@ -777,7 +777,7 @@ footer {
   }
 
   .fullscreen-nav {
-    padding-top: 80px; 
+    padding-top: 120px; 
   }
 
   .menu-icon {
@@ -787,6 +787,22 @@ footer {
 
   .menu-icon span {
     height: 3px;
+  }
+
+  .menu-icon.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(10px);
+  }
+
+  .menu-icon.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-icon.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-10px);
+  }
+
+  .fullscreen-nav.active {
+    transform: translateY(0);
   }
 
   .nav-links a {
@@ -845,7 +861,7 @@ footer {
   .about-container,
   .contact-container {
     margin: 20px;
-    padding-top: 70px; 
+    padding-top: 100px; 
   }
 
   .about-content,
@@ -859,6 +875,7 @@ footer {
   .contact-image {
     width: 250px;
     height: 250px;
+    margin-bottom: 20px;
   }
 
   .about-header h1,
@@ -867,7 +884,7 @@ footer {
   .speaking-header h1,
   .index-content h1 {
     font-size: 2.5rem;
-    padding: 10px 20px;
+    padding: 0px 20px;
   }
 
   .about-text,
@@ -875,7 +892,7 @@ footer {
   .speaking-text,
   .index-content p {
     font-size: 1.2rem;
-    padding: 10px 20px;
+    padding: 0px 20px;
   }
 
   .contact-box p strong {
@@ -883,22 +900,61 @@ footer {
   }
 
   /* Speaking Page List */
+
+  .speaking-container {
+    align-items: flex-start; 
+    margin: 20px;
+    justify-content: center;
+  }
+
+  .speaking-list {
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    text-align: left;
+    justify-content: center; 
+    width: 100%;
+    margin: 0 auto; 
+    padding: 0px 0px;
+    box-sizing: border-box;
+
+  .speaking-list li {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: left;
+    margin: 20px auto;
+    box-sizing: border-box;
+  }
+
   .speaking-list li a {
-    padding: 15px;
+    align-items: flex-start;
+    text-align: left;
     font-size: 1rem;
+    box-sizing: border-box;
   }
 
   /* Index Page */
   .index-container {
-    padding: 0 10px;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    padding-top: 100px; 
+    overflow-y: auto;
+    transform: translateX(-5%);
   }
 
   .index-content {
+    text-align: center;
+    font-size: 1rem;
     padding: 20px;
+    margin: 0 auto;
   }
 
   .index-content h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    padding-top: 80px;
+    margin: 0, auto;
   }
 
   .index-button {

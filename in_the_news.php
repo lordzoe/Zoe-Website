@@ -27,8 +27,8 @@
                     <img src="images/iac_2024_1.png" alt="IAC Conference 2024">
                 </div>
                 <div class="content-info">
-                    <h2>IAC Conference 2024</h2>
-                    <p>Exhibition: 26 September 2024 – 23 February 2025</p>
+                    <h2>Attending the IAC Conference 2024</h2>
+                    <p>October 2024</p>
                 </div>
                 <div class="content-details">
                     <?php include('iac_2024.html'); ?>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="content-info">
                     <h2>EVA Space Suit Evaluation Course 2024</h2>
-                    <p>Exhibition: 17 October 2024 – 9 February 2025</p>
+                    <p>October 2024</p>
                 </div>
                 <div class="content-details">
                     <?php include('eva_2024.html'); ?>
@@ -55,14 +55,14 @@
             <!-- Content Box 3 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="image.png" alt="Picasso">
+                    <img src="image.png" alt="USNA">
                 </div>
                 <div class="content-info">
-                    <h2>Picasso</h2>
-                    <p>Exhibition: 7 November 2024 – 30 March 2025</p>
+                    <h2>Visiting the United States Naval Academy</h2>
+                    <p>October 2024</p>
                 </div>
                 <div class="content-details">
-                    <?php include('picasso.html'); ?>
+                    <?php include('USNA_2024.html'); ?>
                 </div>
             </div>
 

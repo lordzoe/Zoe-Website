@@ -203,8 +203,8 @@ footer {
 
 /* Main Content Container */
 .content-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 300px);
   justify-content: center;
   gap: 20px;
   padding: 30px 20px;
@@ -213,7 +213,6 @@ footer {
 /* Individual Content Box */
 .content-box {
   position: relative;
-  width: 300px;
   height: 400px;
   overflow: hidden;
   background-color: #222;
@@ -222,6 +221,7 @@ footer {
   transition: transform 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   z-index: 1;
+  margin: 0;
 }
 
 .content-box:hover {
@@ -367,10 +367,41 @@ footer {
   top: 20px;
   right: 40px;
   color: #fff;
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: bold;
   cursor: pointer;
   user-select: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-close:hover {
+  color: #f39c12;
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 5rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 0 10px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 3000; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-arrow.left {
+  left: 400px;
+}
+
+.lightbox-arrow.right {
+  right: 400px;
+}
+
+.lightbox-arrow:hover {
+  color: #f39c12;
 }
 
 /* Canvas Background */
@@ -835,14 +866,26 @@ footer {
   .content-container {
     padding: 20px 10px;
     gap: 10px;
+    grid-template-columns: 1fr; 
+    justify-items: center;     
+    padding: 20px 10px;
+    gap: 10px;
+    box-sizing: border-box;
+
   }
 
   .content-box {
-    width: 90%;
+    width: 95%;
     height: auto;
     min-height: 300px; 
+    margin: 0;
+    background-color: #0e0e0e;
   }
 
+  .content-box:hover {
+    transform: scale(1.02);
+    background-color: #222;
+  }
   .content-info h2 {
     font-size: 1.2rem;
   }
@@ -852,12 +895,18 @@ footer {
   }
 
   /* Expanded Boxes */
-  .content-box.expanded {
+  .content-box.expanded { 
     top: 5%;
     left: 5%;
+    padding: 10px;
     width: 90%;
     height: 80%;
-    padding: 10px;
+    background-color: #0e0e0e;
+    box-sizing: border-box;
+  }
+
+  .content-box.expanded:hover {
+    transform: none;
   }
 
   .content-box.expanded h2 {
@@ -871,6 +920,29 @@ footer {
   .content-box.expanded .image-mosaic {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     grid-auto-rows: 150px;
+  }
+
+  #lightbox-content {
+    position: relative;
+  }
+
+  .lightbox-close {
+    font-size: 4rem;
+  }
+
+  .lightbox-arrow {
+    font-size: 3rem;   
+    text-shadow: none;       
+    z-index: 3001;    
+    
+  }
+
+  .lightbox-arrow.left {
+    left: 20px;           
+  }
+
+  .lightbox-arrow.right {
+    right: 20px;
   }
 
   /* About and Contact Pages */
@@ -911,11 +983,9 @@ footer {
     padding: 0px 20px;
   }
 
-  @media (max-width: 600px) {
-    .about-text:hover {
-      transform: none;
-      background-color: inherit;
-    }
+  .about-text:hover {
+    transform: none;
+    background-color: inherit;
   }
 
   .contact-box p strong {

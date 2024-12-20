@@ -125,61 +125,105 @@ function closeBox() {
   document.querySelector('.blur-overlay').classList.remove('active');
 }
 
+// Image Lightbox
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.getElementById('image-lightbox');
   const lightboxClose = document.getElementById('lightbox-close');
   const lightboxContent = document.getElementById('lightbox-content');
+  const prevArrow = document.getElementById('lightbox-prev');
+  const nextArrow = document.getElementById('lightbox-next');
 
-  let currentMedia = null;
+  let currentMediaIndex = null;
+  let currentMediaItems = []; 
+  let currentMediaElement = null; 
 
-  const mosaicElements = document.querySelectorAll('.image-mosaic img, .image-mosaic video');
+  function closeLightbox() {
+    if (currentMediaElement && currentMediaElement.tagName === 'VIDEO') {
+      currentMediaElement.pause();
+      currentMediaElement.currentTime = 0;
+    }
+    lightbox.classList.remove('active');
+    lightboxContent.innerHTML = '';
+    currentMediaIndex = null;
+    currentMediaItems = [];
+    currentMediaElement = null;
+  }
 
-  mosaicElements.forEach(el => {
-    el.addEventListener('click', () => {
-      lightboxContent.innerHTML = '';
+  function showMediaAtIndex(index) {
+    if (index < 0 || index >= currentMediaItems.length) return;
 
-      if (el.tagName === 'VIDEO') {
-        const videoSrc = el.querySelector('source') ? el.querySelector('source').src : el.src;
+    lightboxContent.innerHTML = '';
+    const el = currentMediaItems[index];
+    let elementToShow;
 
-        const video = document.createElement('video');
-        video.src = videoSrc;
-        video.controls = true;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true; 
-        video.style.maxWidth = '80vw';
-        video.style.maxHeight = '80vh';
+    if (el.tagName === 'VIDEO') {
+      const videoSrc = el.querySelector('source') ? el.querySelector('source').src : el.src;
 
-        lightboxContent.appendChild(video);
-        currentMedia = video;
-      } else if (el.tagName === 'IMG') {
-        const img = document.createElement('img');
-        img.src = el.src;
-        img.style.maxWidth = '80vw';
-        img.style.maxHeight = '80vh';
-        img.style.objectFit = 'contain';
+      const video = document.createElement('video');
+      video.src = videoSrc;
+      video.controls = true;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true; 
+      video.style.maxWidth = '80vw';
+      video.style.maxHeight = '80vh';
 
-        lightboxContent.appendChild(img);
-        currentMedia = null;
-      }
+      elementToShow = video;
+    } else if (el.tagName === 'IMG') {
+      const img = document.createElement('img');
+      img.src = el.src;
+      img.style.maxWidth = '80vw';
+      img.style.maxHeight = '80vh';
+      img.style.objectFit = 'contain';
+
+      elementToShow = img;
+    }
+
+    lightboxContent.appendChild(elementToShow);
+    currentMediaElement = elementToShow;
+    currentMediaIndex = index;
+  }
+
+  document.querySelectorAll('.content-box.expanded .image-mosaic').forEach(mosaic => {
+    mosaic.addEventListener('click', (e) => {
+      const el = e.target;
+      if (el.tagName !== 'IMG' && el.tagName !== 'VIDEO') return;
+
+      currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
+      const clickedIndex = currentMediaItems.indexOf(el);
 
       lightbox.classList.add('active');
+      showMediaAtIndex(clickedIndex);
     });
+  });
+
+  document.addEventListener('click', (e) => {
+    const el = e.target;
+    if (el.closest('.image-mosaic img, .image-mosaic video')) {
+      const mosaic = el.closest('.image-mosaic');
+      currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
+      const clickedIndex = currentMediaItems.indexOf(el);
+      lightbox.classList.add('active');
+      showMediaAtIndex(clickedIndex);
+    }
+  });
+
+  prevArrow.addEventListener('click', () => {
+    if (currentMediaIndex !== null && currentMediaIndex > 0) {
+      showMediaAtIndex(currentMediaIndex - 1);
+    }
+  });
+
+  nextArrow.addEventListener('click', () => {
+    if (currentMediaIndex !== null && currentMediaIndex < currentMediaItems.length - 1) {
+      showMediaAtIndex(currentMediaIndex + 1);
+    }
   });
 
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
-
-  function closeLightbox() {
-    if (currentMedia && currentMedia.tagName === 'VIDEO') {
-      currentMedia.pause();
-      currentMedia.currentTime = 0;
-    }
-    lightbox.classList.remove('active');
-    lightboxContent.innerHTML = '';
-  }
 });
 
 document.addEventListener("DOMContentLoaded", function () {

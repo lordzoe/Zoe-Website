@@ -66,6 +66,20 @@
                 </div>
             </div>
 
+            <!-- Content Box 4 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="image.png" alt="USNA">
+                </div>
+                <div class="content-info">
+                    <h2>Visiting the United States Naval Academy</h2>
+                    <p>October 2024</p>
+                </div>
+                <div class="content-details">
+                    <?php include('USNA_2024.html'); ?>
+                </div>
+            </div>
+
         </section>
     </main>
 
@@ -75,6 +89,9 @@
     <!-- Image Lightbox Overlay -->
     <div class="image-lightbox" id="image-lightbox">
         <span class="lightbox-close" id="lightbox-close">&times;</span>
+        <!-- Add these two arrows -->
+        <div class="lightbox-arrow left" id="lightbox-prev">&#10094;</div>
+        <div class="lightbox-arrow right" id="lightbox-next">&#10095;</div>
         <div id="lightbox-content" style="display: flex; justify-content: center; align-items: center;"></div>
     </div>
 

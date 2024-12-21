@@ -13,6 +13,7 @@ if (file_exists($file)) {
         <link rel="apple-touch-icon" href="images/favicon.png">
         <title>Lord Vitae 2024</title>
     </head>
+    
     <body style="margin: 0; overflow: hidden;">
         <iframe src="vitae/Lord_CV.pdf" style="width: 100%; height: 100vh; border: none;"></iframe>
     </body>

@@ -9,6 +9,7 @@
     <title>Events - Zoé Victoria Lord</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <?php include 'navigation.html'; ?>
@@ -97,5 +98,6 @@
 
     <!-- Footer -->
     <?php include 'footer.html'; ?>
+
 </body>
 </html>

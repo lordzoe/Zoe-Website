@@ -137,7 +137,8 @@ function closeBox() {
 
 document.addEventListener('click', (event) => {
   const expandedBox = document.querySelector('.content-box.expanded');
-  if (expandedBox && !expandedBox.contains(event.target)) {
+  const lightbox = document.getElementById('image-lightbox');
+  if (expandedBox && !expandedBox.contains(event.target) && !lightbox.contains(event.target)) {
     closeBox();
   }
 });
@@ -218,6 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
       const clickedIndex = currentMediaItems.indexOf(el);
       lightbox.classList.add('active');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
       document.documentElement.classList.add('no-scroll');
       document.body.classList.add('no-scroll');
       showMediaAtIndex(clickedIndex);
@@ -226,6 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   prevArrow.addEventListener('click', () => {
     if (currentMediaIndex !== null) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; 
       document.documentElement.classList.add('no-scroll');
       document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex - 1);
@@ -234,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   nextArrow.addEventListener('click', () => {
     if (currentMediaIndex !== null) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; 
       document.documentElement.classList.add('no-scroll');
       document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex + 1);

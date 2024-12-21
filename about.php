@@ -9,6 +9,7 @@
     <title>About - Zoé Victoria Lord</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <?php include 'navigation.html'; ?>

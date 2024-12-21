@@ -1,3 +1,18 @@
+// Autoplay Loop for Videos
+document.addEventListener("DOMContentLoaded", () => {
+  const videos = document.querySelectorAll(".content-image video");
+
+  videos.forEach((video) => {
+    video.muted = true; 
+    video.playsInline = true; 
+    video.loop = true; 
+    video.autoplay = true; 
+    video.play().catch((error) => {
+      console.error("Autoplay failed on mobile:", error);
+    });
+  });
+});
+
 // Orbs Animation
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById('orb-canvas');
@@ -11,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxOrbRadius = 8; 
   const fadeDistance = 50; 
 
-  // Initialize Orbs
   function createOrbs() {
       for (let i = 0; i < numOrbs; i++) {
           const distance = Math.random() * canvas.width * 0.5;
@@ -36,16 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const centerY = canvas.height / 2;
 
     orbs.forEach((orb, index) => {
-        // Move Orb
         orb.x += Math.cos(orb.angle) * orb.speed;
         orb.y += Math.sin(orb.angle) * orb.speed;
 
-        // Calculate Distance from Center of the Screen
         const distanceFromCenter = Math.sqrt(
             Math.pow(orb.x - centerX, 2) + Math.pow(orb.y - centerY, 2)
         );
 
-        // Determine the Maximum Orb Size Based on Distance (Closer to Center = Larger Size)
         const maxPerspectiveSize = Math.max(
             maxOrbRadius * (1 - (distanceFromCenter / (canvas.width * 0.6))), 
             1.5 
@@ -53,13 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         orb.radius = Math.min(orb.radius + orb.growth, maxPerspectiveSize);
 
-        // Fade Near Edges
         const fadeX = Math.min(orb.x, canvas.width - orb.x);
         const fadeY = Math.min(orb.y, canvas.height - orb.y);
         const distanceToEdge = Math.min(fadeX, fadeY);
         orb.opacity = Math.max(0, distanceToEdge / fadeDistance);
 
-        // Draw Orb
         ctx.save();
         ctx.globalAlpha = orb.opacity;
         ctx.beginPath();
@@ -73,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fill();
         ctx.restore();
 
-        // Reset Orb if it Fades Out
         if (orb.opacity <= 0) {
             const distance = Math.random() * canvas.width * 0.5;
             const angle = Math.random() * Math.PI * 2;
@@ -93,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animateOrbs);
 }
 
-  // Responsive Canvas Resizing
   window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -114,16 +121,26 @@ menuIcon.addEventListener('click', () => {
   fullscreenNav.classList.toggle('active');
 });
 
+// Content-Box.Expanded
 function expandBox(box) {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
   box.classList.add('expanded');
-  document.querySelector('.blur-overlay').classList.add('active');
+  document.documentElement.classList.add('no-scroll');
+  document.body.classList.add('no-scroll');
 }
 
 function closeBox() {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
-  document.querySelector('.blur-overlay').classList.remove('active');
+  document.documentElement.classList.remove('no-scroll');
+  document.body.classList.remove('no-scroll');
 }
+
+document.addEventListener('click', (event) => {
+  const expandedBox = document.querySelector('.content-box.expanded');
+  if (expandedBox && !expandedBox.contains(event.target)) {
+    closeBox();
+  }
+});
 
 // Image Lightbox
 document.addEventListener('DOMContentLoaded', () => {
@@ -134,8 +151,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextArrow = document.getElementById('lightbox-next');
 
   let currentMediaIndex = null;
-  let currentMediaItems = []; 
-  let currentMediaElement = null; 
+  let currentMediaItems = [];
+  let currentMediaElement = null;
+
+  let startX = 0;
+  let startY = 0;
+  const swipeThreshold = 50;
 
   function closeLightbox() {
     if (currentMediaElement && currentMediaElement.tagName === 'VIDEO') {
@@ -147,10 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMediaIndex = null;
     currentMediaItems = [];
     currentMediaElement = null;
+    document.documentElement.classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll');
   }
 
   function showMediaAtIndex(index) {
-    if (index < 0 || index >= currentMediaItems.length) return;
+    document.documentElement.classList.add('no-scroll');
+    document.body.classList.add('no-scroll');
+
+    if (index < 0) {
+      index = currentMediaItems.length - 1;
+    } else if (index >= currentMediaItems.length) {
+      index = 0;
+    }
 
     lightboxContent.innerHTML = '';
     const el = currentMediaItems[index];
@@ -158,16 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (el.tagName === 'VIDEO') {
       const videoSrc = el.querySelector('source') ? el.querySelector('source').src : el.src;
-
       const video = document.createElement('video');
       video.src = videoSrc;
       video.controls = true;
       video.autoplay = true;
       video.loop = true;
-      video.muted = true; 
+      video.muted = true;
       video.style.maxWidth = '80vw';
       video.style.maxHeight = '80vh';
-
       elementToShow = video;
     } else if (el.tagName === 'IMG') {
       const img = document.createElement('img');
@@ -175,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
       img.style.maxWidth = '80vw';
       img.style.maxHeight = '80vh';
       img.style.objectFit = 'contain';
-
       elementToShow = img;
     }
 
@@ -184,19 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMediaIndex = index;
   }
 
-  document.querySelectorAll('.content-box.expanded .image-mosaic').forEach(mosaic => {
-    mosaic.addEventListener('click', (e) => {
-      const el = e.target;
-      if (el.tagName !== 'IMG' && el.tagName !== 'VIDEO') return;
-
-      currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
-      const clickedIndex = currentMediaItems.indexOf(el);
-
-      lightbox.classList.add('active');
-      showMediaAtIndex(clickedIndex);
-    });
-  });
-
   document.addEventListener('click', (e) => {
     const el = e.target;
     if (el.closest('.image-mosaic img, .image-mosaic video')) {
@@ -204,18 +218,24 @@ document.addEventListener('DOMContentLoaded', () => {
       currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
       const clickedIndex = currentMediaItems.indexOf(el);
       lightbox.classList.add('active');
+      document.documentElement.classList.add('no-scroll');
+      document.body.classList.add('no-scroll');
       showMediaAtIndex(clickedIndex);
     }
   });
 
   prevArrow.addEventListener('click', () => {
-    if (currentMediaIndex !== null && currentMediaIndex > 0) {
+    if (currentMediaIndex !== null) {
+      document.documentElement.classList.add('no-scroll');
+      document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex - 1);
     }
   });
 
   nextArrow.addEventListener('click', () => {
-    if (currentMediaIndex !== null && currentMediaIndex < currentMediaItems.length - 1) {
+    if (currentMediaIndex !== null) {
+      document.documentElement.classList.add('no-scroll');
+      document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex + 1);
     }
   });
@@ -224,8 +244,44 @@ document.addEventListener('DOMContentLoaded', () => {
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
+
+  lightbox.addEventListener('touchstart', (e) => {
+    const touch = e.changedTouches[0];
+    startX = touch.pageX;
+    startY = touch.pageY;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches[0];
+    const endX = touch.pageX;
+    const endY = touch.pageY;
+
+    const diffX = endX - startX;
+    const diffY = endY - startY;
+
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+      if (diffX < 0) {
+        if (currentMediaIndex !== null) {
+          document.documentElement.classList.add('no-scroll');
+          document.body.classList.add('no-scroll');
+          showMediaAtIndex(currentMediaIndex + 1);
+        }
+      } else {
+        if (currentMediaIndex !== null) {
+          document.documentElement.classList.add('no-scroll');
+          document.body.classList.add('no-scroll');
+          showMediaAtIndex(currentMediaIndex - 1);
+        }
+      }
+    } else if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > swipeThreshold) {
+      if (diffY > 0) {
+        closeLightbox();
+      }
+    }
+  }, { passive: true });
 });
 
+// Navbar Banner
 document.addEventListener("DOMContentLoaded", function () {
   const banner = document.getElementById("navbar-banner");
   let lastScrollTop = 0;
@@ -234,10 +290,26 @@ document.addEventListener("DOMContentLoaded", function () {
     let scrollTop = window.scrollY || document.documentElement.scrollTop;
 
     if (scrollTop > lastScrollTop) {
-      // Scroll Down: Hide Banner
       banner.classList.add("hidden");
     } else {
-      // Scroll Up: Show Banner
+      banner.classList.remove("hidden");
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  });
+});
+
+//Navbar Banner
+document.addEventListener("DOMContentLoaded", function () {
+  const banner = document.getElementById("navbar-banner");
+  let lastScrollTop = 0;
+
+  window.addEventListener("scroll", function () {
+    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+    if (scrollTop > lastScrollTop) {
+      banner.classList.add("hidden");
+    } else {
       banner.classList.remove("hidden");
     }
 

@@ -886,14 +886,16 @@ footer {
     justify-items: center;     
     gap: 10px;
     box-sizing: border-box;
+    max-width: 100%;
   }
 
   .content-box {
     width: 95%;
     height: auto;
     min-height: 300px; 
-    margin: 0;
+    margin: 0 auto;
     background-color: #0e0e0e;
+    overflow: hidden;
   }
 
   .content-box:hover {
@@ -917,6 +919,7 @@ footer {
     height: 90%;
     background-color: #0e0e0e;
     box-sizing: border-box;
+    overflow-y: auto;
   }
 
   .content-box.expanded:hover {
@@ -999,16 +1002,14 @@ footer {
   .about-header h1,
   .contact-header h1,
   .news-header h1,
-  .speaking-header h1,
-  .index-content h1 {
+  .speaking-header h1 {
     font-size: 2.5rem;
     padding: 0px 20px;
   }
 
   .about-text,
   .contact-box,
-  .speaking-text,
-  .index-content p {
+  .speaking-text {
     font-size: 1.2rem;
     padding: 0px 20px;
   }
@@ -1066,21 +1067,35 @@ footer {
     justify-content: center;
     padding-top: 100px; 
     overflow-y: auto;
-    transform: translateX(-5%);
-    padding: 0px 20px;
+    overflow-x: hidden;
+    padding: 0;
+    max-width: 100%;
   }
 
   .index-content {
     text-align: center;
     font-size: 1rem;
-    padding: 20px;
+    padding: 0 5%;
     margin: 0 auto;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .index-content h1 {
-    font-size: 2.2rem;
+    text-align: center;
+    font-size: 2rem;
+    padding: 0px 20px;
     padding-top: 80px;
     margin: 0, auto;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .index-content p {
+    font-size: 1.1rem;
+    padding: 0px 20px;
+    margin: 0, auto;
+    max-width: 100%;
   }
 
   .index-button {

@@ -21,7 +21,11 @@ p {
   color:aliceblue;
 }
 
-.no-scroll {
+.no-scroll-content {
+  overflow: hidden;
+}
+
+.no-scroll-lightbox {
   overflow: hidden;
 }
 

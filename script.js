@@ -125,14 +125,32 @@ menuIcon.addEventListener('click', () => {
 function expandBox(box) {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
   box.classList.add('expanded');
-  document.documentElement.classList.add('no-scroll');
-  document.body.classList.add('no-scroll');
+  document.body.classList.add('no-scroll-content');
 }
 
 function closeBox() {
   document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
-  document.documentElement.classList.remove('no-scroll');
-  document.body.classList.remove('no-scroll');
+  document.body.classList.remove('no-scroll-content');
+}
+
+document.addEventListener('click', (event) => {
+  const expandedBox = document.querySelector('.content-box.expanded');
+  const lightbox = document.getElementById('image-lightbox');
+  if (expandedBox && !expandedBox.contains(event.target) && !lightbox.contains(event.target)) {
+    closeBox();
+  }
+});
+
+// Image Lightbox
+function expandBox(box) {
+  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
+  box.classList.add('expanded');
+  document.body.classList.add('no-scroll-content');
+}
+
+function closeBox() {
+  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
+  document.body.classList.remove('no-scroll-content');
 }
 
 document.addEventListener('click', (event) => {
@@ -169,13 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMediaIndex = null;
     currentMediaItems = [];
     currentMediaElement = null;
-    document.documentElement.classList.remove('no-scroll');
-    document.body.classList.remove('no-scroll');
+    document.body.classList.remove('no-scroll-lightbox');
   }
 
   function showMediaAtIndex(index) {
-    document.documentElement.classList.add('no-scroll');
-    document.body.classList.add('no-scroll');
+    document.body.classList.add('no-scroll-lightbox');
 
     if (index < 0) {
       index = currentMediaItems.length - 1;
@@ -219,30 +235,19 @@ document.addEventListener('DOMContentLoaded', () => {
       currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
       const clickedIndex = currentMediaItems.indexOf(el);
       lightbox.classList.add('active');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      document.documentElement.classList.add('no-scroll');
-      document.body.classList.add('no-scroll');
+      document.body.classList.add('no-scroll-lightbox');
       showMediaAtIndex(clickedIndex);
     }
   });
 
   prevArrow.addEventListener('click', () => {
     if (currentMediaIndex !== null) {
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden'; 
-      document.documentElement.classList.add('no-scroll');
-      document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex - 1);
     }
   });
 
   nextArrow.addEventListener('click', () => {
     if (currentMediaIndex !== null) {
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden'; 
-      document.documentElement.classList.add('no-scroll');
-      document.body.classList.add('no-scroll');
       showMediaAtIndex(currentMediaIndex + 1);
     }
   });
@@ -269,14 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
       if (diffX < 0) {
         if (currentMediaIndex !== null) {
-          document.documentElement.classList.add('no-scroll');
-          document.body.classList.add('no-scroll');
           showMediaAtIndex(currentMediaIndex + 1);
         }
       } else {
         if (currentMediaIndex !== null) {
-          document.documentElement.classList.add('no-scroll');
-          document.body.classList.add('no-scroll');
           showMediaAtIndex(currentMediaIndex - 1);
         }
       }
@@ -286,24 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }, { passive: true });
-});
-
-// Navbar Banner
-document.addEventListener("DOMContentLoaded", function () {
-  const banner = document.getElementById("navbar-banner");
-  let lastScrollTop = 0;
-
-  window.addEventListener("scroll", function () {
-    let scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop) {
-      banner.classList.add("hidden");
-    } else {
-      banner.classList.remove("hidden");
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-  });
 });
 
 //Navbar Banner

@@ -12,11 +12,54 @@ if (file_exists($file)) {
         <link rel="icon" href="images/favicon.png" type="image/png" sizes="32x32">
         <link rel="apple-touch-icon" href="images/favicon.png">
         <title>Lord Vitae 2024</title>
+        <style>
+            body {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh; 
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+            a {
+                margin-top: 10px;
+                text-align: center;
+                display: none; 
+                background-color: black; 
+                color: white; 
+                padding: 10px 20px;
+                text-decoration: none; 
+                border-radius: 5px; 
+            }
+            @media (max-width: 600px) {
+                iframe {
+                    height: 95vh; 
+                    max-width: 100vw;
+                }
+                a {
+                    display: block; 
+                }
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (window.innerWidth <= 600) {
+                    window.location.href = 'vitae/Lord_CV.pdf';
+                }
+            });
+        </script>
     </head>
     
-    <body style="margin: 0; overflow: hidden;">
-        <iframe src="vitae/Lord_CV.pdf" style="width: 100%; height: 100vh; border: none;"></iframe>
+    <body>
+        <iframe src="vitae/Lord_CV.pdf"></iframe>
+        <a href="vitae/Lord_CV.pdf" target="_blank">View Full CV (PDF)</a>
     </body>
+
     </html>
     <?php
     exit;

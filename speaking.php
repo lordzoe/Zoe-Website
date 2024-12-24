@@ -26,7 +26,7 @@
         
         <!-- Text Content -->
         <div class="speaking-text">
-            <p>With a strong passion for interdisciplinary learning across STEM disciplines, Zoé is driven to gain a unique perspective for addressing the complexities inherent in science and engineering. Zoé’s fascination with neuroscience has led her to pursue further knowledge on the chemical and biological factors influencing the effects of spaceflight.</p>
+            <p>Zoé's speaking engagements reflect her dedication to advancing science, technology, and space exploration. From presenting her research at international conferences, engaging discussions on podcasts, and speaking at public events, her talks explore how interdisciplinary learning fuels innovation and synergies within STEM education.</p>
 
             <ul class="speaking-list">
                 <li>

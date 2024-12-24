@@ -65,7 +65,7 @@
             <!-- Content Box 3 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="image.png" alt="USNA">
+                    <img src="images/USNA_2024_1.jpg" alt="USNA">
                 </div>
                 <div class="content-info">
                     <h2>Visiting the United States Naval Academy</h2>
@@ -80,14 +80,14 @@
             <!-- Content Box 4 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="image.png" alt="USNA">
+                    <img src="images/science_rendezvous_2024_1.jpg" alt="Science Rendezvous 2">
                 </div>
                 <div class="content-info">
-                    <h2>Visiting the United States Naval Academy</h2>
-                    <p>October 2024</p>
+                    <h2>Science Rendezvous! 2024</h2>
+                    <p>May 2024</p>
                 </div>
                 <div class="content-details">
-                    <?php include('USNA_2024.html'); ?>
+                    <?php include('science_rendezvous_2024.html'); ?>
                     <div class="expanded-close" onclick="event.stopPropagation(); closeBox()">×</div>
                 </div>
             </div>

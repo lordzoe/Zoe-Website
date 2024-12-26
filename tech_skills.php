@@ -27,23 +27,33 @@
         <!-- Section 1 -->
         <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
             <div class="tech-content">
-                <div class="tech-text">
-                    <h2>Programming Languages</h2>
-                    <p>
-                        Proficient in Python, JavaScript, and C++. Experience building interactive applications and conducting data analysis.
-                    </p>
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Virtual Reality Gaming Development</h2>
+                        <p>
+                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                        <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Virtual Reality (VR)</li>
+                            <li>Unity Engine</li>
+                            <li>C#</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="tech-media">
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#9664;</button>
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/eva_2024_2.jpg" alt="Programming 1">
-                            <img src="images/eva_2024_4.jpg" alt="Programming 2">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
                             <video autoplay muted loop>
-                                <source src="videos/eva_2024_1.mp4" type="video/mp4">
+                                <source src="videos/vr_project.mp4" type="video/mp4">
                             </video>
                         </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#9654;</button>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
                 </div>
             </div>
@@ -51,25 +61,35 @@
 
         <!-- Section 2 -->
         <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
-            <div class="tech-content reverse-layout">
-                <div class="tech-media">
-                    <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#9664;</button>
-                        <div class="gallery-items">
-                            <img src="images/iac_2024_1.png" alt="Hardware 1">
-                            <video autoplay muted loop>
-                                <source src="videos/eva_2024_3.mp4" type="video/mp4">
-                            </video>
-                            <img src="images/iac_2024_5.jpg" alt="Hardware 2">
-                        </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#9654;</button>
+            <div class="tech-content">
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Virtual Reality Gaming Development</h2>
+                        <p>
+                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                    <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Virtual Reality (VR)</li>
+                            <li>Unity Engine</li>
+                            <li>C#</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="tech-text">
-                    <h2>Hardware Development</h2>
-                    <p>
-                        Experience with Arduino projects, including sensor integration and wireless data transmission using NRF24L01 modules.
-                    </p>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <div class="gallery-items">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <video autoplay muted loop>
+                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -77,23 +97,33 @@
         <!-- Section 3 -->
         <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
             <div class="tech-content">
-                <div class="tech-text">
-                    <h2>Data Analysis</h2>
-                    <p>
-                        Skilled in analyzing physiological sensor data like ECG and GSR. Expertise in feature extraction and machine learning integration.
-                    </p>
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Virtual Reality Gaming Development</h2>
+                        <p>
+                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                    <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Virtual Reality (VR)</li>
+                            <li>Unity Engine</li>
+                            <li>C#</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="tech-media">
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#9664;</button>
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/data1.jpg" alt="Data 1">
-                            <img src="images/data2.jpg" alt="Data 2">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
                             <video autoplay muted loop>
-                                <source src="videos/data.mp4" type="video/mp4">
+                                <source src="videos/vr_project.mp4" type="video/mp4">
                             </video>
                         </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#9654;</button>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
                 </div>
             </div>
@@ -104,7 +134,6 @@
     <?php include 'footer.html'; ?>
 
     <!-- JavaScript -->
-    <script src="tech_gallery.js"></script>
     <script src="script.js"></script>
 
 </body>

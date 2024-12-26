@@ -874,7 +874,7 @@ footer {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   margin-bottom: 30px;
-  overflow: hidden; /* Ensure tint doesn't overflow */
+  overflow: hidden; 
 }
 
 .tech-section::before {
@@ -884,7 +884,7 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* Adjust opacity for the tint */
+  background: rgba(0, 0, 0, 0.4); 
   z-index: 1;
 }
 
@@ -893,23 +893,73 @@ footer {
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 50px;
+  align-items: flex-start;
+  gap: 0;
   width: 100%;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.tech-text {
-  max-width: 50%;
-  text-align: justify;
-  font-size: 1.4rem;
-  color: #ddd;
+.tech-content.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tech-box {
+  display: flex;
+  flex-direction: row-reverse; 
   background: rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-radius: 10px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  min-height: 200px; 
+  position: relative; 
+}
+
+.tech-text {
+  flex: 0 0 65%; 
+  text-align: left;
+  font-size: 1.4rem;
+  color: #ddd;
+  border-radius: 10px;
+  padding: 0 20px;
+}
+
+.tech-skills {
+  flex: 0 0 35%; 
+  display: flex;
+  flex-direction: row; 
+  align-items: flex-start;
+  padding: 0 30px; 
+}
+
+.skill-divider {
+  width: 2px; 
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  margin-right: 20px; 
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.skills-list li::before {
+  content: '|';
+  margin-right: 10px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .tech-media {
+  flex: 1;
   max-width: 45%;
   display: flex;
   justify-content: center;
@@ -923,7 +973,41 @@ footer {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Alternating Layout for Reverse Sections */
+.tech-section:nth-child(even) .tech-box {
+  flex-direction: row;
+}
+
+.tech-section:nth-child(even) .skills-list {
+  flex-direction: row-reverse; 
+}
+
+.tech-section:nth-child(odd) .skills-list {
+  flex-direction: row-reverse; 
+  text-align: right;
+}
+
+.tech-section:nth-child(even) .skills-list li::before {
+  flex-direction: row-reverse; 
+}
+
+.tech-section:nth-child(odd) .skills-list li::before {
+  flex-direction: row-reverse; 
+  margin-right: 10px;
+  margin-left: 0;
+}
+
+.tech-section:nth-child(odd) .skill-divider {
+  order: 1; 
+  margin-left: 10px; 
+  margin-right: 0; 
+}
+
+.tech-section:nth-child(odd) .skill-divider {
+  order: 1; 
+  margin-left: 10px; 
+  margin-left: 0; 
+}
+
 .tech-content.reverse-layout {
   flex-direction: row-reverse;
 }
@@ -934,31 +1018,32 @@ footer {
 
 .tech-section:hover .tech-text {
   transform: scale(1.05);
-  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* Scrolling images/videos */
+/* Tech Gallery */
 .tech-gallery {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 500px; 
+  height: 500px; 
   overflow: hidden;
-  height: 300px; /* Fixed height for gallery */
+  background: #000; 
 }
 
 .gallery-items {
   display: flex;
   transition: transform 0.5s ease-in-out;
-  width: fit-content;
+  will-change: transform;
 }
 
 .gallery-items img,
 .gallery-items video {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 300px; /* Same height as gallery */
+  flex: 0 0 500px;
+  width: 500px;
+  height: 500px;
   object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -968,27 +1053,34 @@ footer {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  font-size: 4rem; 
+  font-weight: bold;
+  color: #ddd;
+  padding: 0 10px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10; 
+  background: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 10;
+  box-shadow: none;
+  outline: none;
+  box-sizing: border-box; 
+}
+
+.gallery-arrow.left-arrow {
+  left: 20px; 
+  transform: translateX(-50%) translateY(-50%); 
+}
+
+.gallery-arrow.right-arrow {
+  right: 20px;
+  transform: translateX(50%) translateY(-50%);
 }
 
 .gallery-arrow:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.left-arrow {
-  left: 10px;
-}
-
-.right-arrow {
-  right: 10px;
+  color: #f39c12; 
 }
 
 /* Responsive Styles Mobile */

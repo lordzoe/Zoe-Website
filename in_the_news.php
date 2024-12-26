@@ -104,7 +104,7 @@
             <!-- Content Box 6 -->
             <div class="content-box" onclick="expandBox(this)">
                 <div class="content-image">
-                    <img src="images/hackathon_2024_1.jpg" alt="Hackthon">
+                    <img src="images/hackathon_2024_1.png" alt="Hackthon">
                 </div>
                 <div class="content-info">
                     <h2>Next Generation Medical Simulation Hackathon 2024</h2>

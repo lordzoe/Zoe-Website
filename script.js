@@ -121,44 +121,41 @@ menuIcon.addEventListener('click', () => {
   fullscreenNav.classList.toggle('active');
 });
 
-// Content-Box.Expanded
+// Expanded Box Overlay
 function expandBox(box) {
-  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
-  box.classList.add('expanded');
+  const details = box.querySelector('.content-details');
+  if (!details) return;
+
+  const mainImageHtml = box.querySelector('.content-image').innerHTML;
+  const overlay = document.getElementById('expanded-overlay');
+  const overlayContent = document.getElementById('expanded-box-content');
+
+  overlayContent.innerHTML = `
+    <div class="overlay-image">${mainImageHtml}</div>
+    ${details.innerHTML}
+    <span class="expanded-close" onclick="closeBox()">×</span>
+  `;
+
+  overlay.classList.add('active');
   document.body.classList.add('no-scroll-content');
 }
 
 function closeBox() {
-  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
+  const overlay = document.getElementById('expanded-overlay');
+  const overlayContent = document.getElementById('expanded-box-content');
+
+  overlay.classList.remove('active');
+  overlayContent.innerHTML = '';
   document.body.classList.remove('no-scroll-content');
 }
 
-document.addEventListener('click', (event) => {
-  const expandedBox = document.querySelector('.content-box.expanded');
-  const lightbox = document.getElementById('image-lightbox');
-  if (expandedBox && !expandedBox.contains(event.target) && !lightbox.contains(event.target)) {
-    closeBox();
-  }
-});
-
-// Image Lightbox
-function expandBox(box) {
-  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
-  box.classList.add('expanded');
-  document.body.classList.add('no-scroll-content');
-}
-
-function closeBox() {
-  document.querySelectorAll('.content-box').forEach(b => b.classList.remove('expanded'));
-  document.body.classList.remove('no-scroll-content');
-}
-
-document.addEventListener('click', (event) => {
-  const expandedBox = document.querySelector('.content-box.expanded');
-  const lightbox = document.getElementById('image-lightbox');
-  if (expandedBox && !expandedBox.contains(event.target) && !lightbox.contains(event.target)) {
-    closeBox();
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('expanded-overlay');
+  overlay.addEventListener('click', (e) => {
+    if (e.target.id === 'expanded-overlay') {
+      closeBox();
+    }
+  });
 });
 
 // Image Lightbox
@@ -289,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 });
 
-//Navbar Banner
+// Navbar Banner
 document.addEventListener("DOMContentLoaded", function () {
   const banner = document.getElementById("navbar-banner");
   let lastScrollTop = 0;

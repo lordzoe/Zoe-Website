@@ -30,7 +30,6 @@
 
             <!-- Content Box 1 -->
             <div class="content-box" onclick="expandBox(this)">
-                
                 <div class="content-image">
                     <img src="images/iac_2024_1.png" alt="IAC Conference 2024">
                 </div>
@@ -40,7 +39,6 @@
                 </div>
                 <div class="content-details">
                     <?php include('iac_2024.html'); ?>
-                    <div class="expanded-close" onclick="event.stopPropagation(); closeBox()">×</div>
                 </div>
             </div>
 
@@ -58,7 +56,6 @@
                 </div>
                 <div class="content-details">
                     <?php include('eva_2024.html'); ?>
-                    <div class="expanded-close" onclick="event.stopPropagation(); closeBox()">×</div>
                 </div>
             </div>
 
@@ -73,7 +70,6 @@
                 </div>
                 <div class="content-details">
                     <?php include('USNA_2024.html'); ?>
-                    <div class="expanded-close" onclick="event.stopPropagation(); closeBox()">×</div>
                 </div>
             </div>
 
@@ -88,15 +84,47 @@
                 </div>
                 <div class="content-details">
                     <?php include('science_rendezvous_2024.html'); ?>
-                    <div class="expanded-close" onclick="event.stopPropagation(); closeBox()">×</div>
+                </div>
+            </div>
+
+            <!-- Content Box 5 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/solar_eclipse_2024_1.jpg" alt="Solar Eclipse">
+                </div>
+                <div class="content-info">
+                    <h2>Total Solar Eclipse 2024</h2>
+                    <p>April 2024</p>
+                </div>
+                <div class="content-details">
+                    <?php include('solar_eclipse_2024.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 6 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/hackathon_2024_1.jpg" alt="Hackthon">
+                </div>
+                <div class="content-info">
+                    <h2>Next Generation Medical Simulation Hackathon 2024</h2>
+                    <p>February 2024</p>
+                </div>
+                <div class="content-details">
+                    <?php include('hackathon_2024.html'); ?>
                 </div>
             </div>
 
         </section>
     </main>
 
-    <!-- Blur Overlay -->
-    <div class="blur-overlay" onclick="closeBox()"></div>
+    <!-- Dedicated Overlay for Expanded Content -->
+    <div class="expanded-overlay" id="expanded-overlay">
+      <div class="expanded-content">
+          <span class="expanded-close" onclick="closeBox()">×</span>
+          <div id="expanded-box-content"></div>
+      </div>
+    </div>
 
     <!-- Image Lightbox Overlay -->
     <div class="image-lightbox" id="image-lightbox">
@@ -109,6 +137,6 @@
     <!-- JavaScript -->
     <script src="script.js"></script>
 
-    <?php include 'footer.html'; ?>    
+    <?php include 'footer.html'; ?>
 </body>
 </html>

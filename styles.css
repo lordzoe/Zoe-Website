@@ -62,7 +62,6 @@ p {
   transition: all 0.3s ease;
 }
 
-/* Fullscreen Navigation */
 .fullscreen-nav {
   position: fixed;
   top: 0;
@@ -127,7 +126,6 @@ p {
   transform: translateY(0);
 }
 
-/* Center and Style Navbar Name */
 .navbar-name {
   flex: 1;
   text-align: center;
@@ -144,7 +142,6 @@ p {
   color: inherit;
 }
 
-/* Navbar Banner for Credentials */
 .navbar-banner {
   position: fixed;
   top: 50px; 
@@ -166,7 +163,7 @@ p {
   transform: translateY(-100%);
 }
 
-/* Footer Styles */
+/* Footer */
 footer {
   background-color: #0f4c75;
   color: #ddd;
@@ -208,7 +205,7 @@ footer {
   letter-spacing: 1px;
 }
 
-/* News Page Container */
+/* News Page */
 .news-container {
   display: flex;
   flex-direction: column;
@@ -221,12 +218,11 @@ footer {
   animation: aboutFadeIn 1s ease both;
 }
 
-/* News Page Header Title */
 .news-header {
   text-align: left;
   max-width: 1300px;
   width: 100%;
-  margin-bottom: 0px; /*Space between header and content*/
+  margin-bottom: 30px; /*Space between header and content*/
   margin-top: -50px;
 }
 
@@ -240,7 +236,6 @@ footer {
   display: none; 
 }
 
-/* Main Content Container */
 .content-container {
   display: grid;
   grid-template-columns: repeat(3, 300px);
@@ -249,7 +244,6 @@ footer {
   padding: 30px 20px;
 }
 
-/* Individual Content Box */
 .content-box {
   position: relative;
   height: 400px;
@@ -383,7 +377,7 @@ footer {
   transform: scale(1.05);
 }
 
-/* Overlay Image Styling */
+/* Overlay Images */
 .expanded-content .overlay-image {
   width: 100%;
   max-width: 3000px; 
@@ -492,7 +486,7 @@ footer {
   color: #f39c12;
 }
 
-/* Canvas Background */
+/* Orb Canvas */
 #orb-canvas {
   position: fixed;
   top: 0;
@@ -509,7 +503,7 @@ footer {
   to { opacity: 1; }
 }
 
-/* About Page Container */
+/* About Page */
 .about-container {
   display: flex;
   flex-direction: column;
@@ -522,7 +516,6 @@ footer {
   animation: aboutFadeIn 1s ease both;
 }
 
-/* Layout Wrapper for Image and Text */
 .about-content {
   display: flex;
   align-items: flex-start;
@@ -531,7 +524,6 @@ footer {
   max-width: 1800px; 
 }
 
-/* Headshot Image */
 .about-image {
   width: 500px; 
   height: 500px; 
@@ -549,7 +541,6 @@ footer {
   object-position: 65% center; 
 }
 
-/* About Details (Header + Text) */
 .about-details {
   display: flex;
   flex-direction: column;
@@ -558,7 +549,6 @@ footer {
   color: #fff;
 }
 
-/* About Header Title */
 .about-header {
   text-align: left;
   margin-bottom: 30px; 
@@ -570,7 +560,6 @@ footer {
   margin: 0;
 }
 
-/* About Text */
 .about-text {
   text-align: justify; 
   font-size: 1.4rem;
@@ -583,7 +572,6 @@ footer {
   transition: transform 0.3s ease, background-color 0.3s ease; 
 }
 
-/* Hover Effect */
 .about-text:hover {
   transform: scale(1.05); 
   background-color: #333; 
@@ -601,7 +589,7 @@ footer {
   }
 }
 
-/* Contact Page Container */
+/* Contact Page */
 .contact-container {
   display: flex;
   flex-direction: column;
@@ -614,7 +602,6 @@ footer {
   animation: aboutFadeIn 1s ease both;
 }
 
-/* Layout Wrapper for Image and Contact Details */
 .contact-content {
   display: flex;
   align-items: flex-start;
@@ -623,7 +610,6 @@ footer {
   max-width: 1300px;
 }
 
-/* Contact Headshot Image */
 .contact-image {
   width: 500px;
   height: 500px;
@@ -641,7 +627,6 @@ footer {
   object-position: 65% center;
 }
 
-/* Contact Details (Header, Text, Social Links) */
 .contact-details {
   display: flex;
   flex-direction: column;
@@ -650,7 +635,6 @@ footer {
   color: #ddd;
 }
 
-/* Contact Header */
 .contact-header {
   text-align: justify;
   margin-bottom: 30px; 
@@ -662,7 +646,6 @@ footer {
   margin: 0;
 }
 
-/* Contact Text Box */
 .contact-box {
   text-align: justify;
   font-size: 2rem;
@@ -684,7 +667,7 @@ footer {
   color: #ffffff;
 }
 
-/* Social Container */
+/* Social Logos */
 .contact-social-container {
   display: flex;
   flex-direction: row;
@@ -701,7 +684,7 @@ footer {
   transform: scale(1.15);
 }
 
-/* Speaking Page Container */
+/* Speaking Page */
 .speaking-container {
   display: flex;
   flex-direction: column;
@@ -714,7 +697,6 @@ footer {
   animation: aboutFadeIn 1s ease both;
 }
 
-/* Speaking Header Title */
 .speaking-header {
   text-align: left;
   max-width: 1300px; 
@@ -729,7 +711,6 @@ footer {
   margin: 0;
 }
 
-/* Speaking Text */
 .speaking-text {
   text-align: justify;
   font-size: 1.4rem;
@@ -772,7 +753,6 @@ footer {
   color: #fff; 
 }
 
-/* Hover Effect on li */
 .speaking-list li:hover {
   transform: scale(1.05);
   background-color: #f39c12; 
@@ -782,7 +762,7 @@ footer {
   color: #fff; 
 }
 
-/* Index Container */
+/* Index Page */
 .index-container {
   position: relative;
   width: 100%;
@@ -795,7 +775,6 @@ footer {
   padding: 0px 0px;
 }
 
-/* Dark Overlay */
 .index-overlay {
   position: absolute;
   top: 0;
@@ -808,7 +787,6 @@ footer {
   justify-content: center;
 }
 
-/* Index Content */
 .index-content {
   max-width: 800px;
   text-align: center;
@@ -856,6 +834,161 @@ footer {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tech Skills Page */
+.tech-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 180px;
+  margin: 50px;
+  box-sizing: border-box;
+}
+
+.tech-header {
+  text-align: left;
+  max-width: 1300px; 
+  width: 100%;
+  margin-bottom: 30px; 
+  margin-top: -50px;
+}
+
+.tech-header h1 {
+  font-size: 4rem;
+  color: #fff;
+  margin: 0;
+}
+
+.tech-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  max-width: 1550px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin-bottom: 30px;
+  overflow: hidden; /* Ensure tint doesn't overflow */
+}
+
+.tech-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Adjust opacity for the tint */
+  z-index: 1;
+}
+
+.tech-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+  width: 100%;
+}
+
+.tech-text {
+  max-width: 50%;
+  text-align: justify;
+  font-size: 1.4rem;
+  color: #ddd;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.tech-media {
+  max-width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tech-media img,
+.tech-media video {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Alternating Layout for Reverse Sections */
+.tech-content.reverse-layout {
+  flex-direction: row-reverse;
+}
+
+.tech-section:nth-child(even) .tech-content {
+  flex-direction: row-reverse;
+}
+
+.tech-section:hover .tech-text {
+  transform: scale(1.05);
+  background-color: #333;
+}
+
+/* Scrolling images/videos */
+.tech-gallery {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  height: 300px; /* Fixed height for gallery */
+}
+
+.gallery-items {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: fit-content;
+}
+
+.gallery-items img,
+.gallery-items video {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 300px; /* Same height as gallery */
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.gallery-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
 }
 
 /* Responsive Styles Mobile */
@@ -930,7 +1063,7 @@ footer {
     font-size: 0.8rem;
   }
 
-  /* News Container */
+  /* News Page */
   .news-container {
     align-items: flex-start; 
     margin: 20px;
@@ -938,7 +1071,6 @@ footer {
     animation: none;
   }
 
-  /* Content Boxes */
   .content-container {
     padding: 20px 10px;
     gap: 10px;
@@ -962,7 +1094,7 @@ footer {
     transform: scale(1.02);
     background-color: #1b1b1b;
   }
-  
+
   .content-info h2 {
     font-size: 1.2rem;
   }

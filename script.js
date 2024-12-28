@@ -363,11 +363,12 @@ sections.forEach((section) => {
 });
 
 // Homepage Delay Animation
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const indexContent = document.querySelector(".index-content");
   setTimeout(() => {
-    indexContent.classList.add("with-image"); 
-  }, 5000); 
+    indexContent.classList.add("with-image");
+  }, 3500);
 });
+
 
 

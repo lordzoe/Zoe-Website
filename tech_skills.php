@@ -31,7 +31,7 @@
                     <div class="tech-text">
                         <h2>Virtual Reality Gaming Development</h2>
                         <p>
-                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                            Text here.
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -59,22 +59,23 @@
             </div>
         </section>
 
-        <!-- Section 2 -->
+        <!-- Section 2 -->->
         <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
-                        <h2>Virtual Reality Gaming Development</h2>
+                        <h2>Functional Near-Infrared Spectroscopy</h2>
                         <p>
-                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                            Text here.
                         </p>
                     </div>
                     <div class="tech-skills">
-                    <div class="skill-divider"></div>
+                        <div class="skill-divider"></div>
                         <ul class="skills-list">
-                            <li>Virtual Reality (VR)</li>
-                            <li>Unity Engine</li>
-                            <li>C#</li>
+                            <li>OxySoft Software</li>
+                            <li>PsychoPy Software</li>
+                            <li>Python</li>
+                            <li>MATLAB</li>
                         </ul>
                     </div>
                 </div>
@@ -94,22 +95,23 @@
             </div>
         </section>
 
+
         <!-- Section 3 -->
         <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
-                        <h2>Virtual Reality Gaming Development</h2>
+                        <h2>Eye-Tracking</h2>
                         <p>
-                            Developed immersive gaming experiences using Unity Engine, focusing on interactive environments and gameplay mechanics.
+                            Text here.
                         </p>
                     </div>
                     <div class="tech-skills">
-                    <div class="skill-divider"></div>
+                        <div class="skill-divider"></div>
                         <ul class="skills-list">
-                            <li>Virtual Reality (VR)</li>
-                            <li>Unity Engine</li>
-                            <li>C#</li>
+                            <li>SRanipal Runtime Software</li>
+                            <li>Python</li>
+                            <li>IBM SPSS Statistics</li>
                         </ul>
                     </div>
                 </div>
@@ -128,6 +130,154 @@
                 </div>
             </div>
         </section>
+
+        <!-- Section 4 -->
+        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+            <div class="tech-content">
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Cardiovascular Resuscitation (CPR) Manikin Testing Platform</h2>
+                        <p>
+                            Text here.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                        <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Cardiovascular Fluid Dynamics</li>
+                            <li>FISO Pressure Transducer</li>
+                            <li>Electric Linear Actuator</li>
+                            <li>SolidWorks Software</li>
+                            <li>Evolution Software</li>
+                            <li>Moons Software</li>
+                            <li>Python</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <div class="gallery-items">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <video autoplay muted loop>
+                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+            <div class="tech-content">
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Biomonitoring</h2>
+                        <p>
+                            Text here.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                        <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Biomonitor Sensors</li>
+                            <li>Tranceiver Modules</li>
+                            <li>Soldering/Desoldering</li>
+                            <li>Arduino IDE</li>
+                            <li>Python</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <div class="gallery-items">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <video autoplay muted loop>
+                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6 -->
+        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+            <div class="tech-content">
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Perovskite Nanoparticle Synthesis</h2>
+                        <p>
+                            Text here.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                        <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>Inorganic Synthesis</li>
+                            <li>Microwave-Assisted Solvothermal (MAS) Reactor</li>
+                            <li>ATR-IR Spectroscopy</li>
+                            <li>UV/VIS Spectroscopy</li>
+                            <li>Powder X-Ray Diffraction (pXRD)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <div class="gallery-items">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <video autoplay muted loop>
+                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7 -->
+        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+            <div class="tech-content">
+                <div class="tech-box">
+                    <div class="tech-text">
+                        <h2>Web Development</h2>
+                        <p>
+                            Text here.
+                        </p>
+                    </div>
+                    <div class="tech-skills">
+                        <div class="skill-divider"></div>
+                        <ul class="skills-list">
+                            <li>JavaScript</li>
+                            <li>HTML/CSS</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <div class="gallery-items">
+                            <img src="images/vr_1.jpg" alt="VR Project 1">
+                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <video autoplay muted loop>
+                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->

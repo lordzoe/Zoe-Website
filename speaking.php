@@ -30,6 +30,7 @@
 
             <ul class="speaking-list">
                 <li>
+                    <img src="images/iac_2024_6.png" alt="Event Icon" class="speaking-img">
                     <a href="https://iafastro.directory/iac/paper/id/86069/abstract-pdf/IAC-24,A1,7,4,x86069.brief.pdf?2024-03-26.17:16:15" target="_blank">
                         <p><strong>[ October 2024 ] Milano, Italia</strong></p>
                         <p><strong>Oral Presentation at the International Astronautical Congress (IAC 2024)</strong></p> 
@@ -38,6 +39,7 @@
                 </li>
 
                 <li>
+                    <img src="images/iac_2024_1.png" alt="Event Icon" class="speaking-img">
                     <a href="https://iafastro.directory/iac/paper/id/86302/abstract-pdf/IAC-24,A1,3,6,x86302.brief.pdf?2024-03-28.08:18:55" target="_blank">
                         <p><strong>[ October 2024 ] Milano, Italia </strong></p>
                         <p><strong>Oral Presentation at the International Astronautical Congress (IAC 2024)</strong></p> 
@@ -46,6 +48,7 @@
                 </li>
 
                 <li>
+                    <img src="images/USNA_logo.png" alt="Event Icon" class="speaking-img contain-img">
                     <a target="_blank">
                         <p><strong>[ October 2024 ] Annapolis, Maryland, USA</strong></p>
                         <p><strong>Guest Speaker at United States Naval Academy</strong></p>
@@ -54,6 +57,7 @@
                 </li>
 
                 <li>
+                    <img src="images/metaverse_podcast.png" alt="Event Icon" class="speaking-img">
                     <a href="https://ontheblockchain.ca/2024/03/072-zoe-lord/" target="_blank">
                         <p><strong>[ March 2024 ] Kingston, Ontario, Canada</strong></p>
                         <p><strong>Guest Speaker on the <em>Making the Metaverse</em> Podcast hosted by OntheBlockChain</strong></p>
@@ -62,6 +66,7 @@
                 </li>
 
                 <li>
+                    <img src="images/grad_chat_podcast.jpg" alt="Event Icon" class="speaking-img">
                     <a href="https://podcast.cfrc.ca/podcast/zoe-lord-chemistry-testing-the-impact-of-cognitive-overload-on-task-performance-in-virtual-reality-vr-to-provide-insights-into-vr-design-for-chemistry-education/" target="_blank">
                         <p><strong>[ October 2023 ] Kingston, Ontario, Canada</strong></p>
                         <p><strong>Guest Speaker on the <em>Grad Chat</em> Podcast hosted by the CFRC Network</strong></p>
@@ -70,6 +75,7 @@
                 </li>
 
                 <li>
+                    <img src="images/upper_canada_school_board_logo.png" alt="Event Icon" class="speaking-img">
                     <a target="_blank">
                         <p><strong>[ May 2023 ] Athens, Ontario, Canada</strong></p>
                         <p><strong>Guest Speaker at Athens District Public School</strong></p>
@@ -78,6 +84,7 @@
                 </li>
 
                 <li>
+                    <img src="images/upper_canada_school_board_logo.png" alt="Event Icon" class="speaking-img">
                     <a target="_blank">
                         <p><strong>[ October 2022 ] Pineview, Ontario, Canada</strong></p>
                         <p><strong>Guest Speaker at Pineview Public School</strong></p>
@@ -86,6 +93,7 @@
                 </li>
 
                 <li>
+                    <img src="images/getoriented_podcast.png" alt="Event Icon" class="speaking-img">
                     <a href="https://www.youtube.com/watch?v=YVphJZj-sdE&ab_channel=CUBCAPS" target="_blank">
                         <p><strong>[ May 2022 ] Montreal, Québec, Canada</strong></p>
                         <p><strong>Host on the <em>Get Oriented!</em> Podcast with Special Guest Dr. Pat Forgione</strong></p>

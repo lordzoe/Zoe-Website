@@ -22,12 +22,10 @@
 
     <!-- Main Index Section -->
     <main class="index-container">
-        <div class="index-overlay">
-            <div class="index-content">
-                <h1>Exploring the Frontiers of Science and Engineering</h1>
-                <p>A journey of interdisciplinary research, from cognitive load to medical technologies for spaceflight environments. Discovering how curiosity and persistence can push us towards new horizons in human exploration.</p>
-                <a href="in_the_news.php" class="index-button">Learn More</a>
-            </div>
+        <div id="index-content" class="index-content">
+            <h1>Exploring the Frontiers of Science and Engineering</h1>
+            <p>A journey of interdisciplinary research, from cognitive load to medical technologies for spaceflight environments. Discovering how curiosity and persistence can push us towards new horizons in human exploration.</p>
+            <a href="in_the_news.php" class="index-button">Learn More</a>
         </div>
     </main>
 

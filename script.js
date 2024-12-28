@@ -361,3 +361,13 @@ sections.forEach((section) => {
   observer.observe(section);
 });
 });
+
+// Homepage Delay Animation
+document.addEventListener("DOMContentLoaded", function () {
+  const indexContent = document.querySelector(".index-content");
+  setTimeout(() => {
+    indexContent.classList.add("with-image"); 
+  }, 5000); 
+});
+
+

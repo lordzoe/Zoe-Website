@@ -5,7 +5,7 @@ body, html {
   height: 100%;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  background-color:#111;
+  background-color: #111;
 }
 
 body {
@@ -546,7 +546,7 @@ footer {
   flex-direction: column;
   align-items: flex-start;
   max-width: 1800px;
-  color: #fff;
+  color: #ddd;
 }
 
 .about-header {
@@ -556,7 +556,7 @@ footer {
 
 .about-header h1 {
   font-size: 4rem;
-  color: #fff;
+  color: #ddd;
   margin: 0;
 }
 
@@ -642,7 +642,7 @@ footer {
 
 .contact-header h1 {
   font-size: 4rem;
-  color: #fff;
+  color: #ddd;
   margin: 0;
 }
 
@@ -707,7 +707,7 @@ footer {
 
 .speaking-header h1 {
   font-size: 4rem;
-  color: #fff;
+  color: #ddd;
   margin: 0;
 }
 
@@ -726,7 +726,15 @@ footer {
 }
 
 /* List Styling */
+.speaking-list {
+  list-style: none; 
+  padding: 0; 
+}
+
 .speaking-list li {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
   background-color: #1d1d1d;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.5);
@@ -736,11 +744,24 @@ footer {
   overflow: hidden;
 }
 
+.speaking-list li img.speaking-img {
+  width: 180px; 
+  height: 160px; 
+  margin: 15px; 
+  object-fit: cover; 
+  border-radius: 5px; 
+}
+
+.speaking-list li img.contain-img {
+  object-fit: contain; 
+}
+
 .speaking-list li a {
   display: block;
   padding: 20px; 
   color: #ddd;
   text-decoration: none;
+  flex-grow: 1; 
   transition: color 0.3s ease;
 }
 
@@ -750,7 +771,7 @@ footer {
 }
 
 .speaking-list li p strong {
-  color: #fff; 
+  color: #ddd; 
 }
 
 .speaking-list li:hover {
@@ -759,7 +780,7 @@ footer {
 }
 
 .speaking-list li:hover a {
-  color: #fff; 
+  color: #ddd; 
 }
 
 /* Index Page */
@@ -775,18 +796,6 @@ footer {
   padding: 0px 0px;
 }
 
-.index-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(17, 17, 17, 0.6); 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .index-content {
   max-width: 800px;
   text-align: center;
@@ -794,9 +803,50 @@ footer {
   z-index: 2;
   padding: 40px;
   background: rgba(0,0,0,0.3);
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  animation: fadeIn 1s ease both;
+  animation: fadeIn 2s ease both;
+  transition: background 1s ease;
+}
+
+.index-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  z-index: 1;
+  border-radius: 20px;
+  opacity: 0;
+  animation: fadeIn 40s ease both;
+}
+
+.index-content.with-image::before {
+  background: url('images/homepage_image.jpg') center/cover no-repeat; 
+  opacity: 1; 
+}
+
+.index-content.with-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); 
+  z-index: 2;
+  border-radius: 20px;
+  animation: fadeInStatic 40s ease both;
+}
+
+.index-content h1,
+.index-content p,
+.index-content .index-button {
+  position: relative; 
+  z-index: 3; 
 }
 
 .index-content h1 {
@@ -830,7 +880,11 @@ footer {
   background: #d87f0f;
 }
 
-/* Fade-In Animation */
+@keyframes fadeInStatic {
+  from { opacity: 1; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -857,7 +911,7 @@ footer {
 
 .tech-header h1 {
   font-size: 4rem;
-  color: #fff;
+  color: #ddd;
   margin: 0;
 }
 
@@ -869,7 +923,7 @@ footer {
   padding: 100px 20px;
   background-size: cover;
   background-position: center;
-  color: #fff;
+  color: #ddd;
   max-width: 1550px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
@@ -947,7 +1001,7 @@ footer {
   padding: 0;
   margin: 0;
   font-size: 1.2rem;
-  color: #fff;
+  color: #ddd;
   text-align: left;
   line-height: 1.8;
 }
@@ -1237,7 +1291,7 @@ footer {
     right: 10px;
     font-size: 4rem;
     font-weight: bold;
-    color: #fff;
+    color: #ddd;
     cursor: pointer;
     z-index: 2001;
   }
@@ -1329,12 +1383,25 @@ footer {
 
   .speaking-list li {
     background-color: #0e0e0e;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     justify-content: left;
     margin: 10px auto;
     padding: 0px 0px;
+    border-radius: 5px;
     box-sizing: border-box;
+  }
+
+  .speaking-list li img.speaking-img {
+    width: 150px; 
+    height: 140px; 
+    margin-bottom: 10px; 
+    object-fit: cover; 
+    border-radius: 5px; 
+  }
+
+  .speaking-list li img.contain-img {
+    object-fit: contain;
   }
 
   .speaking-list li a {

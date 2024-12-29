@@ -962,11 +962,11 @@ footer {
 .tech-box {
   display: flex;
   flex-direction: row-reverse; 
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   padding: 20px;
   border-radius: 10px;
-  width: 100%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 60%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   min-height: 200px; 
   position: relative; 
 }
@@ -1082,6 +1082,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 5px;
   width: 500px; 
   height: 500px; 
   overflow: hidden;
@@ -1462,6 +1463,74 @@ footer {
     display: flex;
     flex-direction: row;
     gap: 10px;
+  }
+
+  /* Tech Skills Page */
+  .tech-container {
+    margin: 20px;        
+    padding-top: 40px;   
+  }
+
+  .tech-header h1 {
+    font-size: 1rem;   
+  }
+
+  .tech-section {
+    width: 100%;
+    height: 300px;             
+    padding: 20px 5px;
+    display: flex;
+    flex-direction: column;  
+    align-items: center;
+    justify-content: flex-start; 
+  }
+
+  .tech-content {
+    flex-direction: column;
+    align-items: center;      
+    width: 100%;
+    gap: 10px;            
+  }
+
+  .tech-text {
+    font-size: 0.8rem;     
+    padding: 0 5px;     
+  }
+
+  .tech-skills {
+    padding: 0;          
+  }
+
+  .skill-divider {
+    margin: 0 5px;
+  }
+
+  .skills-list li {
+    margin-bottom: 5px;  
+    font-size: 0.5rem;
+  }
+
+  .tech-media {
+    width: 100%;            
+    max-width: 200px;       
+    margin-top: auto;        
+    margin-bottom: 20px;     
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tech-gallery {
+    width: 150px;
+    height: 150px;
+    background: #000;
+  }
+
+  .gallery-items img,
+  .gallery-items video {
+    flex: 0 0 100px;   
+    width: 100px;
+    height: 100px;
   }
 
 }

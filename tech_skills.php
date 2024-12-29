@@ -25,7 +25,7 @@
         </div>
 
         <!-- Section 1 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_1_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -60,7 +60,7 @@
         </section>
 
         <!-- Section 2 -->->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_2_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -72,8 +72,8 @@
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
                         <ul class="skills-list">
-                            <li>OxySoft Software</li>
-                            <li>PsychoPy Software</li>
+                            <li>OxySoft</li>
+                            <li>PsychoPy</li>
                             <li>Python</li>
                             <li>MATLAB</li>
                         </ul>
@@ -97,7 +97,7 @@
 
 
         <!-- Section 3 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_3_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -109,7 +109,7 @@
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
                         <ul class="skills-list">
-                            <li>SRanipal Runtime Software</li>
+                            <li>SRanipal Runtime</li>
                             <li>Python</li>
                             <li>IBM SPSS Statistics</li>
                         </ul>
@@ -132,7 +132,7 @@
         </section>
 
         <!-- Section 4 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_4_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -147,9 +147,8 @@
                             <li>Cardiovascular Fluid Dynamics</li>
                             <li>FISO Pressure Transducer</li>
                             <li>Electric Linear Actuator</li>
-                            <li>SolidWorks Software</li>
-                            <li>Evolution Software</li>
-                            <li>Moons Software</li>
+                            <li>SolidWorks</li>
+                            <li>Evolution</li>
                             <li>Python</li>
                         </ul>
                     </div>
@@ -171,7 +170,7 @@
         </section>
 
         <!-- Section 5 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_5_image.jpg'); background-size: cover;">">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -208,7 +207,7 @@
         </section>
 
         <!-- Section 6 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_6_image.jpg'); background-size: contain;">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -221,7 +220,7 @@
                         <div class="skill-divider"></div>
                         <ul class="skills-list">
                             <li>Inorganic Synthesis</li>
-                            <li>Microwave-Assisted Solvothermal (MAS) Reactor</li>
+                            <li>Microwave-Assisted Solvothermal Reactor</li>
                             <li>ATR-IR Spectroscopy</li>
                             <li>UV/VIS Spectroscopy</li>
                             <li>Powder X-Ray Diffraction (pXRD)</li>
@@ -245,7 +244,7 @@
         </section>
 
         <!-- Section 7 -->
-        <section class="tech-section" style="background-image: url('images/headshot_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_7_image.jpg')">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">

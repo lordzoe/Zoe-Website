@@ -367,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const indexContent = document.querySelector(".index-content");
   setTimeout(() => {
     indexContent.classList.add("with-image");
-  }, 3500);
+  }, 3000);
 });
 
 

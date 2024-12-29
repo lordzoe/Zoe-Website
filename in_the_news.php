@@ -34,7 +34,7 @@
                     <img src="images/iac_2024_1.png" alt="IAC Conference 2024">
                 </div>
                 <div class="content-info">
-                    <h2>Attending the IAC Conference 2024</h2>
+                    <h2>Attending the IAC Conference</h2>
                     <p>October 2024</p>
                 </div>
                 <div class="content-details">
@@ -51,7 +51,7 @@
                     </video>
                 </div>
                 <div class="content-info">
-                    <h2>EVA Space Suit Evaluation Course 2024</h2>
+                    <h2>Conducting Research in EVA Space Suit</h2>
                     <p>October 2024</p>
                 </div>
                 <div class="content-details">
@@ -79,7 +79,7 @@
                     <img src="images/science_rendezvous_2024_1.jpg" alt="Science Rendezvous 2">
                 </div>
                 <div class="content-info">
-                    <h2>Science Rendezvous! 2024</h2>
+                    <h2>Science Rendezvous!</h2>
                     <p>May 2024</p>
                 </div>
                 <div class="content-details">
@@ -93,7 +93,7 @@
                     <img src="images/solar_eclipse_2024_1.jpg" alt="Solar Eclipse">
                 </div>
                 <div class="content-info">
-                    <h2>Total Solar Eclipse 2024</h2>
+                    <h2>Total Solar Eclipse Ambassador</h2>
                     <p>April 2024</p>
                 </div>
                 <div class="content-details">
@@ -107,11 +107,84 @@
                     <img src="images/hackathon_2024_1.png" alt="Hackthon">
                 </div>
                 <div class="content-info">
-                    <h2>Next Generation Medical Simulation Hackathon 2024</h2>
+                    <h2>Next Generation Medical Simulation Hackathon</h2>
                     <p>February 2024</p>
                 </div>
                 <div class="content-details">
                     <?php include('hackathon_2024.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 7 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/space_medicine_2023_1.jpg" alt="Space Medicine">
+                </div>
+                <div class="content-info">
+                    <h2>Venturing Into the Lava Tubes</h2>
+                    <p>September 2023</p>
+                </div>
+                <div class="content-details">
+                    <?php include('space_medicine_2023.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 8 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <video autoplay muted loop playsinline>
+                        <source src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="content-info">
+                    <h2>Conducting Research in Microgravity</h2>
+                    <p>August 2023</p>
+                </div>
+                <div class="content-details">
+                    <?php include('CAN-RGX_2023.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 9 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/PADI_2023_1.jpg" alt="PADI">
+                </div>
+                <div class="content-info">
+                    <h2>PADI Scuba Diving</h2>
+                    <p>July 2023</p>
+                </div>
+                <div class="content-details">
+                    <?php include('PADI_2023.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 10 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/CSC_2023_1.jpg" alt="CSC">
+                </div>
+                <div class="content-info">
+                    <h2>Attending the CSC Conference</h2>
+                    <p>June 2023</p>
+                </div>
+                <div class="content-details">
+                    <?php include('CSC_2023.html'); ?>
+                </div>
+            </div>
+
+            <!-- Content Box 11 -->
+            <div class="content-box" onclick="expandBox(this)">
+                <div class="content-image">
+                    <img src="images/IIAS_2023_1.jpg" alt="IIAS">
+                </div>
+                <div class="content-info">
+                    <h2>Training with IIAS</h2>
+                    <p>March 2023</p>
+                </div>
+                <div class="content-details">
+                    <?php include('IIAS_2023.html'); ?>
                 </div>
             </div>
 

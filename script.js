@@ -121,7 +121,7 @@ menuIcon.addEventListener('click', () => {
   fullscreenNav.classList.toggle('active');
 });
 
-// Expanded Box Overlay
+// News Expanded Box Overlay
 function expandBox(box) {
   const details = box.querySelector('.content-details');
   if (!details) return;
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Image Lightbox
+// News Image Lightbox
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.getElementById('image-lightbox');
   const lightboxClose = document.getElementById('lightbox-close');

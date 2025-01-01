@@ -48,10 +48,10 @@
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
+                            <img src="images/CAN-RGX_2023_2.jpg" alt="VR Project 1">
+                            <img src="images/CAN-RGX_2023_3.jpg" alt="VR Project 2">
                             <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
+                                <source src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
                             </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>

@@ -122,41 +122,166 @@ menuIcon.addEventListener('click', () => {
 });
 
 // News Expanded Box Overlay
+const contentCache = {};
+
+function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
+    return new Promise((resolve, reject) => {
+        const attemptFetch = (n) => {
+            fetch(url, options)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => resolve(data))
+                .catch(error => {
+                    if (n > 0) {
+                        console.warn(`Fetch failed. Retrying in ${backoff}ms... (${n} retries left)`);
+                        setTimeout(() => attemptFetch(n - 1), backoff);
+                    } else {
+                        reject(error);
+                    }
+                });
+        };
+        attemptFetch(retries);
+    });
+}
+
 function expandBox(box) {
-  const details = box.querySelector('.content-details');
-  if (!details) return;
+    const contentFile = box.getAttribute('data-content');
+    if (!contentFile) {
+        console.error('No data-content attribute found for this content-box.');
+        return;
+    }
 
-  const mainImageHtml = box.querySelector('.content-image').innerHTML;
-  const overlay = document.getElementById('expanded-overlay');
-  const overlayContent = document.getElementById('expanded-box-content');
+    const mainImageHtml = box.querySelector('.content-image').innerHTML;
+    const overlay = document.getElementById('expanded-overlay');
+    const overlayContent = document.getElementById('expanded-box-content');
 
-  overlayContent.innerHTML = `
-    <div class="overlay-image">${mainImageHtml}</div>
-    ${details.innerHTML}
-    <span class="expanded-close" onclick="closeBox()">×</span>
-  `;
+    overlay.classList.add('active');
+    document.body.classList.add('no-scroll-content');
 
-  overlay.classList.add('active');
-  document.body.classList.add('no-scroll-content');
+    overlayContent.innerHTML = `
+        <div class="overlay-image">${mainImageHtml}</div>
+        <div class="overlay-details">
+            <p>Loading...</p>
+        </div>
+        <span class="expanded-close" onclick="closeBox()">×</span>
+    `;
+
+    if (contentCache[contentFile]) {
+        overlayContent.querySelector('.overlay-details').innerHTML = contentCache[contentFile];
+        initializeMediaPlayers();
+        return;
+    }
+
+    fetchWithRetry(contentFile, {}, 3, 500)
+        .then(html => {
+            contentCache[contentFile] = html;
+
+            overlayContent.querySelector('.overlay-details').innerHTML = html;
+            initializeMediaPlayers();
+        })
+        .catch(error => {
+            console.error('Initial fetch failed:', error);
+            fetchWithRetry(contentFile, {}, 1, 500)
+                .then(html => {
+                    contentCache[contentFile] = html;
+
+                    overlayContent.querySelector('.overlay-details').innerHTML = html;
+                    initializeMediaPlayers();
+                })
+                .catch(err => {
+                    overlayContent.querySelector('.overlay-details').innerHTML = '<p>Sorry, the content could not be loaded.</p>';
+                    console.error('Error fetching content after retries:', err);
+                });
+        });
 }
 
 function closeBox() {
-  const overlay = document.getElementById('expanded-overlay');
-  const overlayContent = document.getElementById('expanded-box-content');
+    const overlay = document.getElementById('expanded-overlay');
+    const overlayContent = document.getElementById('expanded-box-content');
 
-  overlay.classList.remove('active');
-  overlayContent.innerHTML = '';
-  document.body.classList.remove('no-scroll-content');
+    overlay.classList.remove('active');
+    overlayContent.innerHTML = '';
+    document.body.classList.remove('no-scroll-content');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function loadVisibleOverlayImages() {
+    const expandedContent = document.querySelector('.expanded-overlay.active #expanded-box-content');
+    if (!expandedContent) return;
+
+    const lazyElements = expandedContent.querySelectorAll('img[data-src], video[data-src]');
+
+    lazyElements.forEach(element => {
+        if (element.tagName === 'IMG') {
+            element.src = element.getAttribute('data-src');
+        } else if (element.tagName === 'VIDEO') {
+            const source = element.querySelector('source');
+            if (source) {
+                source.src = source.getAttribute('data-src');
+                element.load();
+            }
+        }
+        element.removeAttribute('data-src');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const overlay = document.getElementById('expanded-overlay');
-  overlay.addEventListener('click', (e) => {
-    if (e.target.id === 'expanded-overlay') {
-      closeBox();
-    }
-  });
+    const overlay = document.getElementById('expanded-overlay');
+    
+    overlay.addEventListener('click', (e) => {
+        if (e.target.id === 'expanded-overlay') {
+            closeBox();
+        }
+    });
+
+    const contentBoxes = document.querySelectorAll('.content-box');
+    contentBoxes.forEach(box => {
+        const contentFile = box.getAttribute('data-content');
+        if (contentFile && !contentCache[contentFile]) {
+            box.addEventListener('mouseenter', () => {
+                fetchWithRetry(contentFile, {}, 2, 500)
+                    .then(html => {
+                        contentCache[contentFile] = html;
+                    })
+                    .catch(error => {
+                        console.error('Error preloading content:', error);
+                    });
+            });
+        }
+    });
+
+    window.addEventListener('scroll', debounce(() => {
+        loadVisibleOverlayImages();
+    }, 300));
 });
+
+document.addEventListener('lazybeforeunveil', function(e){
+    const target = e.target;
+
+    if(target.tagName === 'VIDEO'){
+        const sources = target.querySelectorAll('source');
+        sources.forEach(source => {
+            if(source.dataset.src){
+                source.src = source.getAttribute('data-src');
+            }
+        });
+        target.load();
+    }
+});
+
+function initializeMediaPlayers() {
+}
 
 // News Image Lightbox
 document.addEventListener('DOMContentLoaded', () => {

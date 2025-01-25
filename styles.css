@@ -1444,7 +1444,7 @@ footer {
   font-size: 1.1rem;           
   margin-bottom: 1.5rem;    
   padding: 0;                
-}
+  }
 
   .index-button {
     font-size: 1rem;
@@ -1466,57 +1466,68 @@ footer {
   }
 
   /* Tech Skills Page */
-  /* Reset any reversing layouts for mobile */
   .tech-section:nth-child(even) .tech-content,
   .tech-content.reverse-layout {
     flex-direction: column !important;
   }
   
-  /* Stack tech-box above tech-media and make them each 100% width */
   .tech-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100%;
+    height: auto;
+    max-width: 800px;
   }
+
   .tech-box,
   .tech-media {
     width: 100%;
-    margin-bottom: 20px; /* Space between stacked elements */
+    margin-bottom: 20px; 
   }
 
-  /* Inside the tech-box, stack text above skills */
+  .tech-media {
+    width: 300px; 
+    height: 300px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
   .tech-box {
     flex-direction: column !important;
-    align-items: flex-start;  /* or center if you prefer centered text */
+    align-items: flex-start; 
     width: 100%;
   }
 
-  /* Let text take full width above skills */
+
   .tech-text,
   .tech-skills {
     width: 100%;
   }
 
-  /* Make the skill-divider horizontal */
+  .tech-text {
+    font-size: 1.4rem;
+  }
+
   .skill-divider {
     display: none; 
   }
 
-  /* Display skills-list items horizontally (wrap as needed) */
   .skills-list {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr);            /* Wrap if there are many items */
-    gap: 5px;                    /* Spacing between items */
+    grid-template-columns: repeat(2, 1fr);          
+    gap: 5px;                  
   }
+
   .skills-list li {
     display: flex;
     align-items: center;
     font-size: 0.8rem;
     margin: 5px 10px;
     text-align: left !important;
-    position: relative; /* Needed if ::before is positioned absolute */
-    padding-left: 5px; /* Space for the ::before bullet/line */
+    position: relative; 
+    padding-left: 5px; 
   }
 
   .skills-list li::after {
@@ -1524,7 +1535,7 @@ footer {
   }
 
   .skills-list li::before {
-    content: '';       /* Or your desired symbol: e.g. "• " */
+    content: '';      
     position: absolute; 
     left: 0; 
     top: 50%;
@@ -1533,19 +1544,29 @@ footer {
     opacity: 1 !important; 
   }
   
-  /* Allow the gallery to use full width of .tech-media */
   .tech-gallery {
-    width: 100%;
-    height: 100%;
+    width: 300px; 
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
   }
+  
   .gallery-items {
-    width: 100%;
-    height: 100%;
+    width: 300px; 
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
   .gallery-items img,
   .gallery-items video {
-    width: 100%;
-    height: 100%;
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    border-radius: 8px; 
   }
 
   .tech-section:nth-child(even) .tech-box,
@@ -1558,6 +1579,7 @@ footer {
 
   .tech-section:hover .tech-text {
     transform: none;
+    animation: none;
   }
 
 }

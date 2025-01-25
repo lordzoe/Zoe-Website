@@ -29,7 +29,7 @@
         <section class="content-container">
 
             <!-- Content Box 1 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="iac_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/iac_2024.html">
                 <div class="content-image">
                     <img data-src="images/iac_2024_1.png" alt="IAC Conference 2024" class="lazyload">
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Content Box 2 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="eva_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/eva_2024.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
                         <source data-src="videos/eva_2024_1.mp4" type="video/mp4">
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Content Box 3 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="USNA_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/USNA_2024.html">
                 <div class="content-image">
                     <img data-src="images/USNA_2024_1.jpg" alt="USNA" class="lazyload">
                 </div>
@@ -65,7 +65,7 @@
             </div>
 
             <!-- Content Box 4 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="science_rendezvous_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/science_rendezvous_2024.html">
                 <div class="content-image">
                     <img data-src="images/science_rendezvous_2024_1.jpg" alt="Science Rendezvous 2" class="lazyload">
                 </div>
@@ -76,7 +76,7 @@
             </div>
 
             <!-- Content Box 5 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="solar_eclipse_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/solar_eclipse_2024.html">
                 <div class="content-image">
                     <img data-src="images/solar_eclipse_2024_1.jpg" alt="Solar Eclipse" class="lazyload">
                 </div>
@@ -87,7 +87,7 @@
             </div>
 
             <!-- Content Box 6 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="hackathon_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/hackathon_2024.html">
                 <div class="content-image">
                     <img data-src="images/hackathon_2024_1.png" alt="Hackathon" class="lazyload">
                 </div>
@@ -98,7 +98,7 @@
             </div>
 
             <!-- Content Box 7 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="cognitive_load_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/cognitive_load_2023.html">
                 <div class="content-image">
                     <img data-src="images/cognitive_load_2023_1.jpg" alt="Cognitive Load in VR" class="lazyload">
                 </div>
@@ -109,7 +109,7 @@
             </div>
 
             <!-- Content Box 8 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="space_medicine_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/space_medicine_2023.html">
                 <div class="content-image">
                     <img data-src="images/space_medicine_2023_1.jpg" alt="Space Medicine" class="lazyload">
                 </div>
@@ -120,7 +120,7 @@
             </div>
 
             <!-- Content Box 9 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="CAN-RGX_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/CAN-RGX_2023.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
                         <source data-src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
@@ -134,7 +134,7 @@
             </div>
 
             <!-- Content Box 10 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="PADI_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/PADI_2023.html">
                 <div class="content-image">
                     <img data-src="images/PADI_2023_1.jpg" alt="PADI" class="lazyload">
                 </div>
@@ -145,7 +145,7 @@
             </div>
 
             <!-- Content Box 11 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="CSC_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/CSC_2023.html">
                 <div class="content-image">
                     <img data-src="images/CSC_2023_1.jpg" alt="CSC" class="lazyload">
                 </div>
@@ -156,7 +156,7 @@
             </div>
 
             <!-- Content Box 12 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="science_rendezvous_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/science_rendezvous_2023.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
                         <source data-src="videos/science_rendezvous_2023_1.mp4" type="video/mp4">
@@ -170,7 +170,7 @@
             </div>
 
             <!-- Content Box 13 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="IIAS_2023.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/IIAS_2023.html">
                 <div class="content-image">
                     <img data-src="images/IIAS_2023_1.jpg" alt="IIAS" class="lazyload">
                 </div>
@@ -181,7 +181,7 @@
             </div>
 
             <!-- Content Box 14 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="MSC_1_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/MSC_1_2022.html">
                 <div class="content-image">
                     <img data-src="images/MSC_1_2022_1.jpg" alt="MSC 1" class="lazyload">
                 </div>
@@ -192,7 +192,7 @@
             </div>
 
             <!-- Content Box 15 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="iac_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/iac_2022.html">
                 <div class="content-image">
                     <img data-src="images/iac_2022_1.jpg" alt="IAC Conference 2022" class="lazyload">
                 </div>
@@ -203,7 +203,7 @@
             </div>
 
             <!-- Content Box 16 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="graduation_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/graduation_2022.html">
                 <div class="content-image">
                     <img data-src="images/graduation_2022_1.jpg" alt="Graduation 2" class="lazyload">
                 </div>
@@ -214,7 +214,7 @@
             </div>
 
             <!-- Content Box 17 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="student_leadership_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/student_leadership_2022.html">
                 <div class="content-image">
                     <img data-src="images/student_leadership_2022_1.jpg" alt="Student Leadership Conference" class="lazyload">
                 </div>
@@ -225,7 +225,7 @@
             </div>
 
             <!-- Content Box 18 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="research_assistant_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/research_assistant_2022.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
                         <source data-src="videos/research_assistant_2022_1.mp4" type="video/mp4">
@@ -239,7 +239,7 @@
             </div>
 
             <!-- Content Box 19 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="undergraduate_thesis_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="news/undergraduate_thesis_2022.html">
                 <div class="content-image">
                     <img data-src="images/undergraduate_thesis_2022_1.jpg" alt="Undergraduate Thesis" class="lazyload">
                 </div>

@@ -318,6 +318,7 @@ footer {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  text-align: center;
 }
 
 .expanded-close {
@@ -346,14 +347,15 @@ footer {
   font-size: 1.4rem;
   line-height: 1.5;
   margin-bottom: 1rem;
+  text-align: left;
 }
 
 .expanded-content .image-mosaic {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-auto-rows: 200px;
-  gap: 10px;
-  margin-top: 20px;
+  display: grid; /* Use grid layout */
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, 300px); /* Dynamically adjust grid to fit items */
+  justify-content: center; /* Center the group of items */
+  justify-items: center; /* Center each item within its grid cell */
 }
 
 .expanded-content .content-details > img {
@@ -362,13 +364,13 @@ footer {
   margin-bottom: 20px;
 }
 
-/* Mosaic Images/Videos */
 .expanded-content .image-mosaic img,
 .expanded-content .image-mosaic video {
-  width: 90%;
-  height: 100%;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   border-radius: 5px;
+  display: block;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -1072,7 +1074,7 @@ footer {
 }
 
 .tech-section:hover .tech-text {
-  transform: scale(1.05);
+  transform: scale(1);
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -1283,8 +1285,22 @@ footer {
   }
 
   .expanded-content .image-mosaic {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    grid-auto-rows: 150px;
+    display: grid; /* Retain grid layout */
+    gap: 10px; /* Reduce gap for mobile */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Smaller thumbnails on mobile */
+    grid-auto-rows: 100px; /* Reduce height to match smaller thumbnails */
+    justify-content: center; /* Center the grid items */
+    padding: 10px; /* Add some padding for better spacing */
+  }
+
+  .expanded-content .image-mosaic img,
+  .expanded-content .image-mosaic video {
+    width: 100%; /* Ensure the image fills its grid cell */
+    height: 100%; /* Maintain a consistent size */
+    object-fit: cover; /* Crop images appropriately without distortion */
+    border-radius: 5px; /* Keep rounded corners */
+    display: block;
+    transition: transform 0.3s ease-in-out;
   }
 
   .expanded-content .expanded-close {

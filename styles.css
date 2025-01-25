@@ -351,11 +351,11 @@ footer {
 }
 
 .expanded-content .image-mosaic {
-  display: grid; /* Use grid layout */
+  display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, 300px); /* Dynamically adjust grid to fit items */
-  justify-content: center; /* Center the group of items */
-  justify-items: center; /* Center each item within its grid cell */
+  grid-template-columns: repeat(auto-fit, 300px);
+  justify-content: center;
+  justify-items: center;
 }
 
 .expanded-content .content-details > img {
@@ -1259,19 +1259,20 @@ footer {
 
   .content-image video {
     pointer-events: none; 
+    cursor: default;
   }
 
   .expanded-overlay {
-    position: fixed; /* Ensure it covers the entire viewport */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* Full viewport width */
-    height: 100vh; /* Full viewport height */
-    padding: 0; /* Remove any padding */
-    background-color: rgba(0, 0, 0, 0.8); /* Dark transparent background */
-    box-sizing: border-box; /* Ensure consistent sizing */
-    overflow-y: auto; /* Allow scrolling if needed */
-    z-index: 9999; /* Ensure it stays above other elements */
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+    overflow-y: auto;
+    z-index: 9999;
   }
 
   .expanded-overlay:hover {
@@ -1287,22 +1288,23 @@ footer {
   }
 
   .expanded-content .image-mosaic {
-    display: grid; /* Retain grid layout */
-    gap: 10px; /* Reduce gap for mobile */
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Smaller thumbnails on mobile */
-    grid-auto-rows: 100px; /* Reduce height to match smaller thumbnails */
-    justify-content: center; /* Center the grid items */
-    padding: 10px; /* Add some padding for better spacing */
+    display: grid; 
+    gap: 10px; 
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
+    grid-auto-rows: 100px; 
+    justify-content: center; 
+    padding: 10px; 
   }
 
   .expanded-content .image-mosaic img,
   .expanded-content .image-mosaic video {
-    width: 100%; /* Ensure the image fills its grid cell */
-    height: 100%; /* Maintain a consistent size */
-    object-fit: cover; /* Crop images appropriately without distortion */
-    border-radius: 5px; /* Keep rounded corners */
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    border-radius: 5px; 
     display: block;
     transition: transform 0.3s ease-in-out;
+
   }
 
   .expanded-content .expanded-close {
@@ -1313,7 +1315,8 @@ footer {
     font-weight: bold;
     color: #ddd;
     cursor: pointer;
-    z-index: 2001;
+    z-index: 2147483647;
+    -webkit-transform: translateZ(1px) /* For some reason implements the z-index on mobile */
   }
 
   .expanded-content .expanded-close:hover {

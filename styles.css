@@ -1261,15 +1261,17 @@ footer {
     pointer-events: none; 
   }
 
-  .expanded-overlay { 
-    top: 5%;
-    left: 5%;
-    padding: 10px;
-    width: 90%;
-    height: 90%;
-    background-color: #0e0e0e;
-    box-sizing: border-box;
-    overflow-y: auto;
+  .expanded-overlay {
+    position: fixed; /* Ensure it covers the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    padding: 0; /* Remove any padding */
+    background-color: rgba(0, 0, 0, 0.8); /* Dark transparent background */
+    box-sizing: border-box; /* Ensure consistent sizing */
+    overflow-y: auto; /* Allow scrolling if needed */
+    z-index: 9999; /* Ensure it stays above other elements */
   }
 
   .expanded-overlay:hover {

@@ -111,15 +111,15 @@ p {
 
 /* Animation States */
 .menu-icon.active span:nth-child(1) {
-  transform: rotate(45deg) translateY(15px);
+  transform: rotate(-10deg) translateX(-3px) translateY(3px); 
 }
 
 .menu-icon.active span:nth-child(2) {
-  opacity: 0;
+  transform: rotate(-43deg) scale(1.12) ;
 }
 
 .menu-icon.active span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-15px);
+  transform: rotate(-10deg) translateX(3px) translateY(-3px);
 }
 
 .fullscreen-nav.active {
@@ -976,10 +976,14 @@ footer {
 .tech-text {
   flex: 0 0 60%; 
   text-align: left;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #ddd;
   border-radius: 10px;
   padding: 0 20px;
+}
+
+.tech-text p {
+  font-size: 1.4rem;
 }
 
 .tech-skills {
@@ -1073,7 +1077,7 @@ footer {
   flex-direction: row-reverse;
 }
 
-.tech-section:hover .tech-text {
+.tech-box:hover .tech-text {
   transform: scale(1);
   background-color: rgba(0, 0, 0, 0.3);
 }
@@ -1180,15 +1184,16 @@ footer {
   }
 
   .menu-icon.active span:nth-child(1) {
-    transform: rotate(45deg) translateY(10px);
+    transform: rotate(-5deg) translateX(-3px) translateY(1px); 
   }
-
+  
   .menu-icon.active span:nth-child(2) {
-    opacity: 0;
+    transform: rotate(-40deg) scale(1.1);
+    opacity: 1;
   }
-
+  
   .menu-icon.active span:nth-child(3) {
-    transform: rotate(-45deg) translateY(-10px);
+    transform: rotate(-5deg) translateX(3px) translateY(-1px);
   }
 
   .fullscreen-nav.active {
@@ -1364,14 +1369,16 @@ footer {
   .about-header h1,
   .contact-header h1,
   .news-header h1,
-  .speaking-header h1 {
+  .speaking-header h1,
+  .tech-header h1 {
     font-size: 2.5rem;
     padding: 0px 20px;
   }
 
   .about-text,
   .contact-box,
-  .speaking-text {
+  .speaking-text,
+  .tech-text p {
     font-size: 1.2rem;
     padding: 0px 20px;
   }
@@ -1487,6 +1494,13 @@ footer {
   }
 
   /* Tech Skills Page */
+  .tech-container {
+    align-items: flex-start; 
+    margin: 20px;
+    justify-content: center;
+    max-width: 100%;
+  }  
+
   .tech-section:nth-child(even) .tech-content,
   .tech-content.reverse-layout {
     flex-direction: column !important;
@@ -1521,14 +1535,13 @@ footer {
     width: 100%;
   }
 
-
   .tech-text,
   .tech-skills {
     width: 100%;
   }
 
-  .tech-text {
-    font-size: 1.4rem;
+  .tech-text h1 {
+    font-size: 2rem;
   }
 
   .skill-divider {
@@ -1544,7 +1557,7 @@ footer {
   .skills-list li {
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin: 5px 10px;
     text-align: left !important;
     position: relative; 
@@ -1572,6 +1585,7 @@ footer {
     justify-content: center;
     align-items: center;
     gap: 10px; 
+    display: none;
   }
   
   .gallery-items {
@@ -1598,9 +1612,10 @@ footer {
     flex-direction: column !important;
   }
 
-  .tech-section:hover .tech-text {
+  .tech-box:hover .tech-text {
     transform: none;
     animation: none;
+    background-color: transparent;
   }
 
 }

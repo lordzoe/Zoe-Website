@@ -454,7 +454,6 @@ function moveGallery(button, direction) {
   galleryItems.style.transform = `translateX(${newOffset}px)`;
 }
 
-
 // Tech Content Animation
 document.addEventListener("DOMContentLoaded", function () {
 const sections = document.querySelectorAll(".tech-content");

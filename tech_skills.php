@@ -31,7 +31,7 @@
                     <div class="tech-text">
                         <h2>Virtual Reality Gaming Development</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -46,15 +46,13 @@
                 </div>
                 <div class="tech-media">
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <img src="images/CAN-RGX_2023_2.jpg" alt="VR Project 1">
-                            <img src="images/CAN-RGX_2023_3.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
+                            <video autoplay muted loop style="object-fit: fill;"> 
+                                <source src="videos/cognitive_load_2023_4.mp4" type="video/mp4">
                             </video>
                         </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                        <!-- <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button> -->
                     </div>
                 </div>
             </div>
@@ -67,7 +65,7 @@
                     <div class="tech-text">
                         <h2>Neuroimaging and Cognitive Science</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -83,22 +81,16 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tech-media">
+                <!-- <div class="tech-media"> 
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
-                            </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
-
 
         <!-- Section 3 -->
         <section class="tech-section" style="background-image: url('images/section_3_image.jpg');">
@@ -107,7 +99,7 @@
                     <div class="tech-text">
                         <h2>Human-Computer Interactions</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -123,28 +115,26 @@
                 </div>
                 <div class="tech-media">
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
+                            <video autoplay muted loop style="object-fit: fill;">
+                                <source src="videos/tech_skills_human-computer_1.mp4" type="video/mp4">
                             </video>
                         </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                        <!-- <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button> -->
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Section 4 -->
-        <section class="tech-section" style="background-image: url('images/section_3_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_4_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
-                        <h2>Machine Learning Modelling</h2>
+                        <h2>Machine Learning</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -159,30 +149,25 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tech-media">
+                <!-- <div class="tech-media"> 
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
-                            </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
 
         <!-- Section 5 -->
-        <section class="tech-section" style="background-image: url('images/section_4_image.jpg');">
+        <section class="tech-section" style="background-image: url('images/section_5_image.jpg');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Biomechanical Testing Platforms</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -203,10 +188,17 @@
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
                             <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
+                                <source src="videos/research_assistant_2022_1.mp4" type="video/mp4">
+                            </video>
+                            <img src="images/tech_skills_biomechanical_2.jpg" alt="Biomechanical 2">
+                            <img src="images/tech_skills_biomechanical_3.jpg" alt="Biomechanical 3">
+                            <img src="images/tech_skills_biomechanical_4.jpg" alt="Biomechanical 4">
+                            <img src="images/tech_skills_biomechanical_5.jpg" alt="Biomechanical 5">
+                            <img src="images/tech_skills_biomechanical_6.jpg" alt="Biomechanical 6" style="object-fit: fill;">
+                            <img src="images/tech_skills_biomechanical_7.jpg" alt="Biomechanical 7" style="object-fit: fill;">
+                            <video autoplay muted loop>
+                                <source src="videos/tech_skills_biomechanical_8.mp4" type="video/mp4">
                             </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
@@ -216,13 +208,13 @@
         </section>
 
         <!-- Section 6 -->
-        <section class="tech-section" style="background-image: url('images/section_5_image.jpg'); background-size: cover;">">
+        <section class="tech-section" style="background-image: url('images/section_6_image.jpg'); background-size: cover;">">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Biomonitoring and Microcontroller Systems</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -241,11 +233,13 @@
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
-                            </video>
+                            <img src="images/tech_skills_biomonitoring_1.jpg" alt="Biomonitoring 1">
+                            <img src="images/tech_skills_biomonitoring_2.jpg" alt="Biomonitoring 2">
+                            <img src="images/tech_skills_biomonitoring_3.jpg" alt="Biomonitoring 3">
+                            <img src="images/tech_skills_biomonitoring_4.jpg" alt="Biomonitoring 4">
+                            <img src="images/tech_skills_biomonitoring_5.jpg" alt="Biomonitoring 5">
+                            <img src="images/eva_2024_2.jpg" alt="Biomonitoring 6">
+                            <img src="images/eva_2024_5.jpg" alt="Biomonitoring 7">
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
@@ -254,13 +248,13 @@
         </section>
 
         <!-- Section 7 -->
-        <section class="tech-section" style="background-image: url('images/section_6_image.jpg'); background-size: contain;">
+        <section class="tech-section" style="background-image: url('images/section_7_image.jpg'); background-size: cover;">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Perovskite Nanoparticle Synthesis</h2>
                         <p>
-                            Text here.
+                            
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -278,11 +272,12 @@
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
-                            </video>
+                            <img src="images/undergraduate_thesis_2022_4.jpg" alt="Perovskite 1">
+                            <img src="images/tech_skills_perovskite_2.jpg" alt="Perovskite 2" style="object-fit: fill;">
+                            <img src="images/undergraduate_thesis_2022_5.jpg" alt="Perovskite 3">
+                            <img src="images/tech_skills_perovskite_4.jpg" alt="Perovskite 4" style="object-fit: fill;">
+                            <img src="images/tech_skills_perovskite_5.jpg" alt="Perovskite 5" style="object-fit: fill;">
+                            <img src="images/tech_skills_perovskite_6.jpg" alt="Perovskite 6" style="object-fit: fill;">
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
@@ -291,13 +286,13 @@
         </section>
 
         <!-- Section 8 -->
-        <section class="tech-section" style="background-image: url('images/section_7_image.jpg')">
+        <section class="tech-section" style="background-image: url('images/section_8_image.jpg')">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Web Development and Backend Design</h2>
                         <p>
-                            Text here.
+                        
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -308,19 +303,14 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tech-media">
+                <!-- <div class="tech-media"> 
                     <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
+                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
                         <div class="gallery-items">
-                            <img src="images/vr_1.jpg" alt="VR Project 1">
-                            <img src="images/vr_2.jpg" alt="VR Project 2">
-                            <video autoplay muted loop>
-                                <source src="videos/vr_project.mp4" type="video/mp4">
-                            </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
 

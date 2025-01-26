@@ -434,35 +434,26 @@ function moveGallery(button, direction) {
   const gallery = button.closest('.tech-gallery');
   const galleryItems = gallery.querySelector('.gallery-items');
   const items = Array.from(galleryItems.children);
-  const itemWidth = gallery.offsetWidth; 
   const totalItems = items.length;
 
-  if (!galleryItems.dataset.cloned) {
-      items.forEach(item => {
-          const clone = item.cloneNode(true);
-          galleryItems.appendChild(clone);
-      });
-      galleryItems.dataset.cloned = true;
-      galleryItems.style.transition = "none";
-      galleryItems.style.transform = `translateX(-${itemWidth}px)`; 
+  let currentIndex = parseInt(galleryItems.dataset.currentIndex ?? "0");
+
+  currentIndex += direction;
+
+  if (currentIndex < 0) {
+    currentIndex = totalItems - 1;
+  } else if (currentIndex >= totalItems) {
+    currentIndex = 0;
   }
 
-  const currentTransform = galleryItems.style.transform || "translateX(0px)";
-  const currentOffset = parseInt(currentTransform.replace("translateX(", "").replace("px)", "") || 0);
-  const newOffset = currentOffset - direction * itemWidth;
+  galleryItems.dataset.currentIndex = currentIndex;
+
+  const itemWidth = gallery.offsetWidth;
+  const newOffset = -(itemWidth * currentIndex);
   galleryItems.style.transition = "transform 0.5s ease-in-out";
   galleryItems.style.transform = `translateX(${newOffset}px)`;
-
-  setTimeout(() => {
-      if (newOffset <= -(itemWidth * totalItems)) {
-          galleryItems.style.transition = "none";
-          galleryItems.style.transform = `translateX(-${itemWidth}px)`;
-      } else if (newOffset >= 0) {
-          galleryItems.style.transition = "none";
-          galleryItems.style.transform = `translateX(-${itemWidth * (totalItems - 1)}px)`;
-      }
-  }, 500); 
 }
+
 
 // Tech Content Animation
 document.addEventListener("DOMContentLoaded", function () {

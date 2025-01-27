@@ -149,55 +149,62 @@ function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
 }
 
 function expandBox(box) {
-    const contentFile = box.getAttribute('data-content');
-    if (!contentFile) {
-        console.error('No data-content attribute found for this content-box.');
-        return;
-    }
+  const contentFile = box.getAttribute('data-content');
+  if (!contentFile) {
+      console.error('No data-content attribute found for this content-box.');
+      return;
+  }
 
-    const mainImageHtml = box.querySelector('.content-image').innerHTML;
-    const overlay = document.getElementById('expanded-overlay');
-    const overlayContent = document.getElementById('expanded-box-content');
+  const mainImageHtml = box.querySelector('.content-image').innerHTML;
+  const overlay = document.getElementById('expanded-overlay');
+  const overlayContent = document.getElementById('expanded-box-content');
 
-    overlay.classList.add('active');
-    document.body.classList.add('no-scroll-content');
+  overlay.classList.add('active');
+  document.body.classList.add('no-scroll-content');
 
-    overlayContent.innerHTML = `
-        <div class="overlay-image">${mainImageHtml}</div>
-        <div class="overlay-details">
-            <p>Loading...</p>
-        </div>
-        <span class="expanded-close" onclick="closeBox()">×</span>
-    `;
+  // Initial HTML for overlay content
+  overlayContent.innerHTML = `
+      <div class="overlay-image">${mainImageHtml}</div>
+      <div class="overlay-details">
+          <p>Loading paragraph...</p>
+          <div class="image-placeholder">Loading images...</div>
+      </div>
+      <span class="expanded-close" onclick="closeBox()">×</span>
+  `;
 
-    if (contentCache[contentFile]) {
-        overlayContent.querySelector('.overlay-details').innerHTML = contentCache[contentFile];
-        initializeMediaPlayers();
-        return;
-    }
+  if (contentCache[contentFile]) {
+      renderContent(contentCache[contentFile]);
+      initializeMediaPlayers();
+      return;
+  }
 
-    fetchWithRetry(contentFile, {}, 3, 500)
-        .then(html => {
-            contentCache[contentFile] = html;
+  fetchWithRetry(contentFile, {}, 3, 500)
+      .then(html => {
+          contentCache[contentFile] = html;
+          renderContent(html);
+          initializeMediaPlayers();
+      })
+      .catch(error => {
+          console.error('Error fetching content:', error);
+          overlayContent.querySelector('.overlay-details').innerHTML = '<p>Sorry, the content could not be loaded.</p>';
+      });
 
-            overlayContent.querySelector('.overlay-details').innerHTML = html;
-            initializeMediaPlayers();
-        })
-        .catch(error => {
-            console.error('Initial fetch failed:', error);
-            fetchWithRetry(contentFile, {}, 1, 500)
-                .then(html => {
-                    contentCache[contentFile] = html;
+  function renderContent(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
 
-                    overlayContent.querySelector('.overlay-details').innerHTML = html;
-                    initializeMediaPlayers();
-                })
-                .catch(err => {
-                    overlayContent.querySelector('.overlay-details').innerHTML = '<p>Sorry, the content could not be loaded.</p>';
-                    console.error('Error fetching content after retries:', err);
-                });
-        });
+      // Separate paragraph and media elements
+      const paragraph = doc.querySelector('p')?.outerHTML || '<p>No text available.</p>';
+      const media = doc.querySelector('.image-mosaic')?.outerHTML || '<div>No images available.</div>';
+
+      // Inject parsed content into overlay
+      overlayContent.querySelector('.overlay-details').innerHTML = `
+          ${paragraph}
+          <div class="image-placeholder">${media}</div>
+      `;
+  }
 }
+
 
 function closeBox() {
     const overlay = document.getElementById('expanded-overlay');

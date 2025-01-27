@@ -829,7 +829,7 @@ footer {
 }
 
 .index-content.with-image::before {
-  background-image: url('images/homepage_image.jpg');
+  background-image: url('images/homepage_image.webp');
   animation: fadeInImage 10s linear forwards;
 }
 

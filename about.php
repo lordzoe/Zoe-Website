@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.png" type="image/png" sizes="16x16">
-    <link rel="icon" href="images/favicon.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="images/favicon.png">
+    <link rel="icon" href="images/favicon.webp" type="image/png" sizes="16x16">
+    <link rel="icon" href="images/favicon.webp" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="images/favicon.webp">
     <title>About - Zoé Victoria Lord</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -21,7 +21,7 @@
     <main class="about-container">
         <div class="about-content">
             <div class="about-image">
-                <img src="images/headshot_image.jpg" alt="Zoé Victoria Lord">
+                <img src="images/headshot_image.webp" alt="Zoé Victoria Lord">
             </div>
             <div class="about-details">
                 <div class="about-header">

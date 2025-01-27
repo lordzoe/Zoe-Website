@@ -32,7 +32,7 @@
 
                     <p>Zoé holds an academic background in Behavioural Neuroscience (2019), Chemistry, and Biology (2022). She is currently pursuing her PhD at Queen’s University, where her research is titled “An Investigation of Cognitive Overload in Virtual Reality Learning Environments”. In 2023, Zoé joined the International Institute for Astronautical Sciences (IIAS) as a Scientist-Astronaut candidate, where she is concurrently studying Bioastronautics with a concentration in EVA Space Suit Evaluation.</p>
 
-                    <p>The road to Zoé’s accomplishments has been an unconventional journey. She met many hardships that she had to overcome with perseverance and resilience in the pursuit of her goals. While some educators did not recognize her potential and encouraged her to pursue a different path, Zoé’s determination to build a career in STEM drove her to push beyond expectations.</p>
+                    <p>The road to Zoé’s accomplishments has been an unconventional journey. She met many hardships that she had to overcome with perseverance and resilience in the pursuit of her goals. From these experiences, Zoé’s determination to build a career in STEM drove her to push beyond expectations.</p>
                 </div>
             </div>
         </div>

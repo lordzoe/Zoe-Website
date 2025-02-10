@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.webp" type="image/png" sizes="16x16">
-    <link rel="icon" href="images/favicon.webp" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="images/favicon.webp">
+    <link rel="icon" href="favicon.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="favicon.png">
     <title>Events - Zoé Victoria Lord</title>
     <link rel="stylesheet" href="styles.css">
 </head>

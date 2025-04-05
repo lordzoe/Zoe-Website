@@ -1,230 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Interactive Model Visualizer</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: row;
-      font-family: Arial, sans-serif;
-    }
-    .sidebar {
-      width: 220px;
-      padding: 20px;
-      background: #f4f4f4;
-      border-right: 1px solid #ccc;
-    }
-    .sidebar h3 {
-      margin-top: 0;
-    }
-    .sidebar button {
-      width: 100%;
-      margin: 5px 0;
-      padding: 10px;
-      font-size: 14px;
-    }
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: #fff;
-    }
-    #datasetButtons {
-      margin: 10px;
-    }
-    canvas {
-      border: 1px solid #000;
-    }
-    .parameters {
-      width: 500px;
-      margin-top: 10px;
-      background: #f8f8f8;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 13px;
-      border: 1px solid #ccc;
-      white-space: pre-wrap;
-    }
-    /* Confusion matrix styling */
-    table.confusion-matrix {
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    table.confusion-matrix td {
-      width: 80px;
-      height: 60px;
-      text-align: center;
-      vertical-align: middle;
-      font-weight: bold;
-      color: #000;
-      border: 1px solid #aaa;
-    }
-  </style>
-</head>
-<body>
-  <div class="sidebar">
-    <h3>Select Dataset</h3>
-    <div id="datasetButtons">
-      <button onclick="selectDataset('A')">Dataset A (Linear)</button>
-      <button onclick="selectDataset('B')">Dataset B (Circular)</button>
-      <button onclick="selectDataset('C')">Dataset C (Noisy)</button>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interactive Model Visualizer</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: row;
+        font-family: Arial, sans-serif;
+      }
+      .sidebar {
+        width: 220px;
+        padding: 20px;
+        background: #f4f4f4;
+        border-right: 1px solid #ccc;
+      }
+      .sidebar h3 {
+        margin-top: 0;
+      }
+      .sidebar button {
+        width: 100%;
+        margin: 5px 0;
+        padding: 10px;
+        font-size: 14px;
+      }
+      .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #fff;
+      }
+      #datasetButtons {
+        margin: 10px;
+      }
+      canvas {
+        border: 1px solid #000;
+      }
+      .parameters {
+        width: 500px;
+        margin-top: 10px;
+        background: #f8f8f8;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 13px;
+        border: 1px solid #ccc;
+        white-space: pre-wrap;
+      }
+      /* Confusion matrix styling */
+      table.confusion-matrix {
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      table.confusion-matrix td {
+        width: 80px;
+        height: 60px;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: bold;
+        color: #000;
+        border: 1px solid #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h3>Select Dataset</h3>
+      <div id="datasetButtons">
+        <button onclick="selectDataset('A')">Dataset A (Linear)</button>
+        <button onclick="selectDataset('B')">Dataset B (Circular)</button>
+        <button onclick="selectDataset('C')">Dataset C (Noisy)</button>
+      </div>
+
+      <h3>Select Model</h3>
+      <button onclick="selectModel('logistic')">Logistic Regression</button>
+      <button onclick="selectModel('knn')">K-Nearest Neighbors (KNN)</button>
+      <button onclick="selectModel('dt')">Decision Tree</button>
+      <button onclick="selectModel('svm')">Support Vector Machine (SVM)</button>
+      <button onclick="selectModel('perceptron')">Perceptron</button>
+      <button onclick="selectModel('ensemble')">Ensemble</button>
     </div>
 
-    <h3>Select Model</h3>
-    <button onclick="selectModel('logistic')">Logistic Regression</button>
-    <button onclick="selectModel('knn')">K-Nearest Neighbors (KNN)</button>
-    <button onclick="selectModel('dt')">Decision Tree</button>
-    <button onclick="selectModel('svm')">Support Vector Machine (SVM)</button>
-    <button onclick="selectModel('perceptron')">Perceptron</button>
-    <button onclick="selectModel('ensemble')">Ensemble</button>
-  </div>
-
-  <div class="main-content">
-    <div style="display: flex; flex-direction: row; align-items: flex-start;">
-        <canvas id="modelVisCanvas" width="500" height="500" style="border: 1px solid #000; margin-right: 10px;"></canvas>
+    <div class="main-content">
+      <div style="display: flex; flex-direction: row; align-items: flex-start;">
+        <canvas
+          id="modelVisCanvas"
+          width="500"
+          height="500"
+          style="border: 1px solid #000; margin-right: 10px;"
+        ></canvas>
         <canvas id="modelCanvas" width="500" height="500"></canvas>
+      </div>
+      <div id="dtControls" style="display: none; margin-top: 10px;">
+        <label for="depthSlider"
+          >Tree Depth: <span id="depthValue">2</span></label
+        ><br />
+        <input
+          type="range"
+          min="1"
+          max="5"
+          value="2"
+          id="depthSlider"
+          onchange="updateDepth(this.value)"
+        />
+      </div>
+      <div id="parameterBox" class="parameters"></div>
     </div>
-    <div id="dtControls" style="display: none; margin-top: 10px;">
-        <label for="depthSlider">Tree Depth: <span id="depthValue">2</span></label><br>
-        <input type="range" min="1" max="5" value="2" id="depthSlider" onchange="updateDepth(this.value)">
-    </div>
-    <div id="parameterBox" class="parameters"></div>
-  </div>
 
-  <script>
-    const canvas = document.getElementById("modelCanvas");
-    const ctx = canvas.getContext("2d");
-    const modelVisCanvas = document.getElementById("modelVisCanvas");
-    const modelVisCtx = modelVisCanvas.getContext("2d");
-    const paramBox = document.getElementById("parameterBox");
-    const W = canvas.width;
-    const H = canvas.height;
+    <script>
+      const canvas = document.getElementById("modelCanvas");
+      const ctx = canvas.getContext("2d");
+      const modelVisCanvas = document.getElementById("modelVisCanvas");
+      const modelVisCtx = modelVisCanvas.getContext("2d");
+      const paramBox = document.getElementById("parameterBox");
+      const W = canvas.width;
+      const H = canvas.height;
 
-    let currentModel = 'logistic';
-    let currentDataset = 'A';
+      let currentModel = "logistic";
+      let currentDataset = "A";
 
-    let maxTreeDepth = 2;
-    const depthSlider = document.getElementById('depthSlider');
-    const depthValue = document.getElementById('depthValue');
+      let maxTreeDepth = 2;
+      const depthSlider = document.getElementById("depthSlider");
+      const depthValue = document.getElementById("depthValue");
 
-    // The dataset we train/predict on
-    let data = [];
+      // The dataset we train/predict on
+      let data = [];
 
-    // Weights for different models
-    let perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-    let perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-    let dtModel = null;
-    let logisticWeights = [Math.random(), Math.random(), Math.random()];
-    let svmWeights = [Math.random(), Math.random(), Math.random()];
+      // Weights for different models
+      let perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+      let perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+      let dtModel = null;
+      let logisticWeights = [Math.random(), Math.random(), Math.random()];
+      let svmWeights = [Math.random(), Math.random(), Math.random()];
 
-    /***********************
-     * Decision Tree Setup *
-     **********************/
+      /***********************
+       * Decision Tree Setup *
+       ***********************/
 
-    // 1) Slider callback
-    function updateDepth(val) {
-      maxTreeDepth = parseInt(val);
-      depthValue.textContent = val;
-      if (currentModel === 'dt') {
-        trainDecisionTree();
-        drawDecisionBoundary();
-        drawDataset();
-        updateParameterDisplay();
+      // 1) Slider callback
+      function updateDepth(val) {
+        maxTreeDepth = parseInt(val);
+        depthValue.textContent = val;
+        if (currentModel === "dt") {
+          trainDecisionTree();
+          drawDecisionBoundary();
+          drawDataset();
+          updateParameterDisplay();
+        }
       }
-    }
 
-    // 2) Convert the tree structure to text
-    function stringifyTree(node, indent = 0) {
-      if (typeof node === 'number') {
-        return ' '.repeat(indent) + `Leaf: ${node}\n`;
+      // 2) Convert the tree structure to text
+      function stringifyTree(node, indent = 0) {
+        if (typeof node === "number") {
+          return " ".repeat(indent) + `Leaf: ${node}\n`;
+        }
+        let str = " ".repeat(indent) + `if (${node.feature} <= ${node.threshold.toFixed(2)})\n`;
+        str += stringifyTree(node.left, indent + 2);
+        str += " ".repeat(indent) + `else\n`;
+        str += stringifyTree(node.right, indent + 2);
+        return str;
       }
-      let str = ' '.repeat(indent) + `if (${node.feature} <= ${node.threshold.toFixed(2)})\n`;
-      str += stringifyTree(node.left, indent + 2);
-      str += ' '.repeat(indent) + `else\n`;
-      str += stringifyTree(node.right, indent + 2);
-      return str;
-    }
 
-    // 3) Build the tree
-    function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
-      // If we are at or beyond max depth or have few data => leaf
-      if (depth >= maxDepth || dataset.length < 4) {
-        const majority = dataset.reduce((acc, p) => acc + p.label, 0) / dataset.length > 0.5 ? 1 : 0;
-        return majority;
+      // 3) Build the tree
+      function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
+        // If we are at or beyond max depth or have few data => leaf
+        if (depth >= maxDepth || dataset.length < 4) {
+          const majority =
+            dataset.reduce((acc, p) => acc + p.label, 0) / dataset.length > 0.5
+              ? 1
+              : 0;
+          return majority;
+        }
+        const split = getBestSplit(dataset);
+        const [left, right] = splitData(dataset, split.feature, split.threshold);
+        // Recurse
+        return {
+          feature: split.feature,
+          threshold: split.threshold,
+          left: buildSimpleTree(left, depth + 1, maxDepth),
+          right: buildSimpleTree(right, depth + 1, maxDepth),
+        };
       }
-      const split = getBestSplit(dataset);
-      const [left, right] = splitData(dataset, split.feature, split.threshold);
-      // Recurse
-      return {
-        feature: split.feature,
-        threshold: split.threshold,
-        left: buildSimpleTree(left, depth + 1, maxDepth),
-        right: buildSimpleTree(right, depth + 1, maxDepth)
-      };
-    }
 
-    // 4) Actually train on the entire dataset (no random subset)
-    function trainDecisionTree() {
-      dtModel = buildSimpleTree(data, 0, maxTreeDepth);
-    }
+      // 4) Actually train on the entire dataset (no random subset)
+      function trainDecisionTree() {
+        dtModel = buildSimpleTree(data, 0, maxTreeDepth);
+      }
 
-    // 5) Find best split
-    function getBestSplit(dataset) {
-      const classValues = [...new Set(dataset.map(p => p.label))];
-      let bestGini = Infinity;
-      let bestFeature = null;
-      let bestThreshold = null;
+      // 5) Find best split
+      function getBestSplit(dataset) {
+        const classValues = [...new Set(dataset.map((p) => p.label))];
+        let bestGini = Infinity;
+        let bestFeature = null;
+        let bestThreshold = null;
 
-      for (const feature of ['x', 'y']) {
-        const values = dataset.map(p => p[feature]);
-        for (const t of values) {
-          const groups = splitData(dataset, feature, t);
-          const gini = giniImpurity(groups, classValues);
-          if (gini < bestGini) {
-            bestGini = gini;
-            bestFeature = feature;
-            bestThreshold = t;
+        for (const feature of ["x", "y"]) {
+          const values = dataset.map((p) => p[feature]);
+          for (const t of values) {
+            const groups = splitData(dataset, feature, t);
+            const gini = giniImpurity(groups, classValues);
+            if (gini < bestGini) {
+              bestGini = gini;
+              bestFeature = feature;
+              bestThreshold = t;
+            }
           }
         }
+        return { feature: bestFeature, threshold: bestThreshold };
       }
-      return { feature: bestFeature, threshold: bestThreshold };
-    }
 
-    function splitData(dataset, feature, threshold) {
-      const left = dataset.filter(p => p[feature] <= threshold);
-      const right = dataset.filter(p => p[feature] > threshold);
-      return [left, right];
-    }
+      function splitData(dataset, feature, threshold) {
+        const left = dataset.filter((p) => p[feature] <= threshold);
+        const right = dataset.filter((p) => p[feature] > threshold);
+        return [left, right];
+      }
 
-    function giniImpurity(groups, classes) {
-      const nInstances = groups[0].length + groups[1].length;
-      let gini = 0.0;
-      for (const group of groups) {
-        const size = group.length;
-        if (size === 0) continue;
-        let score = 0.0;
-        for (const classVal of classes) {
-          const proportion = group.filter(p => p.label === classVal).length / size;
-          score += proportion * proportion;
+      function giniImpurity(groups, classes) {
+        const nInstances = groups[0].length + groups[1].length;
+        let gini = 0.0;
+        for (const group of groups) {
+          const size = group.length;
+          if (size === 0) continue;
+          let score = 0.0;
+          for (const classVal of classes) {
+            const proportion = group.filter((p) => p.label === classVal).length / size;
+            score += proportion * proportion;
+          }
+          gini += (1.0 - score) * (size / nInstances);
         }
-        gini += (1.0 - score) * (size / nInstances);
+        return gini;
       }
-      return gini;
-    }
 
-    /*********************
-     * Model & Data Setup
-     *********************/
-     function selectModel(model) {
+      /*********************
+       * Model & Data Setup
+       *********************/
+      function selectModel(model) {
         currentModel = model;
-        const dtControls = document.getElementById('dtControls');
-        if (model === 'dt') {
-          dtControls.style.display = 'block';
+        const dtControls = document.getElementById("dtControls");
+        if (model === "dt") {
+          dtControls.style.display = "block";
           trainDecisionTree();
         } else {
-          dtControls.style.display = 'none';
+          dtControls.style.display = "none";
         }
         ctx.clearRect(0, 0, W, H);
         drawDecisionBoundary();
@@ -232,249 +249,270 @@
         updateParameterDisplay();
       }
 
-    function selectDataset(ds) {
+      function selectDataset(ds) {
         currentDataset = ds;
-        
+
         // Reinitialize all model weights
         logisticWeights = [Math.random(), Math.random(), Math.random()];
         svmWeights = [Math.random(), Math.random(), Math.random()];
         perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
         perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-        
+
         // Regenerate data and redraw
         resetAndVisualize();
-    }
-      
-
-    /*********************
-     * Generate Datasets
-     *********************/
-    function generateDatasetA() {
-      data = [];
-      for (let i = 0; i < 100; i++) {
-        const x = Math.random();
-        const y = Math.random();
-        // label=1 if y>x
-        const label = y > x ? 1 : 0;
-        data.push({ x, y, label });
       }
-    }
 
-    function generateDatasetB() {
-      data = [];
-      // center class
-      for (let i = 0; i < 50; i++) {
-        const r = Math.random() * 0.15;
-        const angle = Math.random() * 2 * Math.PI;
-        data.push({
-          x: 0.5 + r * Math.cos(angle),
-          y: 0.5 + r * Math.sin(angle),
-          label: 1
-        });
-      }
-      // ring class
-      for (let i = 0; i < 50; i++) {
-        const r = 0.25 + Math.random() * 0.15;
-        const angle = Math.random() * 2 * Math.PI;
-        data.push({
-          x: 0.5 + r * Math.cos(angle),
-          y: 0.5 + r * Math.sin(angle),
-          label: 0
-        });
-      }
-    }
-
-    function generateDatasetC() {
-      data = [];
-      for (let i = 0; i < 100; i++) {
-        const x = Math.random();
-        const y = Math.random();
-        const ideal = y > x ? 1 : 0;
-        // 20% chance to flip
-        const label = Math.random() < 0.2 ? 1 - ideal : ideal;
-        data.push({ x, y, label });
-      }
-    }
-
-    function generateDataset() {
-      if (currentDataset === 'A') generateDatasetA();
-      else if (currentDataset === 'B') generateDatasetB();
-      else generateDatasetC();
-    }
-
-    /***********************
-     * Train Other Models
-     **********************/
-    function trainPerceptron() {
-      for (const point of data) {
-        const inputs = [point.x, point.y, point.x * point.y, point.x ** 2, point.y ** 2, 1];
-        const hidden = tanh(dot(inputs, perceptronHiddenWeights));
-        const output = sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
-        const error = point.label - output;
-        for (let i = 0; i < 5; i++) {
-          perceptronWeights[i] += 0.05 * error * hidden;
-          perceptronHiddenWeights[i] += 0.05 * error * perceptronWeights[0] * (1 - hidden ** 2) * inputs[i];
-        }
-        perceptronWeights[5] += 0.05 * error;
-      }
-    }
-
-    function trainLogistic() {
-      for (const point of data) {
-        const x = point.x;
-        const y = point.y;
-        const z = logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2];
-        const pred = sigmoid(z);
-        const error = pred - point.label;
-        logisticWeights[0] -= 0.1 * error * x;
-        logisticWeights[1] -= 0.1 * error * y;
-        logisticWeights[2] -= 0.1 * error * 1;
-      }
-    }
-
-    function trainSVM() {
-      for (const point of data) {
-        const x = point.x;
-        const y = point.y;
-        const label = point.label === 1 ? 1 : -1;
-        const margin = label * (svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
-        if (margin < 1) {
-          svmWeights[0] += 0.01 * label * x;
-          svmWeights[1] += 0.01 * label * y;
-          svmWeights[2] += 0.01 * label;
+      /*********************
+       * Generate Datasets
+       *********************/
+      function generateDatasetA() {
+        data = [];
+        for (let i = 0; i < 100; i++) {
+          const x = Math.random();
+          const y = Math.random();
+          // label=1 if y>x
+          const label = y > x ? 1 : 0;
+          data.push({ x, y, label });
         }
       }
-    }
 
-    /****************
-     *  Prediction  *
-     ****************/
-    function evaluateDecisionTree(x, y, node = dtModel) {
-      if (typeof node === 'number') return node;
-      const val = (node.feature === 'x') ? x : y;
-      if (val <= node.threshold) return evaluateDecisionTree(x, y, node.left);
-      else return evaluateDecisionTree(x, y, node.right);
-    }
-
-    function predict(x, y) {
-      switch (currentModel) {
-        case 'logistic': return sigmoid(logisticWeights[0]*x + logisticWeights[1]*y + logisticWeights[2]);
-        case 'knn': return knnPredict(x, y);
-        case 'dt': return evaluateDecisionTree(x, y);
-        case 'svm': return sigmoid(svmWeights[0]*x + svmWeights[1]*y + svmWeights[2]);
-        case 'perceptron': {
-          const features = [x, y, x*y, x**2, y**2, 1];
-          const hidden = tanh(dot(features, perceptronHiddenWeights));
-          return sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+      function generateDatasetB() {
+        data = [];
+        // center class
+        for (let i = 0; i < 50; i++) {
+          const r = Math.random() * 0.15;
+          const angle = Math.random() * 2 * Math.PI;
+          data.push({
+            x: 0.5 + r * Math.cos(angle),
+            y: 0.5 + r * Math.sin(angle),
+            label: 1,
+          });
         }
-        case 'ensemble': {
-          return (
-            sigmoid(logisticWeights[0]*x + logisticWeights[1]*y + logisticWeights[2]) +
-            knnPredict(x, y) +
-            sigmoid(svmWeights[0]*x + svmWeights[1]*y + svmWeights[2])
-          ) / 3;
-        }
-        default: 
-          return 0.5;
-      }
-    }
-
-    /************************
-     *   Utility Functions
-     ************************/
-    function sigmoid(z) {
-      return 1 / (1 + Math.exp(-z));
-    }
-    function tanh(z) {
-      return Math.tanh(z);
-    }
-    function dot(a, b) {
-      return a.reduce((sum, ai, i) => sum + ai * b[i], 0);
-    }
-
-    function knnPredict(x, y, k = 3) {
-      return data
-        .map(p => ({ dist: (p.x - x)**2 + (p.y - y)**2, label: p.label }))
-        .sort((a, b) => a.dist - b.dist)
-        .slice(0, k)
-        .reduce((sum, p) => sum + p.label, 0) / k;
-    }
-
-    /************************
-     *   Drawing & UI
-     ************************/
-    function drawDataset() {
-      for (const point of data) {
-        ctx.beginPath();
-        ctx.arc(point.x * W, point.y * H, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = (point.label === 1) ? 'green' : 'red';
-        ctx.fill();
-      }
-    }
-
-    function drawDecisionBoundary() {
-      for (let x = 0; x < W; x += 4) {
-        for (let y = 0; y < H; y += 4) {
-          const normX = x / W;
-          const normY = y / H;
-          const prediction = predict(normX, normY);
-          ctx.fillStyle = (prediction > 0.5) ? '#90ee90' : '#ffb6b6';
-          ctx.fillRect(x, y, 4, 4);
+        // ring class
+        for (let i = 0; i < 50; i++) {
+          const r = 0.25 + Math.random() * 0.15;
+          const angle = Math.random() * 2 * Math.PI;
+          data.push({
+            x: 0.5 + r * Math.cos(angle),
+            y: 0.5 + r * Math.sin(angle),
+            label: 0,
+          });
         }
       }
-    }
 
-    /***********************************************
-     *  Metrics: F1, Accuracy, Precision, Recall
-     *  + Confusion Matrix
-     ***********************************************/
-    function computeMetrics() {
-      let TP = 0, TN = 0, FP = 0, FN = 0;
-      for (const p of data) {
-        const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
-        if (p.label === 1 && pred === 1) TP++;
-        else if (p.label === 0 && pred === 0) TN++;
-        else if (p.label === 0 && pred === 1) FP++;
-        else if (p.label === 1 && pred === 0) FN++;
+      function generateDatasetC() {
+        data = [];
+        for (let i = 0; i < 100; i++) {
+          const x = Math.random();
+          const y = Math.random();
+          const ideal = y > x ? 1 : 0;
+          // 20% chance to flip
+          const label = Math.random() < 0.2 ? 1 - ideal : ideal;
+          data.push({ x, y, label });
+        }
       }
-      const total = data.length;
-      const accuracy = (TP + TN) / total;
-      const precision = (TP + FP) === 0 ? 0 : TP / (TP + FP);
-      const recall = (TP + FN) === 0 ? 0 : TP / (TP + FN);
-      const f1 = (precision + recall) === 0 ? 0 : 2*(precision*recall)/(precision+recall);
-      return {TP, TN, FP, FN, accuracy, precision, recall, f1};
-    }
 
-    function colorTPorTN(value) {
-      // from 0..60 => green
-      const v = Math.min(value, 60);
-      const ratio = v / 60;
-      const r = Math.floor(255*(1-ratio));
-      const g = Math.floor(255*ratio);
-      return `rgb(${r},${g},0)`;
-    }
-    function colorFPorFN(value) {
-      // from 0..30 => red
-      const v = Math.min(value, 30);
-      const ratio = v / 30;
-      const r = Math.floor(255*ratio);
-      const g = Math.floor(255*(1-ratio));
-      return `rgb(${r},${g},0)`;
-    }
+      function generateDataset() {
+        if (currentDataset === "A") generateDatasetA();
+        else if (currentDataset === "B") generateDatasetB();
+        else generateDatasetC();
+      }
 
-    function buildConfusionMatrixHTML(TP, TN, FP, FN) {
-      const total = TP + TN + FP + FN;
-      const tpPercent = ((TP / total) * 100).toFixed(2);
-      const tnPercent = ((TN / total) * 100).toFixed(2);
-      const fpPercent = ((FP / total) * 100).toFixed(2);
-      const fnPercent = ((FN / total) * 100).toFixed(2);
+      /***********************
+       * Train Other Models
+       **********************/
+      function trainPerceptron() {
+        for (const point of data) {
+          const inputs = [
+            point.x,
+            point.y,
+            point.x * point.y,
+            point.x ** 2,
+            point.y ** 2,
+            1,
+          ];
+          const hidden = tanh(dot(inputs, perceptronHiddenWeights));
+          const output = sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+          const error = point.label - output;
+          for (let i = 0; i < 5; i++) {
+            perceptronWeights[i] += 0.05 * error * hidden;
+            perceptronHiddenWeights[i] +=
+              0.05 * error * perceptronWeights[0] * (1 - hidden ** 2) * inputs[i];
+          }
+          perceptronWeights[5] += 0.05 * error;
+        }
+      }
 
-      const tpColor = colorTPorTN(parseFloat(tpPercent));
-      const tnColor = colorTPorTN(parseFloat(tnPercent));
-      const fpColor = colorFPorFN(parseFloat(fpPercent));
-      const fnColor = colorFPorFN(parseFloat(fnPercent));
+      function trainLogistic() {
+        for (const point of data) {
+          const x = point.x;
+          const y = point.y;
+          const z = logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2];
+          const pred = sigmoid(z);
+          const error = pred - point.label;
+          logisticWeights[0] -= 0.1 * error * x;
+          logisticWeights[1] -= 0.1 * error * y;
+          logisticWeights[2] -= 0.1 * error * 1;
+        }
+      }
 
-      return `
+      function trainSVM() {
+        for (const point of data) {
+          const x = point.x;
+          const y = point.y;
+          const label = point.label === 1 ? 1 : -1;
+          const margin = label * (svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+          if (margin < 1) {
+            svmWeights[0] += 0.01 * label * x;
+            svmWeights[1] += 0.01 * label * y;
+            svmWeights[2] += 0.01 * label;
+          }
+        }
+      }
+
+      /****************
+       *  Prediction  *
+       ****************/
+      function evaluateDecisionTree(x, y, node = dtModel) {
+        if (typeof node === "number") return node;
+        const val = node.feature === "x" ? x : y;
+        if (val <= node.threshold) return evaluateDecisionTree(x, y, node.left);
+        else return evaluateDecisionTree(x, y, node.right);
+      }
+
+      function predict(x, y) {
+        switch (currentModel) {
+          case "logistic":
+            return sigmoid(
+              logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]
+            );
+          case "knn":
+            return knnPredict(x, y);
+          case "dt":
+            return evaluateDecisionTree(x, y);
+          case "svm":
+            return sigmoid(
+              svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]
+            );
+          case "perceptron": {
+            const features = [x, y, x * y, x ** 2, y ** 2, 1];
+            const hidden = tanh(dot(features, perceptronHiddenWeights));
+            return sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+          }
+          case "ensemble": {
+            return (
+              (sigmoid(
+                logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]
+              ) +
+                knnPredict(x, y) +
+                sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2])) /
+              3
+            );
+          }
+          default:
+            return 0.5;
+        }
+      }
+
+      /************************
+       *   Utility Functions
+       ************************/
+      function sigmoid(z) {
+        return 1 / (1 + Math.exp(-z));
+      }
+      function tanh(z) {
+        return Math.tanh(z);
+      }
+      function dot(a, b) {
+        return a.reduce((sum, ai, i) => sum + ai * b[i], 0);
+      }
+
+      function knnPredict(x, y, k = 3) {
+        return data
+          .map((p) => ({ dist: (p.x - x) ** 2 + (p.y - y) ** 2, label: p.label }))
+          .sort((a, b) => a.dist - b.dist)
+          .slice(0, k)
+          .reduce((sum, p) => sum + p.label, 0) / k;
+      }
+
+      /************************
+       *   Drawing & UI
+       ************************/
+      function drawDataset() {
+        for (const point of data) {
+          ctx.beginPath();
+          ctx.arc(point.x * W, point.y * H, 5, 0, 2 * Math.PI);
+          ctx.fillStyle = point.label === 1 ? "green" : "red";
+          ctx.fill();
+        }
+      }
+
+      function drawDecisionBoundary() {
+        for (let x = 0; x < W; x += 4) {
+          for (let y = 0; y < H; y += 4) {
+            const normX = x / W;
+            const normY = y / H;
+            const prediction = predict(normX, normY);
+            ctx.fillStyle = prediction > 0.5 ? "#90ee90" : "#ffb6b6";
+            ctx.fillRect(x, y, 4, 4);
+          }
+        }
+      }
+
+      /***********************************************
+       *  Metrics: F1, Accuracy, Precision, Recall
+       *  + Confusion Matrix
+       ***********************************************/
+      function computeMetrics() {
+        let TP = 0,
+          TN = 0,
+          FP = 0,
+          FN = 0;
+        for (const p of data) {
+          const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
+          if (p.label === 1 && pred === 1) TP++;
+          else if (p.label === 0 && pred === 0) TN++;
+          else if (p.label === 0 && pred === 1) FP++;
+          else if (p.label === 1 && pred === 0) FN++;
+        }
+        const total = data.length;
+        const accuracy = (TP + TN) / total;
+        const precision = TP + FP === 0 ? 0 : TP / (TP + FP);
+        const recall = TP + FN === 0 ? 0 : TP / (TP + FN);
+        const f1 = precision + recall === 0 ? 0 : (2 * precision * recall) / (precision + recall);
+        return { TP, TN, FP, FN, accuracy, precision, recall, f1 };
+      }
+
+      function colorTPorTN(value) {
+        // from 0..60 => green
+        const v = Math.min(value, 60);
+        const ratio = v / 60;
+        const r = Math.floor(255 * (1 - ratio));
+        const g = Math.floor(255 * ratio);
+        return `rgb(${r},${g},0)`;
+      }
+      function colorFPorFN(value) {
+        // from 0..30 => red
+        const v = Math.min(value, 30);
+        const ratio = v / 30;
+        const r = Math.floor(255 * ratio);
+        const g = Math.floor(255 * (1 - ratio));
+        return `rgb(${r},${g},0)`;
+      }
+
+      function buildConfusionMatrixHTML(TP, TN, FP, FN) {
+        const total = TP + TN + FP + FN;
+        const tpPercent = ((TP / total) * 100).toFixed(2);
+        const tnPercent = ((TN / total) * 100).toFixed(2);
+        const fpPercent = ((FP / total) * 100).toFixed(2);
+        const fnPercent = ((FN / total) * 100).toFixed(2);
+
+        const tpColor = colorTPorTN(parseFloat(tpPercent));
+        const tnColor = colorTPorTN(parseFloat(tnPercent));
+        const fpColor = colorFPorFN(parseFloat(fpPercent));
+        const fnColor = colorFPorFN(parseFloat(fnPercent));
+
+        return `
         <div style="display: flex; flex-direction: column; align-items: center; margin-top: 10px;">
           <div style="font-weight: bold; margin-bottom: 4px;">Confusion Matrix</div>
           <table class="confusion-matrix">
@@ -489,407 +527,442 @@
           </table>
         </div>
       `;
-    }
-
-    /*****************************
-     *  reset & re-draw pipeline
-     *****************************/
-    function resetAndVisualize() {
-      generateDataset();
-      if (currentModel === 'dt') {
-        trainDecisionTree();
       }
-      ctx.clearRect(0, 0, W, H);
-      drawDecisionBoundary();
-      drawDataset();
-      updateParameterDisplay();
-    }
-    function convexHull(points) {
-        points.sort((a, b) => a.x === b.x ? a.y - b.y : a.x - b.x);
+
+      /*****************************
+       *  reset & re-draw pipeline
+       *****************************/
+      function resetAndVisualize() {
+        generateDataset();
+        if (currentModel === "dt") {
+          trainDecisionTree();
+        }
+        ctx.clearRect(0, 0, W, H);
+        drawDecisionBoundary();
+        drawDataset();
+        updateParameterDisplay();
+      }
+      function convexHull(points) {
+        points.sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x));
         const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
         const lower = [];
         for (const p of points) {
-          while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+          while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0)
+            lower.pop();
           lower.push(p);
         }
         const upper = [];
         for (let i = points.length - 1; i >= 0; i--) {
           const p = points[i];
-          while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+          while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0)
+            upper.pop();
           upper.push(p);
         }
         upper.pop();
         lower.pop();
         return lower.concat(upper);
       }
-    function drawModelVisualizer() {
+      function drawModelVisualizer() {
         // 1) Clear the modelVisCanvas
         modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-      
+
         // Inside drawModelVisualizer(), AFTER clearing the canvas, insert:
 
         switch (currentModel) {
+          case "logistic": {
+            const canvasW = modelVisCanvas.width;
+            const canvasH = modelVisCanvas.height;
+            const scaleX = canvasW / 40; // now -10 to +10 range
+            const scaleY = canvasH * 0.8; // compress vertically
+            const centerX = canvasW / 2;
+            const centerY = canvasH / 2;
 
-            case 'logistic': {
-                const canvasW = modelVisCanvas.width;
-                const canvasH = modelVisCanvas.height;
-                const scaleX = canvasW / 40; // now -10 to +10 range
-                const scaleY = canvasH * 0.8; // compress vertically
-                const centerX = canvasW / 2;
-                const centerY = canvasH / 2;
-      
-                // Draw grid
-                modelVisCtx.strokeStyle = '#eee';
-                for (let i = 0; i <= canvasW; i += 50) {
-                  modelVisCtx.beginPath();
-                  modelVisCtx.moveTo(i, 0);
-                  modelVisCtx.lineTo(i, canvasH);
-                  modelVisCtx.stroke();
-                }
-                for (let j = 0; j <= canvasH; j += 50) {
-                  modelVisCtx.beginPath();
-                  modelVisCtx.moveTo(0, j);
-                  modelVisCtx.lineTo(canvasW, j);
-                  modelVisCtx.stroke();
-                }
-      
-                // Sigmoid curve from x = -10 to 10
+            // Draw grid
+            modelVisCtx.strokeStyle = "#eee";
+            for (let i = 0; i <= canvasW; i += 50) {
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(i, 0);
+              modelVisCtx.lineTo(i, canvasH);
+              modelVisCtx.stroke();
+            }
+            for (let j = 0; j <= canvasH; j += 50) {
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(0, j);
+              modelVisCtx.lineTo(canvasW, j);
+              modelVisCtx.stroke();
+            }
+
+            // Sigmoid curve from x = -10 to 10
+            modelVisCtx.beginPath();
+            for (let xVal = -20; xVal <= 20; xVal += 0.1) {
+              const yVal = 1 / (1 + Math.exp(-xVal));
+              const xPix = centerX + xVal * scaleX;
+              const yPix = centerY - (yVal - 0.5) * scaleY;
+              if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
+              else modelVisCtx.lineTo(xPix, yPix);
+            }
+            modelVisCtx.strokeStyle = "blue";
+            modelVisCtx.lineWidth = 2;
+            modelVisCtx.stroke();
+
+            // Data points in model space (clamped to [-20, 20])
+            data.forEach((p) => {
+              const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
+              const sigmoidVal = 1 / (1 + Math.exp(-score));
+              const clampedScore = Math.max(-20, Math.min(20, score));
+              const xPix = centerX + clampedScore * scaleX;
+              const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
+              modelVisCtx.beginPath();
+              modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
+              modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
+              modelVisCtx.fill();
+            });
+
+            break;
+          }
+
+          case "knn": {
+            const drawCluster = (label, color, fillColor) => {
+              const clusterPoints = data
+                .filter((p) => p.label === label)
+                .map((p) => ({
+                  x: p.x * modelVisCanvas.width,
+                  y: p.y * modelVisCanvas.height,
+                }));
+              if (clusterPoints.length < 3) return;
+              const hull = convexHull(clusterPoints);
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(hull[0].x, hull[0].y);
+              for (let i = 1; i < hull.length; i++) {
+                modelVisCtx.lineTo(hull[i].x, hull[i].y);
+              }
+              modelVisCtx.closePath();
+              modelVisCtx.fillStyle = fillColor;
+              modelVisCtx.globalAlpha = 0.1;
+              modelVisCtx.fill();
+              modelVisCtx.globalAlpha = 1.0;
+              modelVisCtx.strokeStyle = color;
+              modelVisCtx.setLineDash([5, 5]);
+              modelVisCtx.stroke();
+              modelVisCtx.setLineDash([]);
+            };
+            drawCluster(0, "orange", "orange");
+            drawCluster(1, "green", "green");
+
+            data.forEach((p) => {
+              modelVisCtx.beginPath();
+              modelVisCtx.arc(
+                p.x * modelVisCanvas.width,
+                p.y * modelVisCanvas.height,
+                5,
+                0,
+                2 * Math.PI
+              );
+              modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
+              modelVisCtx.fill();
+            });
+
+            if (selectedPoint) {
+              const k = 3;
+              const distances = data
+                .map((p) => ({
+                  dist: (p.x - selectedPoint.x) ** 2 + (p.y - selectedPoint.y) ** 2,
+                  point: p,
+                }))
+                .sort((a, b) => a.dist - b.dist)
+                .slice(1, k + 1); // skip self
+
+              distances.forEach(({ point }) => {
                 modelVisCtx.beginPath();
-                for (let xVal = -20; xVal <= 20; xVal += 0.1) {
-                  const yVal = 1 / (1 + Math.exp(-xVal));
-                  const xPix = centerX + xVal * scaleX;
-                  const yPix = centerY - (yVal - 0.5) * scaleY;
-                  if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
-                  else modelVisCtx.lineTo(xPix, yPix);
-                }
-                modelVisCtx.strokeStyle = 'blue';
-                modelVisCtx.lineWidth = 2;
+                modelVisCtx.moveTo(
+                  selectedPoint.x * modelVisCanvas.width,
+                  selectedPoint.y * modelVisCanvas.height
+                );
+                modelVisCtx.lineTo(
+                  point.x * modelVisCanvas.width,
+                  point.y * modelVisCanvas.height
+                );
+                modelVisCtx.strokeStyle = "black";
                 modelVisCtx.stroke();
-      
-                // Data points in model space (clamped to [-20, 20])
-                data.forEach(p => {
-                  const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
-                  const sigmoidVal = 1 / (1 + Math.exp(-score));
-                  const clampedScore = Math.max(-20, Math.min(20, score));
-                  const xPix = centerX + clampedScore * scaleX;
-                  const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
-                  modelVisCtx.beginPath();
-                  modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
-                  modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
-                  modelVisCtx.fill();
-                });
-      
-                break;
-              }
-        
-              case 'knn': {
-                const drawCluster = (label, color, fillColor) => {
-                  const clusterPoints = data.filter(p => p.label === label).map(p => ({
-                    x: p.x * modelVisCanvas.width,
-                    y: p.y * modelVisCanvas.height
-                  }));
-                  if (clusterPoints.length < 3) return;
-                  const hull = convexHull(clusterPoints);
-                  modelVisCtx.beginPath();
-                  modelVisCtx.moveTo(hull[0].x, hull[0].y);
-                  for (let i = 1; i < hull.length; i++) {
-                    modelVisCtx.lineTo(hull[i].x, hull[i].y);
-                  }
-                  modelVisCtx.closePath();
-                  modelVisCtx.fillStyle = fillColor;
-                  modelVisCtx.globalAlpha = 0.1;
-                  modelVisCtx.fill();
-                  modelVisCtx.globalAlpha = 1.0;
-                  modelVisCtx.strokeStyle = color;
-                  modelVisCtx.setLineDash([5, 5]);
-                  modelVisCtx.stroke();
-                  modelVisCtx.setLineDash([]);
-                };
-                drawCluster(0, 'orange', 'orange');
-                drawCluster(1, 'green', 'green');
-              
-                data.forEach(p => {
-                  modelVisCtx.beginPath();
-                  modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
-                  modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
-                  modelVisCtx.fill();
-                });
-              
-                if (selectedPoint) {
-                  const k = 3;
-                  const distances = data.map(p => ({
-                    dist: (p.x - selectedPoint.x) ** 2 + (p.y - selectedPoint.y) ** 2,
-                    point: p
-                  }))
-                  .sort((a, b) => a.dist - b.dist)
-                  .slice(1, k + 1); // skip self
-              
-                  distances.forEach(({ point }) => {
-                    modelVisCtx.beginPath();
-                    modelVisCtx.moveTo(selectedPoint.x * modelVisCanvas.width, selectedPoint.y * modelVisCanvas.height);
-                    modelVisCtx.lineTo(point.x * modelVisCanvas.width, point.y * modelVisCanvas.height);
-                    modelVisCtx.strokeStyle = 'black';
-                    modelVisCtx.stroke();
-                  });
-                }
-                break;
-              }
-        
-            case 'dt':
+              });
+            }
+            break;
+          }
+
+          case "dt":
             // 3) Visualize the decision tree structure
             //    (Tiny text-based “tree” or bracket lines)
             // A quick example: recursively draw node branches
             function drawTree(node, x, y, offset) {
-                if (typeof node === 'number') {
+              if (typeof node === "number") {
                 // Leaf
                 modelVisCtx.fillText(`Leaf: ${node}`, x, y);
                 return;
-                }
-                // Node
-                modelVisCtx.fillText(`(${node.feature} <= ${node.threshold.toFixed(2)})`, x, y);
-                // Draw left branch
-                modelVisCtx.beginPath();
-                modelVisCtx.moveTo(x, y+5);
-                modelVisCtx.lineTo(x - offset, y+40);
-                modelVisCtx.stroke();
-                drawTree(node.left, x - offset, y+40, offset/2);
-                // Draw right branch
-                modelVisCtx.beginPath();
-                modelVisCtx.moveTo(x, y+5);
-                modelVisCtx.lineTo(x + offset, y+40);
-                modelVisCtx.stroke();
-                drawTree(node.right, x + offset, y+40, offset/2);
+              }
+              // Node
+              modelVisCtx.fillText(`(${node.feature} <= ${node.threshold.toFixed(2)})`, x, y);
+              // Draw left branch
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(x, y + 5);
+              modelVisCtx.lineTo(x - offset, y + 40);
+              modelVisCtx.stroke();
+              drawTree(node.left, x - offset, y + 40, offset / 2);
+              // Draw right branch
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(x, y + 5);
+              modelVisCtx.lineTo(x + offset, y + 40);
+              modelVisCtx.stroke();
+              drawTree(node.right, x + offset, y + 40, offset / 2);
             }
             // Start near top-center
-            modelVisCtx.font = '12px Arial';
+            modelVisCtx.font = "12px Arial";
             drawTree(dtModel, modelVisCanvas.width / 2, 40, 80);
             break;
-        
-            case 'svm':
-            // 4) Highlight points that are “support vectors” 
+
+          case "svm":
+            // 4) Highlight points that are “support vectors”
             //    i.e. those near or within the margin
             const marginThreshold = 1.0;
             for (let p of data) {
-                let label = (p.label === 1) ? 1 : -1;
-                let margin = label * (svmWeights[0]*p.x + svmWeights[1]*p.y + svmWeights[2]);
-                if (margin <= marginThreshold) {
+              let label = p.label === 1 ? 1 : -1;
+              let margin = label * (svmWeights[0] * p.x + svmWeights[1] * p.y + svmWeights[2]);
+              if (margin <= marginThreshold) {
                 // Draw a circle around that point
                 modelVisCtx.beginPath();
                 modelVisCtx.arc(
-                    p.x * modelVisCanvas.width,
-                    p.y * modelVisCanvas.height,
-                    7, 0, 2*Math.PI
+                  p.x * modelVisCanvas.width,
+                  p.y * modelVisCanvas.height,
+                  7,
+                  0,
+                  2 * Math.PI
                 );
-                modelVisCtx.strokeStyle = 'black';
+                modelVisCtx.strokeStyle = "black";
                 modelVisCtx.lineWidth = 2;
                 modelVisCtx.stroke();
-                }
+              }
             }
             break;
-        
-            case 'perceptron':
+
+          case "perceptron":
             // 5) Show a little 2-input -> hidden -> output network
             //    You can also color lines by current weight, etc.
             // Example: 2 input nodes, 1 hidden node, 1 output node
-        
+
             // Node positions
-            let in1 = {x: 100, y: 150}, in2 = {x: 100, y: 350};
-            let hidden = {x: 250, y: 250};
-            let out = {x: 400, y: 250};
-        
+            let in1 = { x: 100, y: 150 },
+              in2 = { x: 100, y: 150 };
+            in2.y = 350;
+            let hidden = { x: 250, y: 250 };
+            let out = { x: 400, y: 250 };
+
             // Draw nodes
-            modelVisCtx.fillStyle = 'lightgray';
-            [in1, in2, hidden, out].forEach(n => {
-                modelVisCtx.beginPath();
-                modelVisCtx.arc(n.x, n.y, 25, 0, 2*Math.PI);
-                modelVisCtx.fill();
-                modelVisCtx.stroke();
+            modelVisCtx.fillStyle = "lightgray";
+            [in1, in2, hidden, out].forEach((n) => {
+              modelVisCtx.beginPath();
+              modelVisCtx.arc(n.x, n.y, 25, 0, 2 * Math.PI);
+              modelVisCtx.fill();
+              modelVisCtx.stroke();
             });
-            modelVisCtx.fillStyle = 'black';
-            modelVisCtx.fillText("x1", in1.x - 7, in1.y+5);
-            modelVisCtx.fillText("x2", in2.x - 7, in2.y+5);
-            modelVisCtx.fillText("Hidden", hidden.x - 20, hidden.y+5);
-            modelVisCtx.fillText("Output", out.x - 20, out.y+5);
-        
+            modelVisCtx.fillStyle = "black";
+            modelVisCtx.fillText("x1", in1.x - 7, in1.y + 5);
+            modelVisCtx.fillText("x2", in2.x - 7, in2.y + 5);
+            modelVisCtx.fillText("Hidden", hidden.x - 20, hidden.y + 5);
+            modelVisCtx.fillText("Output", out.x - 20, out.y + 5);
+
             // Draw lines with weights
-            modelVisCtx.strokeStyle = 'gray';
+            modelVisCtx.strokeStyle = "gray";
             // in1->hidden
             modelVisCtx.beginPath();
-            modelVisCtx.moveTo(in1.x+25, in1.y);
-            modelVisCtx.lineTo(hidden.x-25, hidden.y);
+            modelVisCtx.moveTo(in1.x + 25, in1.y);
+            modelVisCtx.lineTo(hidden.x - 25, hidden.y);
             modelVisCtx.stroke();
-            modelVisCtx.fillText(`w1=${perceptronHiddenWeights[0].toFixed(2)}`,
-                                (in1.x + hidden.x)/2 - 10,
-                                (in1.y + hidden.y)/2 - 5);
-        
+            modelVisCtx.fillText(
+              `w1=${perceptronHiddenWeights[0].toFixed(2)}`,
+              (in1.x + hidden.x) / 2 - 10,
+              (in1.y + hidden.y) / 2 - 5
+            );
+
             // in2->hidden
             modelVisCtx.beginPath();
-            modelVisCtx.moveTo(in2.x+25, in2.y);
-            modelVisCtx.lineTo(hidden.x-25, hidden.y);
+            modelVisCtx.moveTo(in2.x + 25, in2.y);
+            modelVisCtx.lineTo(hidden.x - 25, hidden.y);
             modelVisCtx.stroke();
-            modelVisCtx.fillText(`w2=${perceptronHiddenWeights[1].toFixed(2)}`,
-                                (in2.x + hidden.x)/2 - 10,
-                                (in2.y + hidden.y)/2 + 5);
-        
+            modelVisCtx.fillText(
+              `w2=${perceptronHiddenWeights[1].toFixed(2)}`,
+              (in2.x + hidden.x) / 2 - 10,
+              (in2.y + hidden.y) / 2 + 5
+            );
+
             // hidden->out
             modelVisCtx.beginPath();
-            modelVisCtx.moveTo(hidden.x+25, hidden.y);
-            modelVisCtx.lineTo(out.x-25, out.y);
+            modelVisCtx.moveTo(hidden.x + 25, hidden.y);
+            modelVisCtx.lineTo(out.x - 25, out.y);
             modelVisCtx.stroke();
-            modelVisCtx.fillText(`w_out=${perceptronWeights[0].toFixed(2)}`,
-                                (hidden.x + out.x)/2 - 20,
-                                (hidden.y + out.y)/2 - 5);
+            modelVisCtx.fillText(
+              `w_out=${perceptronWeights[0].toFixed(2)}`,
+              (hidden.x + out.x) / 2 - 20,
+              (hidden.y + out.y) / 2 - 5
+            );
             break;
-        
-            case 'ensemble':
+
+          case "ensemble":
             // 6) Draw circles for each “sub‐model,” label them 0/1 based on
             //    that sub‐model’s vote on a hypothetical point
             // Just a schematic example:
-            let leftX = 150, baseY = 150, step = 60;
-            let subModels = ['LR','KNN','SVM'];
+            let leftX = 150,
+              baseY = 150,
+              step = 60;
+            let subModels = ["LR", "KNN", "SVM"];
             subModels.forEach((m, i) => {
-                // Circle for each
-                let cx = leftX;
-                let cy = baseY + i*step;
-                modelVisCtx.beginPath();
-                modelVisCtx.arc(cx, cy, 25, 0, 2*Math.PI);
-                modelVisCtx.fillStyle = '#ccccff';
-                modelVisCtx.fill();
-                modelVisCtx.stroke();
-                modelVisCtx.fillStyle = 'black';
-                modelVisCtx.fillText(m, cx - 10, cy+5);
-        
-                // Example: label that circle’s “vote” 0 or 1
-                // (Here, just a random example or some function)
-                let dummyVote = (Math.random() < 0.5) ? 0 : 1;
-                modelVisCtx.fillText(`vote=${dummyVote}`, cx - 20, cy+35);
+              // Circle for each
+              let cx = leftX;
+              let cy = baseY + i * step;
+              modelVisCtx.beginPath();
+              modelVisCtx.arc(cx, cy, 25, 0, 2 * Math.PI);
+              modelVisCtx.fillStyle = "#ccccff";
+              modelVisCtx.fill();
+              modelVisCtx.stroke();
+              modelVisCtx.fillStyle = "black";
+              modelVisCtx.fillText(m, cx - 10, cy + 5);
+
+              // Example: label that circle’s “vote” 0 or 1
+              // (Here, just a random example or some function)
+              let dummyVote = Math.random() < 0.5 ? 0 : 1;
+              modelVisCtx.fillText(`vote=${dummyVote}`, cx - 20, cy + 35);
             });
             // Then an arrow combining them at a final node
             modelVisCtx.beginPath();
             modelVisCtx.moveTo(leftX + 25, baseY);
-            modelVisCtx.lineTo(leftX + 100, baseY + 100); 
-            modelVisCtx.lineTo(leftX + 25, baseY + step*2);
+            modelVisCtx.lineTo(leftX + 100, baseY + 100);
+            modelVisCtx.lineTo(leftX + 25, baseY + step * 2);
             modelVisCtx.stroke();
             // And so on...
             break;
-        
-            default:
+
+          default:
             // If no special visualization, do nothing additional
             break;
-  }
-  
+        }
+
         // For example, a placeholder text:
         modelVisCtx.fillStyle = "black";
         modelVisCtx.font = "16px Arial";
         modelVisCtx.fillText("Model: " + currentModel, 20, 20);
       }
-        
-    /*****************************
-     *  Animation loop
-     *****************************/
-    function loop() {
-      // Train only these models in real time
-      if (currentModel === 'perceptron') trainPerceptron();
-      if (currentModel === 'logistic') trainLogistic();
-      if (currentModel === 'svm') trainSVM();
 
-      ctx.clearRect(0, 0, W, H);
-      drawDecisionBoundary();
-      drawDataset();
-      updateParameterDisplay();
-      drawModelVisualizer();
-      requestAnimationFrame(loop);
-    }
+      /*****************************
+       *  Animation loop
+       *****************************/
+      function loop() {
+        // Train only these models in real time
+        if (currentModel === "perceptron") trainPerceptron();
+        if (currentModel === "logistic") trainLogistic();
+        if (currentModel === "svm") trainSVM();
 
-    function updateParameterDisplay() {
-      let text = `Model: ${currentModel}\n`;
-      if (currentModel === 'perceptron') {
-        text += `\nPerceptron Weights:\n${perceptronWeights.map(w => w.toFixed(3)).join(', ')}\n`;
-        text += `Hidden Weights:\n${perceptronHiddenWeights.map(w => w.toFixed(3)).join(', ')}`;
-      } else if (currentModel === 'logistic') {
-        text += `\nLogistic Weights:\n${logisticWeights.map(w => w.toFixed(3)).join(', ')}`;
-      } else if (currentModel === 'svm') {
-        text += `\nSVM Weights:\n${svmWeights.map(w => w.toFixed(3)).join(', ')}`;
-      } else if (currentModel === 'dt') {
-        text += `\nDecision Tree Structure:\n` + JSON.stringify(dtModel, null, 2);
-      } 
-      else if (currentModel === 'dt') {
-        text += `\nTree Depth: ${maxTreeDepth}\n`;
-        text += `\nTree Structure:\n${stringifyTree(dtModel)}`;
+        ctx.clearRect(0, 0, W, H);
+        drawDecisionBoundary();
+        drawDataset();
+        updateParameterDisplay();
+        drawModelVisualizer();
+        requestAnimationFrame(loop);
       }
-      else {
-        text += `\n(No trainable parameters displayed)`;
-      }
-      // Add code if you want other models to show weights, etc.
 
-      // Metrics
-      const {TP, TN, FP, FN, accuracy, precision, recall, f1} = computeMetrics();
-      text += `\n\nPerformance Metrics:\n`;
-      text += `Accuracy: ${(accuracy*100).toFixed(2)}%\n`;
-      text += `Precision: ${(precision*100).toFixed(2)}%\n`;
-      text += `Recall: ${(recall*100).toFixed(2)}%\n`;
-      text += `F1 Score: ${(f1*100).toFixed(2)}%\n`;
-
-      // Confusion matrix
-      const cmHTML = buildConfusionMatrixHTML(TP, TN, FP, FN);
-
-      paramBox.innerHTML = text.replace(/\n/g, '<br>') + cmHTML;
-    }
-
-    // Initialize with dataset A by default
-    selectDataset('A');
-    loop();
-
-    let selectedPoint = null;
-
-    // Fix: Call drawModelVisualizer immediately after click
-    modelVisCanvas.addEventListener('click', function(event) {
-      const rect = modelVisCanvas.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const clickY = event.clientY - rect.top;
-      let minDist = Infinity;
-      let chosen = null;
-      for (const p of data) {
-        const dx = p.x * modelVisCanvas.width - clickX;
-        const dy = p.y * modelVisCanvas.height - clickY;
-        const dist = dx * dx + dy * dy;
-        if (dist < minDist && dist < 400) {
-          minDist = dist;
-          chosen = p;
+      function updateParameterDisplay() {
+        let text = `Model: ${currentModel}\n`;
+        if (currentModel === "perceptron") {
+          text += `\nPerceptron Weights:\n${perceptronWeights
+            .map((w) => w.toFixed(3))
+            .join(", ")}\n`;
+          text += `Hidden Weights:\n${perceptronHiddenWeights
+            .map((w) => w.toFixed(3))
+            .join(", ")}`;
+        } else if (currentModel === "logistic") {
+          text += `\nLogistic Weights:\n${logisticWeights
+            .map((w) => w.toFixed(3))
+            .join(", ")}`;
+        } else if (currentModel === "svm") {
+          text += `\nSVM Weights:\n${svmWeights.map((w) => w.toFixed(3)).join(", ")}`;
+        } else if (currentModel === "dt") {
+          text += `\nDecision Tree Structure:\n` + JSON.stringify(dtModel, null, 2);
+        } else if (currentModel === "dt") {
+          text += `\nTree Depth: ${maxTreeDepth}\n`;
+          text += `\nTree Structure:\n${stringifyTree(dtModel)}`;
+        } else {
+          text += `\n(No trainable parameters displayed)`;
         }
-      }
-      selectedPoint = chosen;
-      drawModelVisualizer();  // <<< force redraw so lines appear
-    });
+        // Add code if you want other models to show weights, etc.
 
-    canvas.addEventListener('click', function(event) {
+        // Metrics
+        const { TP, TN, FP, FN, accuracy, precision, recall, f1 } = computeMetrics();
+        text += `\n\nPerformance Metrics:\n`;
+        text += `Accuracy: ${(accuracy * 100).toFixed(2)}%\n`;
+        text += `Precision: ${(precision * 100).toFixed(2)}%\n`;
+        text += `Recall: ${(recall * 100).toFixed(2)}%\n`;
+        text += `F1 Score: ${(f1 * 100).toFixed(2)}%\n`;
+
+        // Confusion matrix
+        const cmHTML = buildConfusionMatrixHTML(TP, TN, FP, FN);
+
+        paramBox.innerHTML = text.replace(/\n/g, "<br>") + cmHTML;
+      }
+
+      // Initialize with dataset A by default
+      selectDataset("A");
+      loop();
+
+      let selectedPoint = null;
+
+      // Fix: Call drawModelVisualizer immediately after click
+      modelVisCanvas.addEventListener("click", function (event) {
+        const rect = modelVisCanvas.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+        let minDist = Infinity;
+        let chosen = null;
+        for (const p of data) {
+          const dx = p.x * modelVisCanvas.width - clickX;
+          const dy = p.y * modelVisCanvas.height - clickY;
+          const dist = dx * dx + dy * dy;
+          if (dist < minDist && dist < 400) {
+            minDist = dist;
+            chosen = p;
+          }
+        }
+        selectedPoint = chosen;
+        drawModelVisualizer(); // <<< force redraw so lines appear
+      });
+
+      canvas.addEventListener("click", function (event) {
         const rect = canvas.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
-      
+
         // Find which data point (if any) was clicked
-        let nearest = null, minDist = Infinity;
+        let nearest = null,
+          minDist = Infinity;
         for (const p of data) {
           const dx = p.x * W - clickX;
           const dy = p.y * H - clickY;
-          const dist = dx*dx + dy*dy;
+          const dist = dx * dx + dy * dy;
           if (dist < minDist) {
             minDist = dist;
             nearest = p;
           }
         }
-      
+
         // If close enough, show how the current model interprets that point:
-        if (minDist < 25) { // i.e. within radius ~5
+        if (minDist < 25) {
+          // i.e. within radius ~5
           const modelOutput = predict(nearest.x, nearest.y);
           alert(
             `Clicked point\n` +
-            `Label: ${nearest.label}\n` +
-            `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
+              `Label: ${nearest.label}\n` +
+              `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(
+                2
+              )})`
           );
         }
       });
-      
-  </script>
-</body>
+    </script>
+  </body>
 </html>

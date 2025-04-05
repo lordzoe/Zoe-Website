@@ -689,35 +689,90 @@
             break;
           }
 
-          case "dt":
-            // 3) Visualize the decision tree structure
-            //    (Tiny text-based “tree” or bracket lines)
-            // A quick example: recursively draw node branches
-            function drawTree(node, x, y, offset) {
-              if (typeof node === "number") {
-                // Leaf
-                modelVisCtx.fillText(`Leaf: ${node}`, x, y);
-                return;
+          case "dt": {
+            function drawTreeNode(x, y, label, isLeaf, highlight) {
+              modelVisCtx.beginPath();
+              if (isLeaf) {
+                modelVisCtx.arc(x, y, 22, 0, 2 * Math.PI);
+              } else {
+                modelVisCtx.roundRect(x - 45, y - 20, 90, 40, 10);
               }
-              // Node
-              modelVisCtx.fillText(`(${node.feature} <= ${node.threshold.toFixed(2)})`, x, y);
-              // Draw left branch
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(x, y + 5);
-              modelVisCtx.lineTo(x - offset, y + 40);
+              modelVisCtx.fillStyle = highlight ? '#ffd700' : '#dff0ff';
+              modelVisCtx.fill();
+              modelVisCtx.strokeStyle = highlight ? '#ff8800' : 'black';
+              modelVisCtx.lineWidth = highlight ? 3 : 1;
               modelVisCtx.stroke();
-              drawTree(node.left, x - offset, y + 40, offset / 2);
-              // Draw right branch
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(x, y + 5);
-              modelVisCtx.lineTo(x + offset, y + 40);
-              modelVisCtx.stroke();
-              drawTree(node.right, x + offset, y + 40, offset / 2);
+              modelVisCtx.lineWidth = 1;
+              modelVisCtx.fillStyle = 'black';
+              modelVisCtx.textAlign = 'center';
+              modelVisCtx.fillText(label, x, y + 4);
             }
-            // Start near top-center
+          
+            function drawTreeConnections(x1, y1, x2, y2, highlight) {
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(x1, y1);
+              modelVisCtx.lineTo(x2, y2);
+              modelVisCtx.strokeStyle = highlight ? '#ff8800' : 'black';
+              modelVisCtx.lineWidth = highlight ? 3 : 1;
+              modelVisCtx.stroke();
+              modelVisCtx.lineWidth = 1;
+            }
+          
+            function drawInteractiveTree(node, x, y, offset, path = [], highlightPath = []) {
+                const isLeaf = typeof node === 'number';
+                const label = isLeaf ? `Leaf: ${node}` : `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
+              
+                // Highlight if path is a prefix of the highlightPath
+                const isHighlighted = highlightPath.length &&
+                  highlightPath[0].length >= path.length &&
+                  path.every((step, i) => highlightPath[0][i] === step);
+              
+                drawTreeNode(x, y, label, isLeaf, isHighlighted);
+              
+                if (!isLeaf) {
+                  const leftX = x - offset;
+                  const rightX = x + offset;
+                  const childY = y + 90;
+              
+                  // Highlight each branch if it’s the correct next step
+                  const isLeftHighlighted = highlightPath.length &&
+                    highlightPath[0][path.length] === 'L' &&
+                    path.every((step, i) => highlightPath[0][i] === step);
+              
+                  const isRightHighlighted = highlightPath.length &&
+                    highlightPath[0][path.length] === 'R' &&
+                    path.every((step, i) => highlightPath[0][i] === step);
+              
+                  drawTreeConnections(x, y + 20, leftX, childY - 20, isLeftHighlighted);
+                  drawTreeConnections(x, y + 20, rightX, childY - 20, isRightHighlighted);
+              
+                  drawInteractiveTree(node.left, leftX, childY, offset / 1.8, path.concat('L'), highlightPath);
+                  drawInteractiveTree(node.right, rightX, childY, offset / 1.8, path.concat('R'), highlightPath);
+                }
+              }
+              
+          
+            function traceDecisionPath(node, xVal, yVal, path = []) {
+              if (typeof node === 'number') return [path];
+              const val = node.feature === 'x' ? xVal : yVal;
+              if (val <= node.threshold) {
+                return traceDecisionPath(node.left, xVal, yVal, path.concat('L'));
+              } else {
+                return traceDecisionPath(node.right, xVal, yVal, path.concat('R'));
+              }
+            }
+          
+            let highlight = [];
+            if (selectedPoint && currentModel === 'dt') {
+              highlight = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
+            }
+          
+            modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
             modelVisCtx.font = "12px Arial";
-            drawTree(dtModel, modelVisCanvas.width / 2, 40, 80);
+            modelVisCtx.textAlign = "center";
+            drawInteractiveTree(dtModel, modelVisCanvas.width / 2, 50, 140, [], highlight);
             break;
+          }
 
           case "svm":
             // 4) Highlight points that are “support vectors”
@@ -952,16 +1007,14 @@
 
         // If close enough, show how the current model interprets that point:
         if (minDist < 25) {
-          // i.e. within radius ~5
-          const modelOutput = predict(nearest.x, nearest.y);
-          alert(
-            `Clicked point\n` +
+            selectedPoint = nearest; 
+            const modelOutput = predict(nearest.x, nearest.y);
+            alert(
+              `Clicked point\n` +
               `Label: ${nearest.label}\n` +
-              `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(
-                2
-              )})`
-          );
-        }
+              `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
+            );
+          }          
       });
     </script>
   </body>

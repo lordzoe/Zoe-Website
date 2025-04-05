@@ -3,12 +3,11 @@ from PIL import Image, ExifTags
 import subprocess
 
 def get_file_size(file_path):
-    return os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
+    return os.path.getsize(file_path) / (1024 * 1024)
 
 def convert_image_to_webp(image_path, output_path):
     try:
         with Image.open(image_path) as img:
-            # Correct orientation using EXIF metadata if available
             exif = img._getexif()
             if exif:
                 for tag, value in exif.items():
@@ -29,17 +28,16 @@ def convert_video_to_webp(video_path, output_path):
     try:
         subprocess.run([
             'ffmpeg', '-i', video_path, 
-            '-vf', 'fps=24,scale=640:-1:flags=lanczos',  # Adjust fps and resolution
+            '-vf', 'fps=24,scale=640:-1:flags=lanczos',  
             '-c:v', 'libwebp', 
-            '-lossless', '0',  # Enable lossy compression
-            '-compression_level', '6',  # Compression level (0-6, higher is better compression)
-            '-q:v', '100',  # Quality level (lower = higher quality, larger size)
-            '-loop', '0',  # Infinite loop
+            '-lossless', '0',  
+            '-compression_level', '6', 
+            '-q:v', '100',  
+            '-loop', '0', 
             output_path
         ], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error converting video {video_path} to WebP: {e}")
-
 
 def convert_media_to_webp(directory):
     if not os.path.exists(directory):

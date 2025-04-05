@@ -28,7 +28,18 @@
         <!-- Content Boxes Section -->
         <section class="content-container">
 
-            <!-- Content Box 1 -->
+            <!-- Content Box 20 -->
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/GRC_2025.html">
+                <div class="content-image">
+                    <img data-src="images/GRC_2025_1.webp" alt="GRC 2025" class="lazyload">
+                </div>
+                <div class="content-info">
+                    <h2>Founding the Gravitas Research Corps</h2>
+                    <p>January 2025</p>
+                </div>
+            </div>
+
+            <!-- Content Box 19 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/iac_2024.html">
                 <div class="content-image">
                     <img data-src="images/iac_2024_1.webp" alt="IAC Conference 2024" class="lazyload">
@@ -39,7 +50,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 2 -->
+            <!-- Content Box 18 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/eva_2024.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
@@ -53,7 +64,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 3 -->
+            <!-- Content Box 17 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/USNA_2024.html">
                 <div class="content-image">
                     <img data-src="images/USNA_2024_1.webp" alt="USNA" class="lazyload">
@@ -64,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 4 -->
+            <!-- Content Box 16 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/science_rendezvous_2024.html">
                 <div class="content-image">
                     <img data-src="images/science_rendezvous_2024_1.webp" alt="Science Rendezvous 2" class="lazyload">
@@ -75,7 +86,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 5 -->
+            <!-- Content Box 15 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/solar_eclipse_2024.html">
                 <div class="content-image">
                     <img data-src="images/solar_eclipse_2024_1.webp" alt="Solar Eclipse" class="lazyload">
@@ -86,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 6 -->
+            <!-- Content Box 14 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/hackathon_2024.html">
                 <div class="content-image">
                     <img data-src="images/hackathon_2024_1.webp" alt="Hackathon" class="lazyload">
@@ -97,7 +108,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 7 -->
+            <!-- Content Box 13 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/cognitive_load_2023.html">
                 <div class="content-image">
                     <img data-src="images/cognitive_load_2023_1.webp" alt="Cognitive Load in VR" class="lazyload">
@@ -108,7 +119,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 8 -->
+            <!-- Content Box 12 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/space_medicine_2023.html">
                 <div class="content-image">
                     <img data-src="images/space_medicine_2023_1.webp" alt="Space Medicine" class="lazyload">
@@ -119,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 9 -->
+            <!-- Content Box 11 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CAN-RGX_2023.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
@@ -144,7 +155,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 11 -->
+            <!-- Content Box 9 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CSC_2023.html">
                 <div class="content-image">
                     <img data-src="images/CSC_2023_1.webp" alt="CSC" class="lazyload">
@@ -155,7 +166,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 12 -->
+            <!-- Content Box 8 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/science_rendezvous_2023.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
@@ -169,7 +180,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 13 -->
+            <!-- Content Box 7 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/IIAS_2023.html">
                 <div class="content-image">
                     <img data-src="images/IIAS_2023_1.webp" alt="IIAS" class="lazyload">
@@ -180,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 14 -->
+            <!-- Content Box 6 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/MSC_1_2022.html">
                 <div class="content-image">
                     <img data-src="images/MSC_1_2022_1.webp" alt="MSC 1" class="lazyload">
@@ -191,7 +202,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 15 -->
+            <!-- Content Box 5 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/iac_2022.html">
                 <div class="content-image">
                     <img data-src="images/iac_2022_1.webp" alt="IAC Conference 2022" class="lazyload">
@@ -202,7 +213,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 16 -->
+            <!-- Content Box 4 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/graduation_2022.html">
                 <div class="content-image">
                     <img data-src="images/graduation_2022_1.webp" alt="Graduation 2" class="lazyload">
@@ -213,7 +224,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 17 -->
+            <!-- Content Box 3 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/student_leadership_2022.html">
                 <div class="content-image">
                     <img data-src="images/student_leadership_2022_1.webp" alt="Student Leadership Conference" class="lazyload">
@@ -224,7 +235,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 18 -->
+            <!-- Content Box 2 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/research_assistant_2022.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
@@ -238,7 +249,7 @@
                 </div>
             </div>
 
-            <!-- Content Box 19 -->
+            <!-- Content Box 1 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/undergraduate_thesis_2022.html">
                 <div class="content-image">
                     <img data-src="images/undergraduate_thesis_2022_1.webp" alt="Undergraduate Thesis" class="lazyload">

@@ -81,14 +81,15 @@
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="tech-media"> 
-                    <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
-                        <div class="gallery-items">
-                        </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                <div class="tech-media"> 
+                    <div id="fnirs-simulation-container">
+                    <!-- Canvas for the fNIRS animation -->
+                    <canvas id="fnirsCanvas" width="600" height="400" 
+                            style="border:1px solid #ccc; background:#fafafa;">
+                        Your browser does not support the HTML5 canvas tag.
+                    </canvas>
                     </div>
-                </div> -->
+                </div>
             </div>
         </section>
 
@@ -269,7 +270,7 @@
                     </div>
                 </div>
                 <div class="tech-media">
-                    <div class="tech-gallery">
+                    <div class="tech-gallery perovskite">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
                             <img src="images/undergraduate_thesis_2022_4.webp" alt="Perovskite 1">
@@ -321,6 +322,7 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <script src="fnirs_demo.js"></script>
 
 </body>
 </html>

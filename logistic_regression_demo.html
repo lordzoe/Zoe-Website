@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Model Visualizer</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: row;
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      width: 220px;
+      padding: 20px;
+      background: #f4f4f4;
+      border-right: 1px solid #ccc;
+    }
+    .sidebar h3 {
+      margin-top: 0;
+    }
+    .sidebar button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+    }
+    #datasetButtons {
+      margin: 10px;
+    }
+    canvas {
+      border: 1px solid #000;
+    }
+    .parameters {
+      width: 500px;
+      margin-top: 10px;
+      background: #f8f8f8;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+    }
+    /* Confusion matrix styling */
+    table.confusion-matrix {
+        border-collapse: collapse;
+        margin-top: 10px;
+        }
+    table.confusion-matrix td {
+    width: 80px;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #000;
+    border: 1px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3>Select Dataset</h3>
+    <div id="datasetButtons">
+      <button onclick="selectDataset('A')">Dataset A (Linear)</button>
+      <button onclick="selectDataset('B')">Dataset B (Circular)</button>
+      <button onclick="selectDataset('C')">Dataset C (Noisy)</button>
+    </div>
+
+    <h3>Select Model</h3>
+    <button onclick="selectModel('logistic')">Logistic Regression</button>
+    <button onclick="selectModel('knn')">K-Nearest Neighbors (KNN)</button>
+    <button onclick="selectModel('dt')">Decision Tree</button>
+    <button onclick="selectModel('svm')">Support Vector Machine (SVM)</button>
+    <button onclick="selectModel('perceptron')">Perceptron</button>
+    <button onclick="selectModel('ensemble')">Ensemble</button>
+  </div>
+
+  <div class="main-content">
+    <canvas id="modelCanvas" width="500" height="500"></canvas>
+    <div id="parameterBox" class="parameters"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("modelCanvas");
+    const ctx = canvas.getContext("2d");
+    const paramBox = document.getElementById("parameterBox");
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // Model selection
+    let currentModel = 'logistic';
+    // Dataset selection
+    let currentDataset = 'A';
+
+    let maxTreeDepth = 2;
+    const depthSlider = document.getElementById('depthSlider');
+    const depthValue = document.getElementById('depthValue');
+
+    // Our data array
+    let data = [];
+
+    // Random initial weights for each model
+    let perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+    let perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+    let dtModel = null;
+    let logisticWeights = [Math.random(), Math.random(), Math.random()];
+    let svmWeights = [Math.random(), Math.random(), Math.random()];
+
+    // ===================== DECISION TREE HELPERS =====================
+
+    function updateDepth(val) {
+        maxTreeDepth = parseInt(val);
+        depthValue.textContent = val;
+        if (currentModel === 'dt') {
+          trainDecisionTree();
+          drawDecisionBoundary();
+          drawDataset();
+          updateParameterDisplay();
+        }
+      }
+  
+    function giniImpurity(groups, classes) {
+      const nInstances = groups[0].length + groups[1].length;
+      let gini = 0.0;
+      for (const group of groups) {
+        const size = group.length;
+        if (size === 0) continue;
+        let score = 0.0;
+        for (const classVal of classes) {
+          const proportion = group.filter(p => p.label === classVal).length / size;
+          score += proportion * proportion;
+        }
+        gini += (1.0 - score) * (size / nInstances);
+      }
+      return gini;
+    }
+
+    function splitData(dataset, feature, threshold) {
+      const left = dataset.filter(p => p[feature] <= threshold);
+      const right = dataset.filter(p => p[feature] > threshold);
+      return [left, right];
+    }
+
+    function getBestSplit(dataset) {
+      const classValues = [...new Set(dataset.map(p => p.label))];
+      let bestGini = Infinity;
+      let bestFeature = null;
+      let bestThreshold = null;
+
+      for (const feature of ['x', 'y']) {
+        const values = dataset.map(p => p[feature]);
+        for (const t of values) {
+          const groups = splitData(dataset, feature, t);
+          const gini = giniImpurity(groups, classValues);
+          if (gini < bestGini) {
+            bestGini = gini;
+            bestFeature = feature;
+            bestThreshold = t;
+          }
+        }
+      }
+      return { feature: bestFeature, threshold: bestThreshold };
+    }
+
+    function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
+      if (depth >= maxDepth || dataset.length < 4) {
+        const majority = dataset.reduce((acc, p) => acc + p.label, 0) / dataset.length > 0.5 ? 1 : 0;
+        return majority;
+      }
+      const split = getBestSplit(dataset);
+      const [left, right] = splitData(dataset, split.feature, split.threshold);
+      return {
+        feature: split.feature,
+        threshold: split.threshold,
+        left: buildSimpleTree(left, depth + 1, maxDepth),
+        right: buildSimpleTree(right, depth + 1, maxDepth)
+      };
+    }
+
+    function trainDecisionTree() {
+      // We'll train on a random subset to see changes over time
+      const shuffle = [...data].sort(() => Math.random() - 0.5);
+      const subset = shuffle.slice(0, 60);
+      dtModel = buildSimpleTree(subset);
+    }
+
+    // ===================== MODEL & DATASET SELECTORS =====================
+
+    function selectModel(model) {
+        currentModel = model;
+        if (model === 'dt') trainDecisionTree(); // ✅ Train tree once here
+        ctx.clearRect(0, 0, W, H);
+        drawDecisionBoundary();
+        drawDataset();
+        updateParameterDisplay();
+      }
+      
+
+    function selectDataset(ds) {
+      currentDataset = ds;
+      resetAndVisualize();
+    }
+
+    // ===================== DATASET GENERATORS =====================
+    function generateDatasetA() {
+      data = [];
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random();
+        const y = Math.random();
+        const label = y > x ? 1 : 0; // easy linear
+        data.push({ x, y, label });
+      }
+    }
+
+    function generateDatasetB() {
+      data = [];
+      // center class
+      for (let i = 0; i < 50; i++) {
+        const r = Math.random() * 0.15;
+        const angle = Math.random() * 2 * Math.PI;
+        data.push({ 
+          x: 0.5 + r * Math.cos(angle), 
+          y: 0.5 + r * Math.sin(angle),
+          label: 1
+        });
+      }
+      // ring class
+      for (let i = 0; i < 50; i++) {
+        const r = 0.25 + Math.random() * 0.15;
+        const angle = Math.random() * 2 * Math.PI;
+        data.push({ 
+          x: 0.5 + r * Math.cos(angle), 
+          y: 0.5 + r * Math.sin(angle),
+          label: 0
+        });
+      }
+    }
+
+    function generateDatasetC() {
+      data = [];
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random();
+        const y = Math.random();
+        // We'll label with a diagonal line + random noise
+        const ideal = y > x ? 1 : 0;
+        // 20% chance we flip the label
+        const label = Math.random() < 0.2 ? 1 - ideal : ideal;
+        data.push({ x, y, label });
+      }
+    }
+
+    function generateDataset() {
+      if (currentDataset === 'A') generateDatasetA();
+      else if (currentDataset === 'B') generateDatasetB();
+      else generateDatasetC();
+    }
+
+    // ===================== TRAINING FOR MODELS =====================
+
+    function trainPerceptron() {
+      for (const point of data) {
+        const inputs = [point.x, point.y, point.x * point.y, point.x ** 2, point.y ** 2, 1];
+        const hidden = tanh(dot(inputs, perceptronHiddenWeights));
+        const output = sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+        const error = point.label - output;
+        for (let i = 0; i < 5; i++) {
+          perceptronWeights[i] += 0.05 * error * hidden;
+          perceptronHiddenWeights[i] += 0.05 * error * perceptronWeights[0] * (1 - hidden ** 2) * inputs[i];
+        }
+        perceptronWeights[5] += 0.05 * error;
+      }
+    }
+
+    function trainLogistic() {
+      for (const point of data) {
+        const x = point.x;
+        const y = point.y;
+        const z = logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2];
+        const pred = sigmoid(z);
+        const error = pred - point.label;
+        logisticWeights[0] -= 0.1 * error * x;
+        logisticWeights[1] -= 0.1 * error * y;
+        logisticWeights[2] -= 0.1 * error * 1;
+      }
+    }
+
+    function trainSVM() {
+      for (const point of data) {
+        const x = point.x;
+        const y = point.y;
+        const label = point.label === 1 ? 1 : -1;
+        const margin = label * (svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+        if (margin < 1) {
+          svmWeights[0] += 0.01 * label * x;
+          svmWeights[1] += 0.01 * label * y;
+          svmWeights[2] += 0.01 * label;
+        }
+      }
+    }
+
+    // ===================== PREDICTION =====================
+    function evaluateDecisionTree(x, y, node = dtModel) {
+      if (typeof node === 'number') return node;
+      const val = node.feature === 'x' ? x : y;
+      return val <= node.threshold
+        ? evaluateDecisionTree(x, y, node.left)
+        : evaluateDecisionTree(x, y, node.right);
+    }
+
+    function predict(x, y) {
+      switch (currentModel) {
+        case 'logistic': 
+          return sigmoid(logisticWeights[0]*x + logisticWeights[1]*y + logisticWeights[2]);
+        case 'knn': 
+          return knnPredict(x, y);
+        case 'dt': 
+          return evaluateDecisionTree(x, y);
+        case 'svm': 
+          return sigmoid(svmWeights[0]*x + svmWeights[1]*y + svmWeights[2]);
+        case 'perceptron': {
+          const features = [x, y, x*y, x**2, y**2, 1];
+          const hidden = tanh(dot(features, perceptronHiddenWeights));
+          return sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+        }
+        case 'ensemble': {
+          return (
+            sigmoid(logisticWeights[0]*x + logisticWeights[1]*y + logisticWeights[2]) +
+            knnPredict(x, y) +
+            sigmoid(svmWeights[0]*x + svmWeights[1]*y + svmWeights[2])
+          ) / 3;
+        }
+        default: 
+          return 0.5;
+      }
+    }
+
+    // ===================== UTILS =====================
+    function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+    function tanh(z) { return Math.tanh(z); }
+    function dot(a, b) { return a.reduce((sum, ai, i) => sum + ai * b[i], 0); }
+
+    function knnPredict(x, y, k = 3) {
+      return data
+        .map(p => ({ dist: (p.x - x)**2 + (p.y - y)**2, label: p.label }))
+        .sort((a, b) => a.dist - b.dist)
+        .slice(0, k)
+        .reduce((sum, p) => sum + p.label, 0) / k;
+    }
+
+    // ===================== DRAWING & UI =====================
+    function drawDataset() {
+      for (const point of data) {
+        ctx.beginPath();
+        ctx.arc(point.x * W, point.y * H, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.label === 1 ? "green" : "red";
+        ctx.fill();
+      }
+    }
+
+    function drawDecisionBoundary() {
+      for (let x = 0; x < W; x += 4) {
+        for (let y = 0; y < H; y += 4) {
+          const normX = x / W;
+          const normY = y / H;
+          const prediction = predict(normX, normY);
+          ctx.fillStyle = prediction > 0.5 ? '#90ee90' : '#ffb6b6';
+          ctx.fillRect(x, y, 4, 4);
+        }
+      }
+    }
+
+    // ===================== METRICS: F1, ACC, PR, RECALL, CONF MAT =====================
+    function computeMetrics() {
+      let TP = 0, TN = 0, FP = 0, FN = 0;
+      for (const p of data) {
+        const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
+        if (p.label === 1 && pred === 1) TP++;
+        else if (p.label === 0 && pred === 0) TN++;
+        else if (p.label === 0 && pred === 1) FP++;
+        else if (p.label === 1 && pred === 0) FN++;
+      }
+      const total = data.length;
+      const accuracy = (TP + TN) / total;
+      const precision = (TP + FP) === 0 ? 0 : TP / (TP + FP);
+      const recall = (TP + FN) === 0 ? 0 : TP / (TP + FN);
+      const f1 = (precision + recall) === 0 ? 0 : 2*(precision*recall)/(precision+recall);
+      return {TP, TN, FP, FN, accuracy, precision, recall, f1};
+    }
+
+    // color from 0->60% for TP/TN, 0->30% for FP/FN
+    function colorTPorTN(value) {
+      // clamp to [0,60]
+      const v = Math.min(value, 60);
+      const ratio = v / 60;  // 0..1
+      // ratio => green; 0 => red, 1 => green
+      const r = Math.floor(255*(1-ratio));
+      const g = Math.floor(255*ratio);
+      return `rgb(${r},${g},0)`;
+    }
+    function colorFPorFN(value) {
+      // clamp to [0,30]
+      const v = Math.min(value, 30);
+      const ratio = v / 30; // 0..1
+      // ratio => red; 0 => green, 1 => red
+      const r = Math.floor(255*ratio);
+      const g = Math.floor(255*(1-ratio));
+      return `rgb(${r},${g},0)`;
+    }
+
+    function buildConfusionMatrixHTML(TP, TN, FP, FN) {
+        const total = TP + TN + FP + FN;
+        const tpPercent = ((TP / total) * 100).toFixed(2);
+        const tnPercent = ((TN / total) * 100).toFixed(2);
+        const fpPercent = ((FP / total) * 100).toFixed(2);
+        const fnPercent = ((FN / total) * 100).toFixed(2);
+      
+        const tpColor = colorTPorTN(parseFloat(tpPercent));
+        const tnColor = colorTPorTN(parseFloat(tnPercent));
+        const fpColor = colorFPorFN(parseFloat(fpPercent));
+        const fnColor = colorFPorFN(parseFloat(fnPercent));
+      
+        return `
+          <div style="display: flex; flex-direction: column; align-items: center; margin-top: 10px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">Confusion Matrix</div>
+            <table class="confusion-matrix">
+              <tr>
+                <td style="background:${tpColor}">TP<br>${tpPercent}%</td>
+                <td style="background:${fpColor}">FP<br>${fpPercent}%</td>
+              </tr>
+              <tr>
+                <td style="background:${tnColor}">TN<br>${tnPercent}%</td>
+                <td style="background:${fnColor}">FN<br>${fnPercent}%</td>
+              </tr>
+            </table>
+          </div>
+        `;
+      }
+    
+    // ===================== TRAINING LOOP =====================
+    function trainDecisionTree() {
+      const shuffle = [...data].sort(() => Math.random() - 0.5);
+      const subset = shuffle.slice(0, 60);
+      dtModel = buildSimpleTree(subset);
+    }
+
+    function updateParameterDisplay() {
+      // 1) Base model info
+      let text = `Model: ${currentModel}\n`;
+      if (currentModel === 'perceptron') {
+        text += `\nPerceptron Weights:\n${perceptronWeights.map(w => w.toFixed(3)).join(', ')}\n`;
+        text += `Hidden Weights:\n${perceptronHiddenWeights.map(w => w.toFixed(3)).join(', ')}`;
+      } else if (currentModel === 'logistic') {
+        text += `\nLogistic Weights:\n${logisticWeights.map(w => w.toFixed(3)).join(', ')}`;
+      } else if (currentModel === 'svm') {
+        text += `\nSVM Weights:\n${svmWeights.map(w => w.toFixed(3)).join(', ')}`;
+      } else if (currentModel === 'dt') {
+        text += `\nDecision Tree Structure:\n` + JSON.stringify(dtModel, null, 2);
+      } else {
+        text += `\n(No trainable parameters displayed)`;
+      }
+
+      // 2) Compute metrics
+      const {TP, TN, FP, FN, accuracy, precision, recall, f1} = computeMetrics();
+      text += `\n\nPerformance Metrics:\n`;
+      text += `Accuracy: ${(accuracy*100).toFixed(2)}%\n`;
+      text += `Precision: ${(precision*100).toFixed(2)}%\n`;
+      text += `Recall: ${(recall*100).toFixed(2)}%\n`;
+      text += `F1 Score: ${(f1*100).toFixed(2)}%\n`;
+
+      // 3) Confusion matrix
+      const cmHTML = buildConfusionMatrixHTML(TP, TN, FP, FN);
+
+      // 4) Final text + confusion matrix in paramBox
+      paramBox.innerHTML = text.replace(/\n/g, '<br>') + cmHTML;
+    }
+
+    function computeMetrics() {
+      let TP = 0, TN = 0, FP = 0, FN = 0;
+      for (const p of data) {
+        const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
+        if (p.label === 1 && pred === 1) TP++;
+        else if (p.label === 0 && pred === 0) TN++;
+        else if (p.label === 0 && pred === 1) FP++;
+        else if (p.label === 1 && pred === 0) FN++;
+      }
+      const total = data.length;
+      const accuracy = (TP + TN) / total;
+      const precision = (TP + FP) === 0 ? 0 : TP / (TP + FP);
+      const recall = (TP + FN) === 0 ? 0 : TP / (TP + FN);
+      const f1 = (precision + recall) === 0 ? 0 : 2 * (precision * recall) / (precision + recall);
+      return {TP, TN, FP, FN, accuracy, precision, recall, f1};
+    }
+
+    // Re-generate data, clear, draw
+    function resetAndVisualize() {
+        generateDataset();
+        if (currentModel === 'dt') trainDecisionTree();  // ✅ Train if needed
+        ctx.clearRect(0, 0, W, H);
+        drawDecisionBoundary();
+        drawDataset();
+        updateParameterDisplay();
+      }
+      
+
+    function loop() {
+      if (currentModel === 'perceptron') trainPerceptron();
+      if (currentModel === 'logistic') trainLogistic();
+      if (currentModel === 'svm') trainSVM();
+
+      ctx.clearRect(0, 0, W, H);
+      drawDecisionBoundary();
+      drawDataset();
+      updateParameterDisplay();
+
+      requestAnimationFrame(loop);
+    }
+
+    // Initialize with dataset A by default
+    selectDataset('A');
+    loop();
+  </script>
+</body>
+</html>

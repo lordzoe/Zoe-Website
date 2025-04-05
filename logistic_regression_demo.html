@@ -504,199 +504,281 @@
       drawDataset();
       updateParameterDisplay();
     }
-
+    function convexHull(points) {
+        points.sort((a, b) => a.x === b.x ? a.y - b.y : a.x - b.x);
+        const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+        const lower = [];
+        for (const p of points) {
+          while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+          lower.push(p);
+        }
+        const upper = [];
+        for (let i = points.length - 1; i >= 0; i--) {
+          const p = points[i];
+          while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+          upper.push(p);
+        }
+        upper.pop();
+        lower.pop();
+        return lower.concat(upper);
+      }
     function drawModelVisualizer() {
         // 1) Clear the modelVisCanvas
         modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
       
         // Inside drawModelVisualizer(), AFTER clearing the canvas, insert:
 
-switch (currentModel) {
+        switch (currentModel) {
 
-    case 'logistic':
-      // 1) Draw a basic logistic (sigmoid) curve for illustration
-      //    e.g. from x=-6..+6 in “modelVisCanvas” coordinates
-      modelVisCtx.beginPath();
-      let originX = 50, originY = 250;
-      let scaleX = 20, scaleY = 100; // adjust as you prefer
-      for (let xVal = -6; xVal <= 6; xVal += 0.1) {
-        let yVal = 1 / (1 + Math.exp(-xVal)); 
-        let xPix = originX + xVal * scaleX;
-        let yPix = originY - yVal * scaleY;
-        if (xVal === -6) modelVisCtx.moveTo(xPix, yPix);
-        else modelVisCtx.lineTo(xPix, yPix);
-      }
-      modelVisCtx.strokeStyle = 'blue';
-      modelVisCtx.stroke();
-  
-      // Optionally draw axes, labels, etc.
-      break;
-  
-    case 'knn':
-      // 2) Show lines from each point to its k=3 nearest neighbors
-      //    (Purely illustrative; depends on your data)
-      modelVisCtx.strokeStyle = 'gray';
-      data.forEach((p, i) => {
-        // Find neighbors
-        let distances = data.map((q, j) => {
-          let dx = q.x - p.x;
-          let dy = q.y - p.y;
-          return { index: j, dist: dx*dx + dy*dy };
-        });
-        distances.sort((a, b) => a.dist - b.dist);
-        // Connect to next 3 neighbors (skipping the first, which is self)
-        let neighbors = distances.slice(1, 4);
-        neighbors.forEach(n => {
-          let nbr = data[n.index];
-          modelVisCtx.beginPath();
-          modelVisCtx.moveTo(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height);
-          modelVisCtx.lineTo(nbr.x * modelVisCanvas.width, nbr.y * modelVisCanvas.height);
-          modelVisCtx.stroke();
-        });
-      });
-      break;
-  
-    case 'dt':
-      // 3) Visualize the decision tree structure
-      //    (Tiny text-based “tree” or bracket lines)
-      // A quick example: recursively draw node branches
-      function drawTree(node, x, y, offset) {
-        if (typeof node === 'number') {
-          // Leaf
-          modelVisCtx.fillText(`Leaf: ${node}`, x, y);
-          return;
+            case 'logistic': {
+                const canvasW = modelVisCanvas.width;
+                const canvasH = modelVisCanvas.height;
+                const scaleX = canvasW / 40; // now -10 to +10 range
+                const scaleY = canvasH * 0.8; // compress vertically
+                const centerX = canvasW / 2;
+                const centerY = canvasH / 2;
+      
+                // Draw grid
+                modelVisCtx.strokeStyle = '#eee';
+                for (let i = 0; i <= canvasW; i += 50) {
+                  modelVisCtx.beginPath();
+                  modelVisCtx.moveTo(i, 0);
+                  modelVisCtx.lineTo(i, canvasH);
+                  modelVisCtx.stroke();
+                }
+                for (let j = 0; j <= canvasH; j += 50) {
+                  modelVisCtx.beginPath();
+                  modelVisCtx.moveTo(0, j);
+                  modelVisCtx.lineTo(canvasW, j);
+                  modelVisCtx.stroke();
+                }
+      
+                // Sigmoid curve from x = -10 to 10
+                modelVisCtx.beginPath();
+                for (let xVal = -20; xVal <= 20; xVal += 0.1) {
+                  const yVal = 1 / (1 + Math.exp(-xVal));
+                  const xPix = centerX + xVal * scaleX;
+                  const yPix = centerY - (yVal - 0.5) * scaleY;
+                  if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
+                  else modelVisCtx.lineTo(xPix, yPix);
+                }
+                modelVisCtx.strokeStyle = 'blue';
+                modelVisCtx.lineWidth = 2;
+                modelVisCtx.stroke();
+      
+                // Data points in model space (clamped to [-20, 20])
+                data.forEach(p => {
+                  const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
+                  const sigmoidVal = 1 / (1 + Math.exp(-score));
+                  const clampedScore = Math.max(-20, Math.min(20, score));
+                  const xPix = centerX + clampedScore * scaleX;
+                  const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
+                  modelVisCtx.beginPath();
+                  modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
+                  modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
+                  modelVisCtx.fill();
+                });
+      
+                break;
+              }
+        
+              case 'knn': {
+          // Draw convex hulls for clusters
+          const drawCluster = (label, color, fillColor) => {
+            const clusterPoints = data.filter(p => p.label === label).map(p => ({
+              x: p.x * modelVisCanvas.width,
+              y: p.y * modelVisCanvas.height
+            }));
+            if (clusterPoints.length < 3) return;
+            const hull = convexHull(clusterPoints);
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(hull[0].x, hull[0].y);
+            for (let i = 1; i < hull.length; i++) {
+              modelVisCtx.lineTo(hull[i].x, hull[i].y);
+            }
+            modelVisCtx.closePath();
+            modelVisCtx.fillStyle = fillColor;
+            modelVisCtx.globalAlpha = 0.1;
+            modelVisCtx.fill();
+            modelVisCtx.globalAlpha = 1.0;
+            modelVisCtx.strokeStyle = color;
+            modelVisCtx.setLineDash([5, 5]);
+            modelVisCtx.stroke();
+            modelVisCtx.setLineDash([]);
+          };
+          drawCluster(0, 'orange', 'orange');
+          drawCluster(1, 'green', 'green');
+
+          // Draw points
+          data.forEach(p => {
+            modelVisCtx.beginPath();
+            modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
+            modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
+            modelVisCtx.fill();
+          });
+
+          // If a point is selected, show its neighbors
+          if (selectedPoint) {
+            const distances = data.map((q, i) => {
+              const dx = q.x - selectedPoint.x;
+              const dy = q.y - selectedPoint.y;
+              return { index: i, dist: dx * dx + dy * dy };
+            });
+            distances.sort((a, b) => a.dist - b.dist);
+            const neighbors = distances.slice(1, 4);
+            neighbors.forEach(n => {
+              const nbr = data[n.index];
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(selectedPoint.x * modelVisCanvas.width, selectedPoint.y * modelVisCanvas.height);
+              modelVisCtx.lineTo(nbr.x * modelVisCanvas.width, nbr.y * modelVisCanvas.height);
+              modelVisCtx.strokeStyle = 'black';
+              modelVisCtx.stroke();
+            });
+          }
+          break;
         }
-        // Node
-        modelVisCtx.fillText(`(${node.feature} <= ${node.threshold.toFixed(2)})`, x, y);
-        // Draw left branch
-        modelVisCtx.beginPath();
-        modelVisCtx.moveTo(x, y+5);
-        modelVisCtx.lineTo(x - offset, y+40);
-        modelVisCtx.stroke();
-        drawTree(node.left, x - offset, y+40, offset/2);
-        // Draw right branch
-        modelVisCtx.beginPath();
-        modelVisCtx.moveTo(x, y+5);
-        modelVisCtx.lineTo(x + offset, y+40);
-        modelVisCtx.stroke();
-        drawTree(node.right, x + offset, y+40, offset/2);
-      }
-      // Start near top-center
-      modelVisCtx.font = '12px Arial';
-      drawTree(dtModel, modelVisCanvas.width / 2, 40, 80);
-      break;
-  
-    case 'svm':
-      // 4) Highlight points that are “support vectors” 
-      //    i.e. those near or within the margin
-      const marginThreshold = 1.0;
-      for (let p of data) {
-        let label = (p.label === 1) ? 1 : -1;
-        let margin = label * (svmWeights[0]*p.x + svmWeights[1]*p.y + svmWeights[2]);
-        if (margin <= marginThreshold) {
-          // Draw a circle around that point
-          modelVisCtx.beginPath();
-          modelVisCtx.arc(
-            p.x * modelVisCanvas.width,
-            p.y * modelVisCanvas.height,
-            7, 0, 2*Math.PI
-          );
-          modelVisCtx.strokeStyle = 'black';
-          modelVisCtx.lineWidth = 2;
-          modelVisCtx.stroke();
-        }
-      }
-      break;
-  
-    case 'perceptron':
-      // 5) Show a little 2-input -> hidden -> output network
-      //    You can also color lines by current weight, etc.
-      // Example: 2 input nodes, 1 hidden node, 1 output node
-  
-      // Node positions
-      let in1 = {x: 100, y: 150}, in2 = {x: 100, y: 350};
-      let hidden = {x: 250, y: 250};
-      let out = {x: 400, y: 250};
-  
-      // Draw nodes
-      modelVisCtx.fillStyle = 'lightgray';
-      [in1, in2, hidden, out].forEach(n => {
-        modelVisCtx.beginPath();
-        modelVisCtx.arc(n.x, n.y, 25, 0, 2*Math.PI);
-        modelVisCtx.fill();
-        modelVisCtx.stroke();
-      });
-      modelVisCtx.fillStyle = 'black';
-      modelVisCtx.fillText("x1", in1.x - 7, in1.y+5);
-      modelVisCtx.fillText("x2", in2.x - 7, in2.y+5);
-      modelVisCtx.fillText("Hidden", hidden.x - 20, hidden.y+5);
-      modelVisCtx.fillText("Output", out.x - 20, out.y+5);
-  
-      // Draw lines with weights
-      modelVisCtx.strokeStyle = 'gray';
-      // in1->hidden
-      modelVisCtx.beginPath();
-      modelVisCtx.moveTo(in1.x+25, in1.y);
-      modelVisCtx.lineTo(hidden.x-25, hidden.y);
-      modelVisCtx.stroke();
-      modelVisCtx.fillText(`w1=${perceptronHiddenWeights[0].toFixed(2)}`,
-                           (in1.x + hidden.x)/2 - 10,
-                           (in1.y + hidden.y)/2 - 5);
-  
-      // in2->hidden
-      modelVisCtx.beginPath();
-      modelVisCtx.moveTo(in2.x+25, in2.y);
-      modelVisCtx.lineTo(hidden.x-25, hidden.y);
-      modelVisCtx.stroke();
-      modelVisCtx.fillText(`w2=${perceptronHiddenWeights[1].toFixed(2)}`,
-                           (in2.x + hidden.x)/2 - 10,
-                           (in2.y + hidden.y)/2 + 5);
-  
-      // hidden->out
-      modelVisCtx.beginPath();
-      modelVisCtx.moveTo(hidden.x+25, hidden.y);
-      modelVisCtx.lineTo(out.x-25, out.y);
-      modelVisCtx.stroke();
-      modelVisCtx.fillText(`w_out=${perceptronWeights[0].toFixed(2)}`,
-                           (hidden.x + out.x)/2 - 20,
-                           (hidden.y + out.y)/2 - 5);
-      break;
-  
-    case 'ensemble':
-      // 6) Draw circles for each “sub‐model,” label them 0/1 based on
-      //    that sub‐model’s vote on a hypothetical point
-      // Just a schematic example:
-      let leftX = 150, baseY = 150, step = 60;
-      let subModels = ['LR','KNN','SVM'];
-      subModels.forEach((m, i) => {
-        // Circle for each
-        let cx = leftX;
-        let cy = baseY + i*step;
-        modelVisCtx.beginPath();
-        modelVisCtx.arc(cx, cy, 25, 0, 2*Math.PI);
-        modelVisCtx.fillStyle = '#ccccff';
-        modelVisCtx.fill();
-        modelVisCtx.stroke();
-        modelVisCtx.fillStyle = 'black';
-        modelVisCtx.fillText(m, cx - 10, cy+5);
-  
-        // Example: label that circle’s “vote” 0 or 1
-        // (Here, just a random example or some function)
-        let dummyVote = (Math.random() < 0.5) ? 0 : 1;
-        modelVisCtx.fillText(`vote=${dummyVote}`, cx - 20, cy+35);
-      });
-      // Then an arrow combining them at a final node
-      modelVisCtx.beginPath();
-      modelVisCtx.moveTo(leftX + 25, baseY);
-      modelVisCtx.lineTo(leftX + 100, baseY + 100); 
-      modelVisCtx.lineTo(leftX + 25, baseY + step*2);
-      modelVisCtx.stroke();
-      // And so on...
-      break;
-  
-    default:
-      // If no special visualization, do nothing additional
-      break;
+        
+            case 'dt':
+            // 3) Visualize the decision tree structure
+            //    (Tiny text-based “tree” or bracket lines)
+            // A quick example: recursively draw node branches
+            function drawTree(node, x, y, offset) {
+                if (typeof node === 'number') {
+                // Leaf
+                modelVisCtx.fillText(`Leaf: ${node}`, x, y);
+                return;
+                }
+                // Node
+                modelVisCtx.fillText(`(${node.feature} <= ${node.threshold.toFixed(2)})`, x, y);
+                // Draw left branch
+                modelVisCtx.beginPath();
+                modelVisCtx.moveTo(x, y+5);
+                modelVisCtx.lineTo(x - offset, y+40);
+                modelVisCtx.stroke();
+                drawTree(node.left, x - offset, y+40, offset/2);
+                // Draw right branch
+                modelVisCtx.beginPath();
+                modelVisCtx.moveTo(x, y+5);
+                modelVisCtx.lineTo(x + offset, y+40);
+                modelVisCtx.stroke();
+                drawTree(node.right, x + offset, y+40, offset/2);
+            }
+            // Start near top-center
+            modelVisCtx.font = '12px Arial';
+            drawTree(dtModel, modelVisCanvas.width / 2, 40, 80);
+            break;
+        
+            case 'svm':
+            // 4) Highlight points that are “support vectors” 
+            //    i.e. those near or within the margin
+            const marginThreshold = 1.0;
+            for (let p of data) {
+                let label = (p.label === 1) ? 1 : -1;
+                let margin = label * (svmWeights[0]*p.x + svmWeights[1]*p.y + svmWeights[2]);
+                if (margin <= marginThreshold) {
+                // Draw a circle around that point
+                modelVisCtx.beginPath();
+                modelVisCtx.arc(
+                    p.x * modelVisCanvas.width,
+                    p.y * modelVisCanvas.height,
+                    7, 0, 2*Math.PI
+                );
+                modelVisCtx.strokeStyle = 'black';
+                modelVisCtx.lineWidth = 2;
+                modelVisCtx.stroke();
+                }
+            }
+            break;
+        
+            case 'perceptron':
+            // 5) Show a little 2-input -> hidden -> output network
+            //    You can also color lines by current weight, etc.
+            // Example: 2 input nodes, 1 hidden node, 1 output node
+        
+            // Node positions
+            let in1 = {x: 100, y: 150}, in2 = {x: 100, y: 350};
+            let hidden = {x: 250, y: 250};
+            let out = {x: 400, y: 250};
+        
+            // Draw nodes
+            modelVisCtx.fillStyle = 'lightgray';
+            [in1, in2, hidden, out].forEach(n => {
+                modelVisCtx.beginPath();
+                modelVisCtx.arc(n.x, n.y, 25, 0, 2*Math.PI);
+                modelVisCtx.fill();
+                modelVisCtx.stroke();
+            });
+            modelVisCtx.fillStyle = 'black';
+            modelVisCtx.fillText("x1", in1.x - 7, in1.y+5);
+            modelVisCtx.fillText("x2", in2.x - 7, in2.y+5);
+            modelVisCtx.fillText("Hidden", hidden.x - 20, hidden.y+5);
+            modelVisCtx.fillText("Output", out.x - 20, out.y+5);
+        
+            // Draw lines with weights
+            modelVisCtx.strokeStyle = 'gray';
+            // in1->hidden
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(in1.x+25, in1.y);
+            modelVisCtx.lineTo(hidden.x-25, hidden.y);
+            modelVisCtx.stroke();
+            modelVisCtx.fillText(`w1=${perceptronHiddenWeights[0].toFixed(2)}`,
+                                (in1.x + hidden.x)/2 - 10,
+                                (in1.y + hidden.y)/2 - 5);
+        
+            // in2->hidden
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(in2.x+25, in2.y);
+            modelVisCtx.lineTo(hidden.x-25, hidden.y);
+            modelVisCtx.stroke();
+            modelVisCtx.fillText(`w2=${perceptronHiddenWeights[1].toFixed(2)}`,
+                                (in2.x + hidden.x)/2 - 10,
+                                (in2.y + hidden.y)/2 + 5);
+        
+            // hidden->out
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(hidden.x+25, hidden.y);
+            modelVisCtx.lineTo(out.x-25, out.y);
+            modelVisCtx.stroke();
+            modelVisCtx.fillText(`w_out=${perceptronWeights[0].toFixed(2)}`,
+                                (hidden.x + out.x)/2 - 20,
+                                (hidden.y + out.y)/2 - 5);
+            break;
+        
+            case 'ensemble':
+            // 6) Draw circles for each “sub‐model,” label them 0/1 based on
+            //    that sub‐model’s vote on a hypothetical point
+            // Just a schematic example:
+            let leftX = 150, baseY = 150, step = 60;
+            let subModels = ['LR','KNN','SVM'];
+            subModels.forEach((m, i) => {
+                // Circle for each
+                let cx = leftX;
+                let cy = baseY + i*step;
+                modelVisCtx.beginPath();
+                modelVisCtx.arc(cx, cy, 25, 0, 2*Math.PI);
+                modelVisCtx.fillStyle = '#ccccff';
+                modelVisCtx.fill();
+                modelVisCtx.stroke();
+                modelVisCtx.fillStyle = 'black';
+                modelVisCtx.fillText(m, cx - 10, cy+5);
+        
+                // Example: label that circle’s “vote” 0 or 1
+                // (Here, just a random example or some function)
+                let dummyVote = (Math.random() < 0.5) ? 0 : 1;
+                modelVisCtx.fillText(`vote=${dummyVote}`, cx - 20, cy+35);
+            });
+            // Then an arrow combining them at a final node
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(leftX + 25, baseY);
+            modelVisCtx.lineTo(leftX + 100, baseY + 100); 
+            modelVisCtx.lineTo(leftX + 25, baseY + step*2);
+            modelVisCtx.stroke();
+            // And so on...
+            break;
+        
+            default:
+            // If no special visualization, do nothing additional
+            break;
   }
   
         // For example, a placeholder text:
@@ -760,6 +842,28 @@ switch (currentModel) {
     // Initialize with dataset A by default
     selectDataset('A');
     loop();
+
+    let selectedPoint = null;
+
+    // Fix: Call drawModelVisualizer immediately after click
+    modelVisCanvas.addEventListener('click', function(event) {
+      const rect = modelVisCanvas.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+      let minDist = Infinity;
+      let chosen = null;
+      for (const p of data) {
+        const dx = p.x * modelVisCanvas.width - clickX;
+        const dy = p.y * modelVisCanvas.height - clickY;
+        const dist = dx * dx + dy * dy;
+        if (dist < minDist && dist < 400) {
+          minDist = dist;
+          chosen = p;
+        }
+      }
+      selectedPoint = chosen;
+      drawModelVisualizer();  // <<< force redraw so lines appear
+    });
 
     canvas.addEventListener('click', function(event) {
         const rect = canvas.getBoundingClientRect();

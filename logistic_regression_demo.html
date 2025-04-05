@@ -583,60 +583,57 @@
               }
         
               case 'knn': {
-          // Draw convex hulls for clusters
-          const drawCluster = (label, color, fillColor) => {
-            const clusterPoints = data.filter(p => p.label === label).map(p => ({
-              x: p.x * modelVisCanvas.width,
-              y: p.y * modelVisCanvas.height
-            }));
-            if (clusterPoints.length < 3) return;
-            const hull = convexHull(clusterPoints);
-            modelVisCtx.beginPath();
-            modelVisCtx.moveTo(hull[0].x, hull[0].y);
-            for (let i = 1; i < hull.length; i++) {
-              modelVisCtx.lineTo(hull[i].x, hull[i].y);
-            }
-            modelVisCtx.closePath();
-            modelVisCtx.fillStyle = fillColor;
-            modelVisCtx.globalAlpha = 0.1;
-            modelVisCtx.fill();
-            modelVisCtx.globalAlpha = 1.0;
-            modelVisCtx.strokeStyle = color;
-            modelVisCtx.setLineDash([5, 5]);
-            modelVisCtx.stroke();
-            modelVisCtx.setLineDash([]);
-          };
-          drawCluster(0, 'orange', 'orange');
-          drawCluster(1, 'green', 'green');
-
-          // Draw points
-          data.forEach(p => {
-            modelVisCtx.beginPath();
-            modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
-            modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
-            modelVisCtx.fill();
-          });
-
-          // If a point is selected, show its neighbors
-          if (selectedPoint) {
-            const distances = data.map((q, i) => {
-              const dx = q.x - selectedPoint.x;
-              const dy = q.y - selectedPoint.y;
-              return { index: i, dist: dx * dx + dy * dy };
-            });
-            distances.sort((a, b) => a.dist - b.dist);
-            const neighbors = distances.slice(1, 4);
-            neighbors.forEach(n => {
-              const nbr = data[n.index];
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(selectedPoint.x * modelVisCanvas.width, selectedPoint.y * modelVisCanvas.height);
-              modelVisCtx.lineTo(nbr.x * modelVisCanvas.width, nbr.y * modelVisCanvas.height);
-              modelVisCtx.strokeStyle = 'black';
-              modelVisCtx.stroke();
-            });
-          }
-          break;
-        }
+                const drawCluster = (label, color, fillColor) => {
+                  const clusterPoints = data.filter(p => p.label === label).map(p => ({
+                    x: p.x * modelVisCanvas.width,
+                    y: p.y * modelVisCanvas.height
+                  }));
+                  if (clusterPoints.length < 3) return;
+                  const hull = convexHull(clusterPoints);
+                  modelVisCtx.beginPath();
+                  modelVisCtx.moveTo(hull[0].x, hull[0].y);
+                  for (let i = 1; i < hull.length; i++) {
+                    modelVisCtx.lineTo(hull[i].x, hull[i].y);
+                  }
+                  modelVisCtx.closePath();
+                  modelVisCtx.fillStyle = fillColor;
+                  modelVisCtx.globalAlpha = 0.1;
+                  modelVisCtx.fill();
+                  modelVisCtx.globalAlpha = 1.0;
+                  modelVisCtx.strokeStyle = color;
+                  modelVisCtx.setLineDash([5, 5]);
+                  modelVisCtx.stroke();
+                  modelVisCtx.setLineDash([]);
+                };
+                drawCluster(0, 'orange', 'orange');
+                drawCluster(1, 'green', 'green');
+              
+                data.forEach(p => {
+                  modelVisCtx.beginPath();
+                  modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
+                  modelVisCtx.fillStyle = p.label === 1 ? 'green' : 'red';
+                  modelVisCtx.fill();
+                });
+              
+                if (selectedPoint) {
+                  const k = 3;
+                  const distances = data.map(p => ({
+                    dist: (p.x - selectedPoint.x) ** 2 + (p.y - selectedPoint.y) ** 2,
+                    point: p
+                  }))
+                  .sort((a, b) => a.dist - b.dist)
+                  .slice(1, k + 1); // skip self
+              
+                  distances.forEach(({ point }) => {
+                    modelVisCtx.beginPath();
+                    modelVisCtx.moveTo(selectedPoint.x * modelVisCanvas.width, selectedPoint.y * modelVisCanvas.height);
+                    modelVisCtx.lineTo(point.x * modelVisCanvas.width, point.y * modelVisCanvas.height);
+                    modelVisCtx.strokeStyle = 'black';
+                    modelVisCtx.stroke();
+                  });
+                }
+                break;
+              }
         
             case 'dt':
             // 3) Visualize the decision tree structure

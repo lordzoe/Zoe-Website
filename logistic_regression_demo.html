@@ -133,6 +133,7 @@
       let logisticWeights = [Math.random(), Math.random(), Math.random()];
       let svmWeights = [Math.random(), Math.random(), Math.random()];
 
+
       /***********************
        * Decision Tree Setup *
        ***********************/
@@ -400,15 +401,12 @@
             return sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
           }
           case "ensemble": {
-            return (
-              (sigmoid(
-                logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]
-              ) +
-                knnPredict(x, y) +
-                sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2])) /
-              3
-            );
+            const logistic = sigmoid(logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]);
+            const knn = knnPredict(x, y);
+            const svm = sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+            return (logistic + knn + svm) / 3;
           }
+
           default:
             return 0.5;
         }
@@ -463,25 +461,27 @@
        *  Metrics: F1, Accuracy, Precision, Recall
        *  + Confusion Matrix
        ***********************************************/
-      function computeMetrics() {
-        let TP = 0,
-          TN = 0,
-          FP = 0,
-          FN = 0;
+       function computeMetrics() {
+        let TP = 0, TN = 0, FP = 0, FN = 0;
+      
         for (const p of data) {
-          const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
+          const pred = predict(p.x, p.y, p) > 0.5 ? 1 : 0;
+      
           if (p.label === 1 && pred === 1) TP++;
           else if (p.label === 0 && pred === 0) TN++;
           else if (p.label === 0 && pred === 1) FP++;
           else if (p.label === 1 && pred === 0) FN++;
         }
+      
         const total = data.length;
         const accuracy = (TP + TN) / total;
         const precision = TP + FP === 0 ? 0 : TP / (TP + FP);
         const recall = TP + FN === 0 ? 0 : TP / (TP + FN);
         const f1 = precision + recall === 0 ? 0 : (2 * precision * recall) / (precision + recall);
+      
         return { TP, TN, FP, FN, accuracy, precision, recall, f1 };
       }
+      
 
       function colorTPorTN(value) {
         // from 0..60 => green
@@ -1296,149 +1296,120 @@ case "svm": {
     break;
   }
 
-    case "ensemble": {
-        // Clear the modelVisCanvas first
-        modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+  case "ensemble": {
+    modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 
-        const nodeRadius = 45;
-        modelVisCtx.save();
-        modelVisCtx.translate(50, 65); 
-        modelVisCtx.restore();
-        
-        const inputNode = { x: 250, y: 100, label: "Input" };
-        const subModels = [
-        { name: "LR", x: 150, y: 220 },
-        { name: "KNN", x: 250, y: 220 },
-        { name: "SVM", x: 350, y: 220 },
-        ];
-        const finalNode = { x: 250, y: 400, label: "final vote:\n0.00" };
+    const nodeRadius = 45;
 
+    const inputNode = { x: 250, y: 100, label: "Input" };
+    const subModels = [
+      { name: "LR", x: 150, y: 220 },
+      { name: "KNN", x: 250, y: 220 },
+      { name: "SVM", x: 350, y: 220 },
+    ];
+    const finalNode = { x: 250, y: 400, label: "final vote:\n0.00" };
 
-        /********************************************
-        * 1) Compute sub-model votes ONLY if needed
-        ********************************************/
-        // Instead of generating them each frame, do it once if a point is selected
-        if (selectedPoint) {
-        // For demonstration, assign an integer in [0..2] to each model
-        subModels.forEach((m) => {
-            m.vote = Math.floor(Math.random() * 3); // => 0, 1, or 2
-        });
-
-        // Example final vote: average of 0..2 => in [0..2].
-        // You could do majority or sum, etc. if you prefer.
-        const sum = subModels.reduce((acc, m) => acc + m.vote, 0);
-        const avg = sum / subModels.length; // => in [0..2]
-        // Put it into the final node label
-        finalNode.label = `final vote:\n${avg.toFixed(2)}`;
-        } else {
-        // If no point selected, show final vote: 0 or blank
+    /********************************************
+     * 1) Compute sub-model votes based on actual models
+     ********************************************/
+     if (selectedPoint) {
+        const x = selectedPoint.x;
+        const y = selectedPoint.y;
+      
+        const logistic = sigmoid(logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]);
+        const knn = knnPredict(x, y);
+        const svm = sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+      
+        subModels[0].vote = logistic;
+        subModels[1].vote = knn;
+        subModels[2].vote = svm;
+      
+        const average = (logistic + knn + svm) / 3;
+        finalNode.label = `final vote:\n${average.toFixed(2)}`;
+      } else {
         finalNode.label = "final vote:\n0.00";
-        }
+      }
 
-        /********************************
-        * 2) Helper: draw a circle node
-        ********************************/
-        function drawNode(ctx, node, radius, fillColor = "#cce5ff") {
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = fillColor;
-        ctx.fill();
-        ctx.strokeStyle = "grey";
-        ctx.stroke();
+    /********************************
+     * 2) Helper: draw a circle node
+     ********************************/
+    function drawNode(ctx, node, radius, fillColor = "#cce5ff") {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+      ctx.strokeStyle = "grey";
+      ctx.stroke();
 
-        if (node.label) {
-            ctx.fillStyle = "black";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "16px Arial";
-            const lines = node.label.split("\n");
-            lines.forEach((ln, i) => {
-            ctx.fillText(ln, node.x, node.y + (i - (lines.length - 1) / 2) * 16);
-            });
-        }
-        }
-
-        /********************************
-        * 3) Helper: draw an arrow line
-        ********************************/
-        function drawArrow(ctx, x1, y1, x2, y2, color = "gray") {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = color;
-        ctx.stroke();
-
-        const headLength = 10;
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const angle = Math.atan2(dy, dx);
-        ctx.beginPath();
-        ctx.moveTo(x2, y2);
-        ctx.lineTo(
-            x2 - headLength * Math.cos(angle - Math.PI / 6),
-            y2 - headLength * Math.sin(angle - Math.PI / 6)
-        );
-        ctx.lineTo(
-            x2 - headLength * Math.cos(angle + Math.PI / 6),
-            y2 - headLength * Math.sin(angle + Math.PI / 6)
-        );
-        ctx.lineTo(x2, y2);
-        ctx.fillStyle = color;
-        ctx.fill();
-        }
-
-        /**********************************************
-        * 4) Draw the ensemble diagram (no real-time)
-        **********************************************/
-        // A) Draw input node
-        drawNode(modelVisCtx, inputNode, nodeRadius);
-
-        // B) Draw sub-models with their integer vote underneath
-        subModels.forEach((m) => {
-        // Draw the model node
-        drawNode(modelVisCtx, { x: m.x, y: m.y, label: m.name }, nodeRadius);
-
-        // If a point is selected, show the integer vote under the node
-        if (selectedPoint) {
-            modelVisCtx.fillStyle = "black";
-            modelVisCtx.textAlign = "center";
-            modelVisCtx.font = "14px Arial";
-            modelVisCtx.fillText(
-            `vote = ${m.vote}`,
-            m.x,
-            m.y + nodeRadius + 15
-            );
-        }
+      if (node.label) {
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "16px Arial";
+        const lines = node.label.split("\n");
+        lines.forEach((ln, i) => {
+          ctx.fillText(ln, node.x, node.y + (i - (lines.length - 1) / 2) * 16);
         });
-
-        // C) Draw final prediction node
-        drawNode(modelVisCtx, finalNode, nodeRadius);
-
-        // D) Arrows: Input -> sub-models
-        subModels.forEach((m) => {
-        drawArrow(
-            modelVisCtx,
-            inputNode.x,
-            inputNode.y + nodeRadius,
-            m.x,
-            m.y - nodeRadius
-        );
-        });
-
-        // E) Arrows: sub-models -> final node
-        subModels.forEach((m) => {
-        drawArrow(
-            modelVisCtx,
-            m.x,
-            m.y + nodeRadius + 25,
-            finalNode.x,
-            finalNode.y - nodeRadius
-        );
-        });
-
-        break;
+      }
     }
-    
+
+    /********************************
+     * 3) Helper: draw an arrow line
+     ********************************/
+    function drawArrow(ctx, x1, y1, x2, y2, color = "gray") {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+
+      const headLength = 10;
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(
+        x2 - headLength * Math.cos(angle - Math.PI / 6),
+        y2 - headLength * Math.sin(angle - Math.PI / 6)
+      );
+      ctx.lineTo(
+        x2 - headLength * Math.cos(angle + Math.PI / 6),
+        y2 - headLength * Math.sin(angle + Math.PI / 6)
+      );
+      ctx.lineTo(x2, y2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    /**********************************************
+     * 4) Draw the ensemble diagram (real-time)
+     **********************************************/
+    drawNode(modelVisCtx, inputNode, nodeRadius);
+
+    subModels.forEach((m) => {
+      drawNode(modelVisCtx, { x: m.x, y: m.y, label: m.name }, nodeRadius);
+      if (selectedPoint && typeof m.vote === "number") {
+        modelVisCtx.fillStyle = "black";
+        modelVisCtx.textAlign = "center";
+        modelVisCtx.font = "14px Arial";
+        modelVisCtx.fillText(`vote = ${m.vote.toFixed(2)}`, m.x, m.y + nodeRadius + 15);
+      }
+    });
+
+    drawNode(modelVisCtx, finalNode, nodeRadius);
+
+    subModels.forEach((m) => {
+      drawArrow(modelVisCtx, inputNode.x, inputNode.y + nodeRadius, m.x, m.y - nodeRadius);
+    });
+
+    subModels.forEach((m) => {
+      drawArrow(modelVisCtx, m.x, m.y + nodeRadius + 25, finalNode.x, finalNode.y - nodeRadius);
+    });
+
+    break;
+  }
+
     default:
         // No special visualization for other models
         break;
@@ -1559,6 +1530,7 @@ case "svm": {
             `Label: ${nearest.label}\n` +
             `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
           );
+          drawModelVisualizer(); // Redraw visualizer
         }
       });
 

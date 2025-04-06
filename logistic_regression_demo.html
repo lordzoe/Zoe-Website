@@ -320,7 +320,7 @@
 
       /***********************
        * Train Other Models
-       **********************/
+       ***********************/
       function trainPerceptron() {
         for (const point of data) {
           const inputs = [
@@ -690,215 +690,760 @@
           }
 
           case "dt": {
-            function drawTreeNode(x, y, label, isLeaf, highlight) {
-              modelVisCtx.beginPath();
-              if (isLeaf) {
-                modelVisCtx.arc(x, y, 22, 0, 2 * Math.PI);
-              } else {
-                modelVisCtx.roundRect(x - 45, y - 20, 90, 40, 10);
-              }
-              modelVisCtx.fillStyle = highlight ? '#ffd700' : '#dff0ff';
-              modelVisCtx.fill();
-              modelVisCtx.strokeStyle = highlight ? '#ff8800' : 'black';
-              modelVisCtx.lineWidth = highlight ? 3 : 1;
-              modelVisCtx.stroke();
-              modelVisCtx.lineWidth = 1;
-              modelVisCtx.fillStyle = 'black';
-              modelVisCtx.textAlign = 'center';
-              modelVisCtx.fillText(label, x, y + 4);
-            }
-          
-            function drawTreeConnections(x1, y1, x2, y2, highlight) {
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(x1, y1);
-              modelVisCtx.lineTo(x2, y2);
-              modelVisCtx.strokeStyle = highlight ? '#ff8800' : 'black';
-              modelVisCtx.lineWidth = highlight ? 3 : 1;
-              modelVisCtx.stroke();
-              modelVisCtx.lineWidth = 1;
-            }
-          
-            function drawInteractiveTree(node, x, y, offset, path = [], highlightPath = []) {
-                const isLeaf = typeof node === 'number';
-                const label = isLeaf ? `Leaf: ${node}` : `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
-              
-                // Highlight if path is a prefix of the highlightPath
-                const isHighlighted = highlightPath.length &&
-                  highlightPath[0].length >= path.length &&
-                  path.every((step, i) => highlightPath[0][i] === step);
-              
-                drawTreeNode(x, y, label, isLeaf, isHighlighted);
-              
-                if (!isLeaf) {
-                  const leftX = x - offset;
-                  const rightX = x + offset;
-                  const childY = y + 90;
-              
-                  // Highlight each branch if it’s the correct next step
-                  const isLeftHighlighted = highlightPath.length &&
-                    highlightPath[0][path.length] === 'L' &&
-                    path.every((step, i) => highlightPath[0][i] === step);
-              
-                  const isRightHighlighted = highlightPath.length &&
-                    highlightPath[0][path.length] === 'R' &&
-                    path.every((step, i) => highlightPath[0][i] === step);
-              
-                  drawTreeConnections(x, y + 20, leftX, childY - 20, isLeftHighlighted);
-                  drawTreeConnections(x, y + 20, rightX, childY - 20, isRightHighlighted);
-              
-                  drawInteractiveTree(node.left, leftX, childY, offset / 1.8, path.concat('L'), highlightPath);
-                  drawInteractiveTree(node.right, rightX, childY, offset / 1.8, path.concat('R'), highlightPath);
-                }
-              }
-              
-          
-            function traceDecisionPath(node, xVal, yVal, path = []) {
-              if (typeof node === 'number') return [path];
-              const val = node.feature === 'x' ? xVal : yVal;
-              if (val <= node.threshold) {
-                return traceDecisionPath(node.left, xVal, yVal, path.concat('L'));
-              } else {
-                return traceDecisionPath(node.right, xVal, yVal, path.concat('R'));
-              }
-            }
-          
-            let highlight = [];
-            if (selectedPoint && currentModel === 'dt') {
-              highlight = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
-            }
-          
-            modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-            modelVisCtx.font = "12px Arial";
-            modelVisCtx.textAlign = "center";
-            drawInteractiveTree(dtModel, modelVisCanvas.width / 2, 50, 140, [], highlight);
-            break;
-          }
+  if (!dtModel) {
+    modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+    modelVisCtx.font = "16px Arial";
+    modelVisCtx.fillStyle = "black";
+    modelVisCtx.fillText("No tree built yet (dtModel is null)", 20, 20);
+    break;
+  }
 
-          case "svm":
-            // 4) Highlight points that are “support vectors”
-            //    i.e. those near or within the margin
-            const marginThreshold = 1.0;
-            for (let p of data) {
-              let label = p.label === 1 ? 1 : -1;
-              let margin = label * (svmWeights[0] * p.x + svmWeights[1] * p.y + svmWeights[2]);
-              if (margin <= marginThreshold) {
-                // Draw a circle around that point
-                modelVisCtx.beginPath();
-                modelVisCtx.arc(
-                  p.x * modelVisCanvas.width,
-                  p.y * modelVisCanvas.height,
-                  7,
-                  0,
-                  2 * Math.PI
-                );
-                modelVisCtx.strokeStyle = "black";
-                modelVisCtx.lineWidth = 2;
-                modelVisCtx.stroke();
-              }
-            }
-            break;
+  // Optional roundRect polyfill
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, radius) {
+      if (typeof radius === "number") {
+        radius = { tl: radius, tr: radius, br: radius, bl: radius };
+      } else {
+        const defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 };
+        for (let side in defaultRadius) {
+          radius[side] = radius[side] || defaultRadius[side];
+        }
+      }
+      this.beginPath();
+      this.moveTo(x + radius.tl, y);
+      this.lineTo(x + width - radius.tr, y);
+      this.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      this.lineTo(x + width, y + height - radius.br);
+      this.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      this.lineTo(x + radius.bl, y + height);
+      this.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      this.lineTo(x, y + radius.tl);
+      this.quadraticCurveTo(x, y, x + radius.tl, y);
+      this.closePath();
+      return this;
+    };
+  }
 
-          case "perceptron":
-            // 5) Show a little 2-input -> hidden -> output network
-            //    You can also color lines by current weight, etc.
-            // Example: 2 input nodes, 1 hidden node, 1 output node
+  // ---- Helpers ----
+  function parseLabel(label) {
+    if (!label.includes(" ≤ ")) {
+      return [label]; // e.g. "Leaf: 1"
+    }
+    const [feat, thr] = label.split(" ≤ ");
+    return [feat + " ≤", thr];
+  }
 
-            // Node positions
-            let in1 = { x: 100, y: 150 },
-              in2 = { x: 100, y: 150 };
-            in2.y = 350;
-            let hidden = { x: 250, y: 250 };
-            let out = { x: 400, y: 250 };
+  function countLeaves(node) {
+    if (typeof node === "number") return 1;
+    return countLeaves(node.left) + countLeaves(node.right);
+  }
 
-            // Draw nodes
-            modelVisCtx.fillStyle = "lightgray";
-            [in1, in2, hidden, out].forEach((n) => {
-              modelVisCtx.beginPath();
-              modelVisCtx.arc(n.x, n.y, 25, 0, 2 * Math.PI);
-              modelVisCtx.fill();
-              modelVisCtx.stroke();
-            });
-            modelVisCtx.fillStyle = "black";
-            modelVisCtx.fillText("x1", in1.x - 7, in1.y + 5);
-            modelVisCtx.fillText("x2", in2.x - 7, in2.y + 5);
-            modelVisCtx.fillText("Hidden", hidden.x - 20, hidden.y + 5);
-            modelVisCtx.fillText("Output", out.x - 20, out.y + 5);
+  function getTreeDepth(node) {
+    if (typeof node === "number") return 1;
+    return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
+  }
 
-            // Draw lines with weights
-            modelVisCtx.strokeStyle = "gray";
-            // in1->hidden
-            modelVisCtx.beginPath();
-            modelVisCtx.moveTo(in1.x + 25, in1.y);
-            modelVisCtx.lineTo(hidden.x - 25, hidden.y);
-            modelVisCtx.stroke();
-            modelVisCtx.fillText(
-              `w1=${perceptronHiddenWeights[0].toFixed(2)}`,
-              (in1.x + hidden.x) / 2 - 10,
-              (in1.y + hidden.y) / 2 - 5
-            );
+  function traceDecisionPath(node, xVal, yVal, path = []) {
+    if (typeof node === "number") return [path];
+    const val = node.feature === "x" ? xVal : yVal;
+    if (val <= node.threshold) {
+      return traceDecisionPath(node.left, xVal, yVal, path.concat("L"));
+    } else {
+      return traceDecisionPath(node.right, xVal, yVal, path.concat("R"));
+    }
+  }
 
-            // in2->hidden
-            modelVisCtx.beginPath();
-            modelVisCtx.moveTo(in2.x + 25, in2.y);
-            modelVisCtx.lineTo(hidden.x - 25, hidden.y);
-            modelVisCtx.stroke();
-            modelVisCtx.fillText(
-              `w2=${perceptronHiddenWeights[1].toFixed(2)}`,
-              (in2.x + hidden.x) / 2 - 10,
-              (in2.y + hidden.y) / 2 + 5
-            );
+  // Which nodes/edges are highlighted?
+  let highlightPath = [];
+  if (selectedPoint) {
+    highlightPath = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
+  }
 
-            // hidden->out
-            modelVisCtx.beginPath();
-            modelVisCtx.moveTo(hidden.x + 25, hidden.y);
-            modelVisCtx.lineTo(out.x - 25, out.y);
-            modelVisCtx.stroke();
-            modelVisCtx.fillText(
-              `w_out=${perceptronWeights[0].toFixed(2)}`,
-              (hidden.x + out.x) / 2 - 20,
-              (hidden.y + out.y) / 2 - 5
-            );
-            break;
+  // ---- 1) Abstract Layout ----
+  const layoutNodes = [];
+  const depth = getTreeDepth(dtModel);
+  const totalLeaves = countLeaves(dtModel);
 
-          case "ensemble":
-            // 6) Draw circles for each “sub‐model,” label them 0/1 based on
-            //    that sub‐model’s vote on a hypothetical point
-            // Just a schematic example:
-            let leftX = 150,
-              baseY = 150,
-              step = 60;
-            let subModels = ["LR", "KNN", "SVM"];
-            subModels.forEach((m, i) => {
-              // Circle for each
-              let cx = leftX;
-              let cy = baseY + i * step;
-              modelVisCtx.beginPath();
-              modelVisCtx.arc(cx, cy, 25, 0, 2 * Math.PI);
-              modelVisCtx.fillStyle = "#ccccff";
-              modelVisCtx.fill();
-              modelVisCtx.stroke();
-              modelVisCtx.fillStyle = "black";
-              modelVisCtx.fillText(m, cx - 10, cy + 5);
+  // We'll define an "abstract" fontSize. Each node can have lines of text.
+  // The node's height in abstract space = (number of lines * abstractFontSize) + padding.
+  const abstractFontSize = 20; 
+  const padding = 10; // extra vertical padding
+  // Horizontal spacing per leaf
+  const leafWidth = 100; 
+  // Vertical spacing between levels
+  const verticalGap = 120; 
+  // Root starts at y=0 in abstract space
+  const topMargin = 0; 
 
-              // Example: label that circle’s “vote” 0 or 1
-              // (Here, just a random example or some function)
-              let dummyVote = Math.random() < 0.5 ? 0 : 1;
-              modelVisCtx.fillText(`vote=${dummyVote}`, cx - 20, cy + 35);
-            });
-            // Then an arrow combining them at a final node
-            modelVisCtx.beginPath();
-            modelVisCtx.moveTo(leftX + 25, baseY);
-            modelVisCtx.lineTo(leftX + 100, baseY + 100);
-            modelVisCtx.lineTo(leftX + 25, baseY + step * 2);
-            modelVisCtx.stroke();
-            // And so on...
-            break;
+  // We'll store in each layout node:
+  // { x, y, lines, isLeaf, highlighted, leftChildIdx, rightChildIdx, width, height, path }
+  function layoutDecisionTree(node, level, leftBoundary, path) {
+    const isLeaf = typeof node === "number";
+    const label = isLeaf
+      ? `Leaf: ${node}`
+      : `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
 
-          default:
-            // If no special visualization, do nothing additional
-            break;
+    const lines = parseLabel(label);
+    // For example, for "x ≤ 0.37", lines = ["x ≤", "0.37"]
+    // For "Leaf: 1", lines = ["Leaf: 1"]
+
+    const isHighlighted =
+      highlightPath.length &&
+      highlightPath[0].length >= path.length &&
+      path.every((step, i) => highlightPath[0][i] === step);
+
+    // Define the size in abstract space:
+    const nodeHeight = lines.length * abstractFontSize + padding;
+    // For leaves, use a circle (use height as width) else a rectangle (fixed multiple)
+    const nodeWidth = isLeaf ? nodeHeight : 3 * abstractFontSize;
+
+    if (isLeaf) {
+      const centerX = leftBoundary + leafWidth / 2;
+      const yPos = topMargin + level * verticalGap;
+      const idx = layoutNodes.length;
+      layoutNodes.push({
+        x: centerX,
+        y: yPos,
+        lines,
+        isLeaf: true,
+        highlighted: isHighlighted,
+        leftChildIdx: null,
+        rightChildIdx: null,
+        path: [...path],
+        width: nodeWidth,
+        height: nodeHeight
+      });
+      return { idx, leaves: 1, centerX };
+    } else {
+      const leftLeaves = countLeaves(node.left);
+      const rightLeaves = countLeaves(node.right);
+
+      const leftInfo = layoutDecisionTree(
+        node.left,
+        level + 1,
+        leftBoundary,
+        path.concat("L")
+      );
+      const rightStart = leftBoundary + leftLeaves * leafWidth;
+      const rightInfo = layoutDecisionTree(
+        node.right,
+        level + 1,
+        rightStart,
+        path.concat("R")
+      );
+
+      const subTreeLeaves = leftLeaves + rightLeaves;
+      const parentX = (leftInfo.centerX + rightInfo.centerX) / 2;
+      const yPos = topMargin + level * verticalGap;
+      const idx = layoutNodes.length;
+      layoutNodes.push({
+        x: parentX,
+        y: yPos,
+        lines,
+        isLeaf: false,
+        highlighted: isHighlighted,
+        leftChildIdx: leftInfo.idx,
+        rightChildIdx: rightInfo.idx,
+        path: [...path],
+        width: nodeWidth,
+        height: nodeHeight
+      });
+      return { idx, leaves: subTreeLeaves, centerX: parentX };
+    }
+  }
+
+  layoutDecisionTree(dtModel, 0, 0, []); // root at x=0
+
+  // ---- 2) Compute bounding box of abstract layout ----
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+  for (const n of layoutNodes) {
+    if (n.x < minX) minX = n.x;
+    if (n.x > maxX) maxX = n.x;
+    if (n.y < minY) minY = n.y;
+    if (n.y > maxY) maxY = n.y;
+  }
+  // Expand bounding box to include node widths and heights
+  for (const n of layoutNodes) {
+    const halfW = n.width / 2;
+    const topY = n.y;
+    const bottomY = n.y + n.height;
+    if (n.x - halfW < minX) minX = n.x - halfW;
+    if (n.x + halfW > maxX) maxX = n.x + halfW;
+    if (topY < minY) minY = topY;
+    if (bottomY > maxY) maxY = bottomY;
+  }
+  const boundingWidth = maxX - minX || 1;
+  const boundingHeight = maxY - minY || 1;
+
+  // 3) Scale to fit the canvas
+  const margin = 20;
+  const availW = modelVisCanvas.width - 2 * margin;
+  const availH = modelVisCanvas.height - 2 * margin;
+  const scaleX = availW / boundingWidth;
+  const scaleY = availH / boundingHeight;
+  const scale = Math.min(scaleX, scaleY);
+
+  // 4) Transform each node into final canvas coordinates
+  for (const n of layoutNodes) {
+    n.canvasX = margin + (n.x - minX) * scale;
+    n.canvasY = margin + (n.y - minY) * scale;
+    n.canvasWidth = n.width * scale;
+    n.canvasHeight = n.height * scale;
+  }
+
+  // ---- NEW: Increase node sizes vertically as tree depth increases ----
+  // Use the slider value (maxTreeDepth) to compute a multiplier.
+  const nodeScaleMultiplier = 1 + (maxTreeDepth - 1) * 0.3;
+
+  // Define base font size (from our abstract font size scaled)
+  const baseFontSize = abstractFontSize * scale;
+  function getFontSize() {
+    return Math.max(10, baseFontSize * nodeScaleMultiplier); // never below 10px
+  }
+
+  // ---- 5) Draw the tree ----
+  modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+
+  // Draw edges first
+  function drawConnection(x1, y1, x2, y2, highlight) {
+    modelVisCtx.beginPath();
+    modelVisCtx.moveTo(x1, y1);
+    modelVisCtx.lineTo(x2, y2);
+    modelVisCtx.strokeStyle = highlight ? "#ff8800" : "black";
+    modelVisCtx.lineWidth = highlight ? 3 : 1;
+    modelVisCtx.stroke();
+  }
+
+  for (const n of layoutNodes) {
+    if (n.leftChildIdx !== null) {
+      const child = layoutNodes[n.leftChildIdx];
+      const edgeHighlight =
+        highlightPath.length &&
+        highlightPath[0][n.path.length] === "L" &&
+        n.path.every((step, idx) => step === highlightPath[0][idx]);
+      drawConnection(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, edgeHighlight);
+    }
+    if (n.rightChildIdx !== null) {
+      const child = layoutNodes[n.rightChildIdx];
+      const edgeHighlight =
+        highlightPath.length &&
+        highlightPath[0][n.path.length] === "R" &&
+        n.path.every((step, idx) => step === highlightPath[0][idx]);
+      drawConnection(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, edgeHighlight);
+    }
+  }
+
+  // Draw nodes (and text) with increased vertical size via nodeScaleMultiplier
+  function drawNode(node) {
+    const fontSize = getFontSize();
+    modelVisCtx.font = `${fontSize}px Arial`;
+    modelVisCtx.textAlign = "center";
+
+    if (node.isLeaf) {
+      // For leaves, scale the drawn circle dimensions
+      const scaledWidth = node.canvasWidth * nodeScaleMultiplier;
+      const scaledHeight = node.canvasHeight * nodeScaleMultiplier;
+      const r = Math.min(scaledWidth, scaledHeight) / 2;
+      modelVisCtx.beginPath();
+      // Adjust circle so its center is at (node.canvasX, node.canvasY + r)
+      modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
+      modelVisCtx.fillStyle = node.highlighted ? "#ffd700" : "#dff0ff";
+      modelVisCtx.fill();
+      modelVisCtx.strokeStyle = node.highlighted ? "#ff8800" : "black";
+      modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
+      modelVisCtx.stroke();
+      // Draw text lines, centered in the circle
+      node.lines.forEach((ln, i) => {
+        const offsetY = (i - (node.lines.length - 1) / 2) * (fontSize + 2);
+        modelVisCtx.fillStyle = "black";
+        modelVisCtx.fillText(ln, node.canvasX, node.canvasY + r + offsetY);
+      });
+    } else {
+      // For decision nodes, scale rectangle dimensions
+      const w = node.canvasWidth * nodeScaleMultiplier;
+      const h = node.canvasHeight * nodeScaleMultiplier;
+      const rx = node.canvasX - w / 2;
+      const ry = node.canvasY;
+      modelVisCtx.beginPath();
+      modelVisCtx.roundRect(rx, ry, w, h, Math.min(w, h) * 0.2);
+      modelVisCtx.fillStyle = node.highlighted ? "#ffd700" : "#dff0ff";
+      modelVisCtx.fill();
+      modelVisCtx.strokeStyle = node.highlighted ? "#ff8800" : "black";
+      modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
+      modelVisCtx.stroke();
+      // Draw text lines in the rectangle
+      node.lines.forEach((ln, i) => {
+        const offsetY = (i + 0.5) * fontSize + i * 2;
+        modelVisCtx.fillStyle = "black";
+        modelVisCtx.fillText(ln, node.canvasX, ry + offsetY);
+      });
+    }
+  }
+
+  layoutNodes.forEach((n) => drawNode(n));
+  break;
+}
+case "svm": {
+    modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+  
+    // Draw all data points
+    for (let p of data) {
+      modelVisCtx.beginPath();
+      modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
+      modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
+      modelVisCtx.fill();
+    }
+  
+    const w = svmWeights;
+    const canvasW = modelVisCanvas.width;
+    const canvasH = modelVisCanvas.height;
+  
+    function toCanvasCoords(x, y) {
+      return [x * canvasW, y * canvasH];
+    }
+  
+    function drawLine(slope, intercept, color, dashed = false) {
+      let x1 = 0, x2 = 1;
+      let y1 = slope * x1 + intercept;
+      let y2 = slope * x2 + intercept;
+      const [cx1, cy1] = toCanvasCoords(x1, y1);
+      const [cx2, cy2] = toCanvasCoords(x2, y2);
+      modelVisCtx.beginPath();
+      modelVisCtx.moveTo(cx1, cy1);
+      modelVisCtx.lineTo(cx2, cy2);
+      modelVisCtx.strokeStyle = color;
+      modelVisCtx.setLineDash(dashed ? [5, 5] : []);
+      modelVisCtx.stroke();
+      modelVisCtx.setLineDash([]); // reset for next line
+    }
+  
+    const slope = -w[0] / w[1];
+    const intercept = -w[2] / w[1];
+  
+    modelVisCtx.lineWidth = 2;
+    drawLine(slope, intercept, "black", false);      // decision boundary (solid)
+    const norm = Math.sqrt(w[0] * w[0] + w[1] * w[1]);
+    const offset = 1 / norm;
+    drawLine(slope, intercept + offset, "black", true);  // margin +
+    drawLine(slope, intercept - offset, "black", true);  // margin -
+  
+    // Highlight support vectors
+    for (let p of data) {
+      const label = p.label === 1 ? 1 : -1;
+      const margin = label * (w[0] * p.x + w[1] * p.y + w[2]);
+      if (margin <= 1.05) {
+        modelVisCtx.beginPath();
+        modelVisCtx.arc(
+          p.x * modelVisCanvas.width,
+          p.y * modelVisCanvas.height,
+          7,
+          0,
+          2 * Math.PI
+        );
+        modelVisCtx.strokeStyle = "black";
+        modelVisCtx.lineWidth = 2;
+        modelVisCtx.stroke();
+      }
+    }
+  
+    modelVisCtx.lineWidth = 1;
+    break;
+  }
+
+  case "perceptron": {
+    // Clear the canvas
+    modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+
+    // Constants for node layout
+    const inputCount = 6;
+    const hiddenCount = 6;
+    const inputLayerX = 80;
+    const hiddenLayerX = 250;
+    const outputLayerX = 460;
+    const activationX = 360;
+    const spacingY = modelVisCanvas.height / (inputCount + 1);
+    const nodeRadius = 28; // Increased for better readability
+
+    // Example weight arrays:
+    // A 2D array for input->hidden connections (6x6)
+    let perceptronInputHiddenWeights = Array.from({ length: inputCount }, () =>
+      Array.from({ length: hiddenCount }, () => Math.random() - 0.5)
+    );
+    // A 1D array for hidden->activation connections (6 weights)
+    let perceptronWeights = Array.from({ length: hiddenCount }, () => Math.random() - 0.5);
+    // Activation->output weight (single value)
+    const activationWeight = 0.5;
+
+    // Build node arrays
+    let inputNodes = [];
+    let hiddenNodes = [];
+    let activationNode, outputNode;
+
+    const inputLabels = ["x", "y", "x*y", "x^2", "y^2", "bias"];
+
+    // Calculate positions for input nodes
+    for (let i = 0; i < inputCount; i++) {
+      inputNodes.push({ x: inputLayerX, y: spacingY * (i + 1), index: i, type: "input" });
+    }
+
+    // Calculate positions for hidden nodes
+    for (let j = 0; j < hiddenCount; j++) {
+      hiddenNodes.push({ x: hiddenLayerX, y: spacingY * (j + 1), index: j, type: "hidden" });
+    }
+
+    // Position of activation and output node
+    activationNode = { x: activationX, y: modelVisCanvas.height / 2, type: "activation" };
+    outputNode = { x: outputLayerX, y: modelVisCanvas.height / 2, type: "output" };
+
+    // --- Helper functions ---
+
+    // Draw a circle node with a given border color
+    function drawNodeWithBorder(node, label, borderColor = "black") {
+      modelVisCtx.beginPath();
+      modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+      modelVisCtx.fillStyle = "#cce5ff";
+      modelVisCtx.fill();
+      modelVisCtx.strokeStyle = borderColor;
+      modelVisCtx.stroke();
+      if (label) {
+        modelVisCtx.fillStyle = "black";
+        modelVisCtx.textAlign = "center";
+        modelVisCtx.textBaseline = "middle";
+        modelVisCtx.fillText(label, node.x, node.y);
+      }
+    }
+
+    // Draw a node in default style (grey border)
+    function drawNode(node, label) {
+      drawNodeWithBorder(node, label, "grey");
+    }
+
+    // Draw an arrow from (fromX, fromY) to (toX, toY) using a given color
+    function drawArrowWithColor(fromX, fromY, toX, toY, color) {
+      const headLength = 10;
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      modelVisCtx.beginPath();
+      modelVisCtx.moveTo(fromX, fromY);
+      modelVisCtx.lineTo(toX, toY);
+      modelVisCtx.strokeStyle = color;
+      modelVisCtx.stroke();
+      // arrowhead
+      modelVisCtx.beginPath();
+      modelVisCtx.moveTo(toX, toY);
+      modelVisCtx.lineTo(
+        toX - headLength * Math.cos(angle - Math.PI / 6),
+        toY - headLength * Math.sin(angle - Math.PI / 6)
+      );
+      modelVisCtx.lineTo(
+        toX - headLength * Math.cos(angle + Math.PI / 6),
+        toY - headLength * Math.sin(angle + Math.PI / 6)
+      );
+      modelVisCtx.lineTo(toX, toY);
+      modelVisCtx.fillStyle = color;
+      modelVisCtx.fill();
+    }
+
+    // Tanh utility
+    function tanh(z) {
+      return Math.tanh(z);
+    }
+
+    // Draw everything in the default (black/gray) style, ignoring highlight
+    function drawAllGray() {
+      // 1) Input nodes in black border, hidden nodes in black border
+      inputNodes.forEach((n, i) => {
+        drawNode(n, inputLabels[i]);
+      });
+      hiddenNodes.forEach((n) => {
+        drawNode(n, "");
+      });
+      // Activation node + output node also in black
+      drawNode(activationNode, "σ");
+      drawNode(outputNode, "Output");
+
+      // 2) Arrows: input->hidden in gray, hidden->activation in gray,
+      //    activation->output in gray
+      // input->hidden
+      inputNodes.forEach((inNode) => {
+        hiddenNodes.forEach((hidNode) => {
+          drawArrowWithColor(
+            inNode.x + nodeRadius,
+            inNode.y,
+            hidNode.x - nodeRadius,
+            hidNode.y,
+            "gray"
+          );
+        });
+      });
+      // hidden->activation
+      hiddenNodes.forEach((hidNode) => {
+        drawArrowWithColor(
+          hidNode.x + nodeRadius,
+          hidNode.y,
+          activationNode.x - nodeRadius,
+          activationNode.y,
+          "gray"
+        );
+      });
+      // activation->output
+      drawArrowWithColor(
+        activationNode.x + nodeRadius,
+        activationNode.y,
+        outputNode.x - nodeRadius,
+        outputNode.y,
+        "gray"
+      );
+    }
+
+    // Highlight the input node, the arrow input->hidden, the hidden node,
+    // and the arrow hidden->activation with a given color.
+    // We do NOT highlight the activation node or arrow activation->output.
+    function highlightPartialPath(i, j, color) {
+      // 1) highlight input node i
+      let inNode = inputNodes[i];
+      drawNodeWithBorder(inNode, inputLabels[i], color);
+
+      // 2) highlight arrow input->hidden
+      drawArrowWithColor(
+        inNode.x + nodeRadius,
+        inNode.y,
+        hiddenNodes[j].x - nodeRadius,
+        hiddenNodes[j].y,
+        color
+      );
+
+      // 3) highlight hidden node j
+      drawNodeWithBorder(hiddenNodes[j], "", color);
+
+      // 4) highlight arrow hidden->activation
+      drawArrowWithColor(
+        hiddenNodes[j].x + nodeRadius,
+        hiddenNodes[j].y,
+        activationNode.x - nodeRadius,
+        activationNode.y,
+        color
+      );
+      // do NOT highlight activation node or arrow activation->output
+    }
+
+    function drawNetwork() {
+      modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+
+      // If no selectedPoint => everything is default
+      if (!selectedPoint) {
+        drawAllGray();
+        return;
+      }
+
+      // 1) compute features + hiddenActivations
+      const xVal = selectedPoint.x;
+      const yVal = selectedPoint.y;
+      const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+
+      // hiddenActivations
+      const hiddenActivations = [];
+      for (let j = 0; j < hiddenCount; j++) {
+        let sum = 0;
+        for (let i = 0; i < inputCount; i++) {
+          sum += features[i] * perceptronInputHiddenWeights[i][j];
+        }
+        hiddenActivations[j] = tanh(sum);
+      }
+
+      // We'll define path score from input->hidden->activation->output
+      // but only highlight input->hidden->activation portion.
+      // pathScore(i, j) = sum of absolute contributions
+      //   (|f[i] * w_{i,j}| + |hiddenActivations[j] * perceptronWeights[j]| + |activationWeight|)
+      let pathScores = [];
+      for (let i = 0; i < inputCount; i++) {
+        for (let j = 0; j < hiddenCount; j++) {
+          const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
+          const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
+          const scoreAO = Math.abs(activationWeight);
+          const totalScore = scoreIH + scoreHA + scoreAO;
+          pathScores.push({ i, j, score: totalScore });
+        }
+      }
+      // Sort descending
+      pathScores.sort((a, b) => b.score - a.score);
+
+      // The top path is green, the second & third are blue
+      // all others remain default gray
+      // => we first draw everything in gray
+      drawAllGray();
+
+      // highlight top 3 if exist
+      if (pathScores.length > 0) {
+        let p = pathScores[0];
+        highlightPartialPath(p.i, p.j, "green");
+      }
+      if (pathScores.length > 1) {
+        let p = pathScores[1];
+        highlightPartialPath(p.i, p.j, "blue");
+      }
+      if (pathScores.length > 2) {
+        let p = pathScores[2];
+        highlightPartialPath(p.i, p.j, "blue");
+      }
+    }
+
+    // Finally, draw
+    drawNetwork();
+
+    break;
+  }
+
+    case "ensemble": {
+        // Clear the modelVisCanvas first
+        modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+
+        const nodeRadius = 45;
+        modelVisCtx.save();
+        modelVisCtx.translate(50, 65); 
+        modelVisCtx.restore();
+        
+        const inputNode = { x: 250, y: 100, label: "Input" };
+        const subModels = [
+        { name: "LR", x: 150, y: 220 },
+        { name: "KNN", x: 250, y: 220 },
+        { name: "SVM", x: 350, y: 220 },
+        ];
+        const finalNode = { x: 250, y: 400, label: "final vote:\n0.00" };
+
+
+        /********************************************
+        * 1) Compute sub-model votes ONLY if needed
+        ********************************************/
+        // Instead of generating them each frame, do it once if a point is selected
+        if (selectedPoint) {
+        // For demonstration, assign an integer in [0..2] to each model
+        subModels.forEach((m) => {
+            m.vote = Math.floor(Math.random() * 3); // => 0, 1, or 2
+        });
+
+        // Example final vote: average of 0..2 => in [0..2].
+        // You could do majority or sum, etc. if you prefer.
+        const sum = subModels.reduce((acc, m) => acc + m.vote, 0);
+        const avg = sum / subModels.length; // => in [0..2]
+        // Put it into the final node label
+        finalNode.label = `final vote:\n${avg.toFixed(2)}`;
+        } else {
+        // If no point selected, show final vote: 0 or blank
+        finalNode.label = "final vote:\n0.00";
         }
 
+        /********************************
+        * 2) Helper: draw a circle node
+        ********************************/
+        function drawNode(ctx, node, radius, fillColor = "#cce5ff") {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+        ctx.strokeStyle = "grey";
+        ctx.stroke();
+
+        if (node.label) {
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "16px Arial";
+            const lines = node.label.split("\n");
+            lines.forEach((ln, i) => {
+            ctx.fillText(ln, node.x, node.y + (i - (lines.length - 1) / 2) * 16);
+            });
+        }
+        }
+
+        /********************************
+        * 3) Helper: draw an arrow line
+        ********************************/
+        function drawArrow(ctx, x1, y1, x2, y2, color = "gray") {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+
+        const headLength = 10;
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const angle = Math.atan2(dy, dx);
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(
+            x2 - headLength * Math.cos(angle - Math.PI / 6),
+            y2 - headLength * Math.sin(angle - Math.PI / 6)
+        );
+        ctx.lineTo(
+            x2 - headLength * Math.cos(angle + Math.PI / 6),
+            y2 - headLength * Math.sin(angle + Math.PI / 6)
+        );
+        ctx.lineTo(x2, y2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        }
+
+        /**********************************************
+        * 4) Draw the ensemble diagram (no real-time)
+        **********************************************/
+        // A) Draw input node
+        drawNode(modelVisCtx, inputNode, nodeRadius);
+
+        // B) Draw sub-models with their integer vote underneath
+        subModels.forEach((m) => {
+        // Draw the model node
+        drawNode(modelVisCtx, { x: m.x, y: m.y, label: m.name }, nodeRadius);
+
+        // If a point is selected, show the integer vote under the node
+        if (selectedPoint) {
+            modelVisCtx.fillStyle = "black";
+            modelVisCtx.textAlign = "center";
+            modelVisCtx.font = "14px Arial";
+            modelVisCtx.fillText(
+            `vote = ${m.vote}`,
+            m.x,
+            m.y + nodeRadius + 15
+            );
+        }
+        });
+
+        // C) Draw final prediction node
+        drawNode(modelVisCtx, finalNode, nodeRadius);
+
+        // D) Arrows: Input -> sub-models
+        subModels.forEach((m) => {
+        drawArrow(
+            modelVisCtx,
+            inputNode.x,
+            inputNode.y + nodeRadius,
+            m.x,
+            m.y - nodeRadius
+        );
+        });
+
+        // E) Arrows: sub-models -> final node
+        subModels.forEach((m) => {
+        drawArrow(
+            modelVisCtx,
+            m.x,
+            m.y + nodeRadius + 25,
+            finalNode.x,
+            finalNode.y - nodeRadius
+        );
+        });
+
+        break;
+    }
+    
+    default:
+        // No special visualization for other models
+        break;
+    }
+    
         // For example, a placeholder text:
         modelVisCtx.fillStyle = "black";
         modelVisCtx.font = "16px Arial";
@@ -1007,15 +1552,24 @@
 
         // If close enough, show how the current model interprets that point:
         if (minDist < 25) {
-            selectedPoint = nearest; 
-            const modelOutput = predict(nearest.x, nearest.y);
-            alert(
-              `Clicked point\n` +
-              `Label: ${nearest.label}\n` +
-              `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
-            );
-          }          
+          selectedPoint = nearest;
+          const modelOutput = predict(nearest.x, nearest.y);
+          alert(
+            `Clicked point\n` +
+            `Label: ${nearest.label}\n` +
+            `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
+          );
+        }
       });
+
+      function countLeaves(node) {
+        // A leaf is just a number in your code
+        if (typeof node === "number") {
+          return 1;
+        }
+        // Otherwise, sum leaves from left and right
+        return countLeaves(node.left) + countLeaves(node.right);
+      }
     </script>
   </body>
 </html>

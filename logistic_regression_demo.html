@@ -24,6 +24,10 @@
         padding: 10px;
         font-size: 14px;
       }
+      .sidebar button.active {
+        background-color: #007BFF;
+        color: #fff;
+      }
       .main-content {
         flex-grow: 1;
         display: flex;
@@ -73,9 +77,9 @@
       </div>
 
       <h3>Select Model</h3>
-      <button onclick="selectModel('logistic')">Logistic Regression</button>
+      <button onclick="selectModel('logistic')">Logistic Regression(LR)</button>
       <button onclick="selectModel('knn')">K-Nearest Neighbors (KNN)</button>
-      <button onclick="selectModel('dt')">Decision Tree</button>
+      <button onclick="selectModel('dt')">Decision Tree (DT)</button>
       <button onclick="selectModel('svm')">Support Vector Machine (SVM)</button>
       <button onclick="selectModel('perceptron')">Perceptron</button>
       <button onclick="selectModel('ensemble')">Ensemble</button>
@@ -240,6 +244,16 @@
        * Model & Data Setup
        *********************/
       function selectModel(model) {
+        const modelButtons = document.querySelectorAll(".sidebar button[onclick^='selectModel']");
+        modelButtons.forEach(btn => {
+          btn.classList.remove("active");
+        });
+      
+        // Add 'active' to the button corresponding to model
+        const activeModelBtn = document.querySelector(`.sidebar button[onclick="selectModel('${model}')"]`);
+        if (activeModelBtn) {
+          activeModelBtn.classList.add("active");
+        }
         currentModel = model;
         const dtControls = document.getElementById("dtControls");
         if (model === "dt") {
@@ -255,6 +269,14 @@
       }
 
         function selectDataset(ds) {
+        document.querySelectorAll("#datasetButtons button").forEach(btn => {
+            btn.classList.remove("active");
+            });
+        
+            const activeBtn = document.querySelector(`#datasetButtons button[onclick="selectDataset('${ds}')"]`);
+            if (activeBtn) {
+            activeBtn.classList.add("active");
+            }
         selectedPoint = null;
         perceptronTopPaths = [];
         
@@ -598,57 +620,69 @@
         // Inside drawModelVisualizer(), AFTER clearing the canvas, insert:
 
         switch (currentModel) {
-          case "logistic": {
-            const canvasW = modelVisCanvas.width;
-            const canvasH = modelVisCanvas.height;
-            const scaleX = canvasW / 40; // now -10 to +10 range
-            const scaleY = canvasH * 0.8; // compress vertically
-            const centerX = canvasW / 2;
-            const centerY = canvasH / 2;
-
-            // Draw grid
-            modelVisCtx.strokeStyle = "#eee";
-            for (let i = 0; i <= canvasW; i += 50) {
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(i, 0);
-              modelVisCtx.lineTo(i, canvasH);
-              modelVisCtx.stroke();
-            }
-            for (let j = 0; j <= canvasH; j += 50) {
-              modelVisCtx.beginPath();
-              modelVisCtx.moveTo(0, j);
-              modelVisCtx.lineTo(canvasW, j);
-              modelVisCtx.stroke();
-            }
-
-            // Sigmoid curve from x = -10 to 10
-            modelVisCtx.beginPath();
-            for (let xVal = -20; xVal <= 20; xVal += 0.1) {
-              const yVal = 1 / (1 + Math.exp(-xVal));
-              const xPix = centerX + xVal * scaleX;
-              const yPix = centerY - (yVal - 0.5) * scaleY;
-              if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
-              else modelVisCtx.lineTo(xPix, yPix);
-            }
-            modelVisCtx.strokeStyle = "blue";
-            modelVisCtx.lineWidth = 2;
-            modelVisCtx.stroke();
-
-            // Data points in model space (clamped to [-20, 20])
-            data.forEach((p) => {
-              const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
-              const sigmoidVal = 1 / (1 + Math.exp(-score));
-              const clampedScore = Math.max(-20, Math.min(20, score));
-              const xPix = centerX + clampedScore * scaleX;
-              const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
-              modelVisCtx.beginPath();
-              modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
-              modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
-              modelVisCtx.fill();
-            });
-
-            break;
-          }
+            
+            case "logistic": {
+                const canvasW = modelVisCanvas.width;
+                const canvasH = modelVisCanvas.height;
+                const scaleX = canvasW / 40; // now -10 to +10 range
+                const scaleY = canvasH * 0.8; // compress vertically
+                const centerX = canvasW / 2;
+                const centerY = canvasH / 2;
+              
+                // Draw grid
+                modelVisCtx.strokeStyle = "#eee";
+                for (let i = 0; i <= canvasW; i += 50) {
+                  modelVisCtx.beginPath();
+                  modelVisCtx.moveTo(i, 0);
+                  modelVisCtx.lineTo(i, canvasH);
+                  modelVisCtx.stroke();
+                }
+                for (let j = 0; j <= canvasH; j += 50) {
+                  modelVisCtx.beginPath();
+                  modelVisCtx.moveTo(0, j);
+                  modelVisCtx.lineTo(canvasW, j);
+                  modelVisCtx.stroke();
+                }
+              
+                // Sigmoid curve from x = -10 to 10
+                modelVisCtx.beginPath();
+                for (let xVal = -20; xVal <= 20; xVal += 0.1) {
+                  const yVal = 1 / (1 + Math.exp(-xVal));
+                  const xPix = centerX + xVal * scaleX;
+                  const yPix = centerY - (yVal - 0.5) * scaleY;
+                  if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
+                  else modelVisCtx.lineTo(xPix, yPix);
+                }
+                modelVisCtx.strokeStyle = "blue";
+                modelVisCtx.lineWidth = 2;
+                modelVisCtx.stroke();
+              
+                // Data points in model space (clamped to [-20, 20])
+                data.forEach((p) => {
+                  const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
+                  const sigmoidVal = 1 / (1 + Math.exp(-score));
+                  const clampedScore = Math.max(-20, Math.min(20, score));
+                  const xPix = centerX + clampedScore * scaleX;
+                  const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
+              
+                  // Fill point
+                  modelVisCtx.beginPath();
+                  modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
+                  modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
+                  modelVisCtx.fill();
+              
+                  // Highlight if selected
+                  if (selectedPoint && selectedPoint === p) {
+                    modelVisCtx.beginPath();
+                    modelVisCtx.arc(xPix, yPix, 6, 0, 2 * Math.PI);
+                    modelVisCtx.strokeStyle = "black";
+                    modelVisCtx.lineWidth = 2;
+                    modelVisCtx.stroke();
+                  }
+                });
+              
+                break;
+              }
 
           case "knn": {
             const drawCluster = (label, color, fillColor) => {
@@ -721,9 +755,6 @@
           case "dt": {
   if (!dtModel) {
     modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-    modelVisCtx.font = "16px Arial";
-    modelVisCtx.fillStyle = "black";
-    modelVisCtx.fillText("No tree built yet (dtModel is null)", 20, 20);
     break;
   }
 
@@ -809,7 +840,7 @@
   function layoutDecisionTree(node, level, leftBoundary, path) {
     const isLeaf = typeof node === "number";
     const label = isLeaf
-      ? `Leaf: ${node}`
+      ? `${node}`
       : `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
 
     const lines = parseLabel(label);
@@ -939,7 +970,7 @@
     modelVisCtx.beginPath();
     modelVisCtx.moveTo(x1, y1);
     modelVisCtx.lineTo(x2, y2);
-    modelVisCtx.strokeStyle = highlight ? "#ff8800" : "black";
+    modelVisCtx.strokeStyle = highlight ? "blue" : "black";
     modelVisCtx.lineWidth = highlight ? 3 : 1;
     modelVisCtx.stroke();
   }
@@ -968,7 +999,8 @@
     const fontSize = getFontSize();
     modelVisCtx.font = `${fontSize}px Arial`;
     modelVisCtx.textAlign = "center";
-
+    modelVisCtx.textBaseline = "middle";
+    
     if (node.isLeaf) {
       // For leaves, scale the drawn circle dimensions
       const scaledWidth = node.canvasWidth * nodeScaleMultiplier;
@@ -977,9 +1009,9 @@
       modelVisCtx.beginPath();
       // Adjust circle so its center is at (node.canvasX, node.canvasY + r)
       modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
-      modelVisCtx.fillStyle = node.highlighted ? "#ffd700" : "#dff0ff";
+      modelVisCtx.fillStyle = "#dff0ff"; //ffd700 = gold
       modelVisCtx.fill();
-      modelVisCtx.strokeStyle = node.highlighted ? "#ff8800" : "black";
+      modelVisCtx.strokeStyle = node.highlighted ? "blue" : "black";
       modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
       modelVisCtx.stroke();
       // Draw text lines, centered in the circle
@@ -996,14 +1028,14 @@
       const ry = node.canvasY;
       modelVisCtx.beginPath();
       modelVisCtx.roundRect(rx, ry, w, h, Math.min(w, h) * 0.2);
-      modelVisCtx.fillStyle = node.highlighted ? "#ffd700" : "#dff0ff";
+      modelVisCtx.fillStyle = "#dff0ff";
       modelVisCtx.fill();
-      modelVisCtx.strokeStyle = node.highlighted ? "#ff8800" : "black";
+      modelVisCtx.strokeStyle = node.highlighted ? "blue" : "black";
       modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
       modelVisCtx.stroke();
       // Draw text lines in the rectangle
       node.lines.forEach((ln, i) => {
-        const offsetY = (i + 0.5) * fontSize + i * 2;
+        const offsetY = (i + 0.75) * fontSize + i * 2;
         modelVisCtx.fillStyle = "black";
         modelVisCtx.fillText(ln, node.canvasX, ry + offsetY);
       });
@@ -1325,38 +1357,41 @@ case "svm": {
 
   case "ensemble": {
     modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-
-    const nodeRadius = 45;
-
-    const inputNode = { x: 250, y: 100, label: "Input" };
+  
+    const nodeRadius = 40;
+  
+    const inputNode = { x: 250, y: 50, label: "Input" };
     const subModels = [
-      { name: "LR", x: 150, y: 220 },
-      { name: "KNN", x: 250, y: 220 },
-      { name: "SVM", x: 350, y: 220 },
+      { name: "LR", x: 150, y: 175 },
+      { name: "KNN", x: 250, y: 175 },
+      { name: "SVM", x: 350, y: 175 },
     ];
-    const finalNode = { x: 250, y: 400, label: "final vote:\n0.00" };
-
+    const finalNode = { x: 250, y: 325, label: "final vote:\n0.00" };
+    const predictionNode = { x: 250, y: 450, label: "Prediction:\n?" };
+  
     /********************************************
-     * 1) Compute sub-model votes based on actual models
+     * 1) Compute sub-model votes and prediction
      ********************************************/
-     if (selectedPoint) {
-        const x = selectedPoint.x;
-        const y = selectedPoint.y;
-      
-        const logistic = sigmoid(logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]);
-        const knn = knnPredict(x, y);
-        const svm = sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
-      
-        subModels[0].vote = logistic;
-        subModels[1].vote = knn;
-        subModels[2].vote = svm;
-      
-        const average = (logistic + knn + svm) / 3;
-        finalNode.label = `final vote:\n${average.toFixed(2)}`;
-      } else {
-        finalNode.label = "final vote:\n0.00";
-      }
-
+    if (selectedPoint) {
+      const x = selectedPoint.x;
+      const y = selectedPoint.y;
+  
+      const logistic = sigmoid(logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2]);
+      const knn = knnPredict(x, y);
+      const svm = sigmoid(svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+  
+      subModels[0].vote = logistic;
+      subModels[1].vote = knn;
+      subModels[2].vote = svm;
+  
+      const average = (logistic + knn + svm) / 3;
+      finalNode.label = `final vote:\n${average.toFixed(2)}`;
+      predictionNode.label = `Prediction:\n ${average > 0.5 ? 1 : 0}`;
+    } else {
+      finalNode.label = "final vote:\n0.00";
+      predictionNode.label = "Prediction:\n ?";
+    }
+  
     /********************************
      * 2) Helper: draw a circle node
      ********************************/
@@ -1367,7 +1402,7 @@ case "svm": {
       ctx.fill();
       ctx.strokeStyle = "grey";
       ctx.stroke();
-
+  
       if (node.label) {
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
@@ -1379,7 +1414,7 @@ case "svm": {
         });
       }
     }
-
+  
     /********************************
      * 3) Helper: draw an arrow line
      ********************************/
@@ -1389,7 +1424,7 @@ case "svm": {
       ctx.lineTo(x2, y2);
       ctx.strokeStyle = color;
       ctx.stroke();
-
+  
       const headLength = 10;
       const dx = x2 - x1;
       const dy = y2 - y1;
@@ -1408,34 +1443,42 @@ case "svm": {
       ctx.fillStyle = color;
       ctx.fill();
     }
-
+  
     /**********************************************
      * 4) Draw the ensemble diagram (real-time)
      **********************************************/
     drawNode(modelVisCtx, inputNode, nodeRadius);
-
+  
     subModels.forEach((m) => {
       drawNode(modelVisCtx, { x: m.x, y: m.y, label: m.name }, nodeRadius);
       if (selectedPoint && typeof m.vote === "number") {
         modelVisCtx.fillStyle = "black";
         modelVisCtx.textAlign = "center";
+        modelVisCtx.textBaseline = "middle";
         modelVisCtx.font = "14px Arial";
         modelVisCtx.fillText(`vote = ${m.vote.toFixed(2)}`, m.x, m.y + nodeRadius + 15);
       }
     });
-
+  
     drawNode(modelVisCtx, finalNode, nodeRadius);
-
+    drawNode(modelVisCtx, predictionNode, nodeRadius);
+  
     subModels.forEach((m) => {
       drawArrow(modelVisCtx, inputNode.x, inputNode.y + nodeRadius, m.x, m.y - nodeRadius);
-    });
-
-    subModels.forEach((m) => {
       drawArrow(modelVisCtx, m.x, m.y + nodeRadius + 25, finalNode.x, finalNode.y - nodeRadius);
     });
-
+  
+    drawArrow(
+      modelVisCtx,
+      finalNode.x,
+      finalNode.y + nodeRadius,
+      predictionNode.x,
+      predictionNode.y - nodeRadius
+    );
+  
     break;
   }
+  
 
     default:
         // No special visualization for other models
@@ -1443,9 +1486,19 @@ case "svm": {
     }
     
         // For example, a placeholder text:
+        modelVisCtx.save();
+        modelVisCtx.resetTransform();
         modelVisCtx.fillStyle = "black";
         modelVisCtx.font = "16px Arial";
+        modelVisCtx.textAlign = "left";
+        modelVisCtx.textBaseline = "top";
+        if (currentModel == "logistic") {
+            modelVisCtx.fillText("Model: lr ", 20, 20);
+        }
+        else {
         modelVisCtx.fillText("Model: " + currentModel, 20, 20);
+        modelVisCtx.restore();
+        }
       }
 
       /*****************************
@@ -1463,27 +1516,30 @@ case "svm": {
         updateParameterDisplay();
         drawModelVisualizer();
         requestAnimationFrame(loop);
+
+        ctx.fillStyle = "black";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText("Click on a datapoint to interact.", W - 20, 30);
       }
 
       function updateParameterDisplay() {
-        let text = `Model: ${currentModel}\n`;
+        let text = currentModel === "logistic" ? "Model: lr\n" : `Model: ${currentModel}\n`;
         if (currentModel === "perceptron") {
-          text += `\nPerceptron Weights:\n${perceptronWeights
+          text += `\nInput Weights:\n${perceptronWeights
             .map((w) => w.toFixed(3))
             .join(", ")}\n`;
           text += `Hidden Weights:\n${perceptronHiddenWeights
             .map((w) => w.toFixed(3))
             .join(", ")}`;
         } else if (currentModel === "logistic") {
-          text += `\nLogistic Weights:\n${logisticWeights
+          text += `\nLR Weights:\n${logisticWeights
             .map((w) => w.toFixed(3))
             .join(", ")}`;
         } else if (currentModel === "svm") {
           text += `\nSVM Weights:\n${svmWeights.map((w) => w.toFixed(3)).join(", ")}`;
         } else if (currentModel === "dt") {
-          text += `\nDecision Tree Structure:\n` + JSON.stringify(dtModel, null, 2);
-        } else {
-          text += `\n(No trainable parameters displayed)`;
+          text += `\nDT Structure:\n` + JSON.stringify(dtModel, null, 2);
         }
         // Add code if you want other models to show weights, etc.
 

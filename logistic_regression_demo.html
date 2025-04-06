@@ -125,6 +125,7 @@
 
       // The dataset we train/predict on
       let data = [];
+      let selectedPoint = null;
 
       // Weights for different models
       let perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
@@ -253,34 +254,43 @@
         updateParameterDisplay();
       }
 
-      function selectDataset(ds) {
+        function selectDataset(ds) {
+        selectedPoint = null;
+        perceptronTopPaths = [];
+        
         currentDataset = ds;
-      
+
         logisticWeights = [Math.random(), Math.random(), Math.random()];
         svmWeights = [Math.random(), Math.random(), Math.random()];
-      
+
         if (ds === "B") {
-          // Base weights that are known to work well for the circular dataset
-          const baseHiddenWeights = [-1, -1, 0, 1, 1, 0.5];
-          const baseOutputWeights = [1, 1, 1, 1, 1, 1];
-          // Define the noise level
-          const noiseScale = 0.1;
-      
-          // Add a small random offset to each weight
-          perceptronHiddenWeights = baseHiddenWeights.map(
+            // Hard-code the circle boundary for radius = 0.2 at (0.5, 0.5).
+            // hidden = 5 * ( (x-0.5)^2 + (y-0.5)^2 - 0.04 )
+            //        = 5x^2 + 5y^2 - 5x - 5y + 2.3
+            const baseHiddenWeights = [-5, -5, 0, 5, 5, 2.3];
+
+            // Output = sigmoid( -10 * hidden + 5 )
+            // Inside circle => hidden < 0 => output ~ 1
+            // Outside circle => hidden > 0 => output ~ 0
+            const baseOutputWeights = [-10, 0, 0, 0, 0, 5];
+
+            // Add a tiny amount of noise to each weight
+            const noiseScale = 0.05;
+            perceptronHiddenWeights = baseHiddenWeights.map(
             w => w + (Math.random() - 0.5) * noiseScale
-          );
-          perceptronWeights = baseOutputWeights.map(
+            );
+            perceptronWeights = baseOutputWeights.map(
             w => w + (Math.random() - 0.5) * noiseScale
-          );
+            );
         } else {
-          // Default random initialization for other datasets
-          perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-          perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+            // Default random initialization for other datasets
+            perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+            perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
         }
-      
+
         resetAndVisualize();
-      }
+        }
+
 
       /*********************
        * Generate Datasets
@@ -1091,7 +1101,7 @@ case "svm": {
         );
 
     // A 1D array for hidden->activation connections (6 weights)
-    let perceptronWeights = Array.from({ length: hiddenCount }, () => Math.random() - 0.5);
+    //perceptronWeights = Array.from({ length: hiddenCount }, () => Math.random() - 0.5);
     // Activation->output weight (single value)
     const activationWeight = 0.5;
 
@@ -1472,9 +1482,6 @@ case "svm": {
           text += `\nSVM Weights:\n${svmWeights.map((w) => w.toFixed(3)).join(", ")}`;
         } else if (currentModel === "dt") {
           text += `\nDecision Tree Structure:\n` + JSON.stringify(dtModel, null, 2);
-        } else if (currentModel === "dt") {
-          text += `\nTree Depth: ${maxTreeDepth}\n`;
-          text += `\nTree Structure:\n${stringifyTree(dtModel)}`;
         } else {
           text += `\n(No trainable parameters displayed)`;
         }
@@ -1498,7 +1505,7 @@ case "svm": {
       selectDataset("A");
       loop();
 
-      let selectedPoint = null;
+      
 
       // Fix: Call drawModelVisualizer immediately after click
       modelVisCanvas.addEventListener("click", function (event) {
@@ -1579,15 +1586,6 @@ case "svm": {
           drawModelVisualizer(); // Redraw visualizer
         }
       });
-
-      function countLeaves(node) {
-        // A leaf is just a number in your code
-        if (typeof node === "number") {
-          return 1;
-        }
-        // Otherwise, sum leaves from left and right
-        return countLeaves(node.left) + countLeaves(node.right);
-      }
     </script>
   </body>
 </html>

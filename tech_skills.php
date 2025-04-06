@@ -82,13 +82,14 @@
                     </div>
                 </div>
                 <div class="tech-media"> 
-                    <div id="fnirs-simulation-container">
-                    <!-- Canvas for the fNIRS animation -->
-                    <canvas id="fnirsCanvas" width="600" height="400" 
-                            style="border:1px solid #ccc; background:#fafafa;">
-                        Your browser does not support the HTML5 canvas tag.
-                    </canvas>
-                    </div>
+                    <!-- <div class="tech-media"> 
+                        <div class="tech-gallery">
+                            <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
+                            <div class="gallery-items">
+                            </div>
+                            <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                        </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -135,29 +136,32 @@
                     <div class="tech-text">
                         <h2>Machine Learning</h2>
                         <p>
-                            
+                        <!-- Put any short description here -->
                         </p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
                         <ul class="skills-list">
-                            <li>Random Forest</li>
-                            <li>Support Vector Machine (SVM)</li>
-                            <li>Linear Regression</li>
-                            <li>Linear Discriminant Analysis (LDA)</li>
-                            <li>Convolutional Neural Networks (CNNs)</li>
-                            <li>Recurrent Neural Networks (RNNs)</li>
+                        <li>Random Forest</li>
+                        <li>Support Vector Machine (SVM)</li>
+                        <li>Linear Regression</li>
+                        <li>Linear Discriminant Analysis (LDA)</li>
+                        <li>Convolutional Neural Networks (CNNs)</li>
+                        <li>Recurrent Neural Networks (RNNs)</li>
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="tech-media"> 
-                    <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
-                        <div class="gallery-items">
-                        </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
-                    </div>
-                </div> -->
+
+                <!-- The "preview" area for your logistic regression demo -->
+                <div class="tech-media demo-preview" 
+                    onclick="expandDemoBox('ml_demo.html')" 
+                    style="position: relative;">
+                <!-- A simple background or partial placeholder where you might 
+                    also place a small screenshot if you wish -->
+                <div class="demo-preview-overlay">
+                    <span>Click Here to Play the Demo</span>
+                </div>
+                </div>
             </div>
         </section>
 
@@ -315,14 +319,22 @@
             </div>
         </section>
 
+        <!-- Dedicated Overlay for expanded content -->
+        <div class="expanded-overlay" id="expanded-overlay">
+            <div class="expanded-content">
+                <span class="expanded-close" onclick="closeDemoBox()">×</span>
+                <div id="expanded-box-content"></div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
     <?php include 'footer.html'; ?>
-
+    
     <!-- JavaScript -->
     <script src="script.js"></script>
-    <script src="fnirs_demo.js"></script>
+    <script src="ml_demo.js"></script>
 
 </body>
 </html>

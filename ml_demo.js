@@ -1522,7 +1522,7 @@ function loop() {
     ctx.fillStyle = "black";
     ctx.font = "16px Arial";
     ctx.textAlign = "right";
-    ctx.fillText("Click on a datapoint to interact.", W - 20, 30);
+    ctx.fillText("Click on a datapoint to interact.", W - 50, 30);
 }
 
 function updateParameterDisplay() {
@@ -1567,6 +1567,29 @@ function updateParameterDisplay() {
 
     paramBox.innerHTML = text.replace(/\n/g, "<br>") + cmHTML;
 }
+
+function expandDemoBox(url) {
+    const overlay = document.getElementById("expanded-overlay");
+    const content = document.getElementById("expanded-box-content");
+
+    // Load the entire ml_demo.html into the overlay
+    // using an <iframe> or AJAX. 
+    // 
+    // 1) Using an iframe approach:
+    content.innerHTML = '<iframe src="' + url + '" width="100%" height="600px" frameborder="0"></iframe>';
+
+    overlay.classList.add("active");
+  }
+
+  function closeDemoBox() {
+    const overlay = document.getElementById("expanded-overlay");
+    const content = document.getElementById("expanded-box-content");
+
+    // hide overlay
+    overlay.classList.remove("active");
+    // clear the content => unload the script
+    content.innerHTML = "";
+  }
 
 // Initialize with dataset A by default
 selectDataset("A");
@@ -1648,13 +1671,8 @@ canvas.addEventListener("click", function(event) {
             perceptronTopPaths.sort((a, b) => b.score - a.score);
             perceptronTopPaths = perceptronTopPaths.slice(0, 3); // keep top 3
         }
-
-        const modelOutput = predict(nearest.x, nearest.y);
-        alert(
-            `Clicked point\n` +
-            `Label: ${nearest.label}\n` +
-            `Model's prediction: ${modelOutput > 0.5 ? 1 : 0} (prob: ${modelOutput.toFixed(2)})`
-        );
         drawModelVisualizer(); // Redraw visualizer
     }
+
+    
 });

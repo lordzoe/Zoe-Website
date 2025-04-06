@@ -133,6 +133,9 @@
       let logisticWeights = [Math.random(), Math.random(), Math.random()];
       let svmWeights = [Math.random(), Math.random(), Math.random()];
 
+      let perceptronInputHiddenWeights = [];
+      let perceptronTopPaths = [];
+
 
       /***********************
        * Decision Tree Setup *
@@ -252,14 +255,30 @@
 
       function selectDataset(ds) {
         currentDataset = ds;
-
-        // Reinitialize all model weights
+      
         logisticWeights = [Math.random(), Math.random(), Math.random()];
         svmWeights = [Math.random(), Math.random(), Math.random()];
-        perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-        perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
-
-        // Regenerate data and redraw
+      
+        if (ds === "B") {
+          // Base weights that are known to work well for the circular dataset
+          const baseHiddenWeights = [-1, -1, 0, 1, 1, 0.5];
+          const baseOutputWeights = [1, 1, 1, 1, 1, 1];
+          // Define the noise level
+          const noiseScale = 0.1;
+      
+          // Add a small random offset to each weight
+          perceptronHiddenWeights = baseHiddenWeights.map(
+            w => w + (Math.random() - 0.5) * noiseScale
+          );
+          perceptronWeights = baseOutputWeights.map(
+            w => w + (Math.random() - 0.5) * noiseScale
+          );
+        } else {
+          // Default random initialization for other datasets
+          perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+          perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+        }
+      
         resetAndVisualize();
       }
 
@@ -465,7 +484,7 @@
         let TP = 0, TN = 0, FP = 0, FN = 0;
       
         for (const p of data) {
-          const pred = predict(p.x, p.y, p) > 0.5 ? 1 : 0;
+          const pred = predict(p.x, p.y) > 0.5 ? 1 : 0;
       
           if (p.label === 1 && pred === 1) TP++;
           else if (p.label === 0 && pred === 0) TN++;
@@ -1067,9 +1086,10 @@ case "svm": {
 
     // Example weight arrays:
     // A 2D array for input->hidden connections (6x6)
-    let perceptronInputHiddenWeights = Array.from({ length: inputCount }, () =>
-      Array.from({ length: hiddenCount }, () => Math.random() - 0.5)
-    );
+    perceptronInputHiddenWeights = Array.from({ length: inputCount }, () =>
+        Array.from({ length: hiddenCount }, () => Math.random() - 0.5)
+        );
+
     // A 1D array for hidden->activation connections (6 weights)
     let perceptronWeights = Array.from({ length: hiddenCount }, () => Math.random() - 0.5);
     // Activation->output weight (single value)
@@ -1276,17 +1296,14 @@ case "svm": {
       drawAllGray();
 
       // highlight top 3 if exist
-      if (pathScores.length > 0) {
-        let p = pathScores[0];
-        highlightPartialPath(p.i, p.j, "green");
+      if (perceptronTopPaths.length > 0) {
+        highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "blue");
       }
-      if (pathScores.length > 1) {
-        let p = pathScores[1];
-        highlightPartialPath(p.i, p.j, "blue");
+      if (perceptronTopPaths.length > 1) {
+        highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "purple");
       }
-      if (pathScores.length > 2) {
-        let p = pathScores[2];
-        highlightPartialPath(p.i, p.j, "blue");
+      if (perceptronTopPaths.length > 2) {
+        highlightPartialPath(perceptronTopPaths[2].i, perceptronTopPaths[2].j, "purple");
       }
     }
 
@@ -1524,6 +1541,35 @@ case "svm": {
         // If close enough, show how the current model interprets that point:
         if (minDist < 25) {
           selectedPoint = nearest;
+
+          if (currentModel === "perceptron" && selectedPoint) {
+            const xVal = selectedPoint.x;
+            const yVal = selectedPoint.y;
+            const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+            const hiddenActivations = [];
+          
+            for (let j = 0; j < 6; j++) {
+              let sum = 0;
+              for (let i = 0; i < 6; i++) {
+                sum += features[i] * perceptronInputHiddenWeights[i][j];
+              }
+              hiddenActivations[j] = Math.tanh(sum);
+            }
+          
+            perceptronTopPaths = [];
+            for (let i = 0; i < 6; i++) {
+              for (let j = 0; j < 6; j++) {
+                const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
+                const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
+                const scoreAO = Math.abs(0.5);
+                const totalScore = scoreIH + scoreHA + scoreAO;
+                perceptronTopPaths.push({ i, j, score: totalScore });
+              }
+            }
+            perceptronTopPaths.sort((a, b) => b.score - a.score);
+            perceptronTopPaths = perceptronTopPaths.slice(0, 3); // keep top 3
+          }
+          
           const modelOutput = predict(nearest.x, nearest.y);
           alert(
             `Clicked point\n` +

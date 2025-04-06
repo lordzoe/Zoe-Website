@@ -553,21 +553,23 @@ function drawModelVisualizer() {
             const scaleY = canvasH * 0.8; // compress vertically
             const centerX = canvasW / 2;
             const centerY = canvasH / 2;
-
+            
+            const gridColor = document.body.classList.contains("dark") ? "#555" : "#eee";
             // Draw grid
-            modelVisCtx.strokeStyle = "#eee";
+            modelVisCtx.strokeStyle = gridColor;
             for (let i = 0; i <= canvasW; i += 50) {
-                modelVisCtx.beginPath();
-                modelVisCtx.moveTo(i, 0);
-                modelVisCtx.lineTo(i, canvasH);
-                modelVisCtx.stroke();
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(i, 0);
+            modelVisCtx.lineTo(i, canvasH);
+            modelVisCtx.stroke();
             }
             for (let j = 0; j <= canvasH; j += 50) {
-                modelVisCtx.beginPath();
-                modelVisCtx.moveTo(0, j);
-                modelVisCtx.lineTo(canvasW, j);
-                modelVisCtx.stroke();
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(0, j);
+            modelVisCtx.lineTo(canvasW, j);
+            modelVisCtx.stroke();
             }
+
 
             // Sigmoid curve from x = -10 to 10
             modelVisCtx.beginPath();
@@ -578,7 +580,7 @@ function drawModelVisualizer() {
                 if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
                 else modelVisCtx.lineTo(xPix, yPix);
             }
-            modelVisCtx.strokeStyle = "blue";
+            modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "blue";
             modelVisCtx.lineWidth = 2;
             modelVisCtx.stroke();
 
@@ -600,7 +602,7 @@ function drawModelVisualizer() {
                 if (selectedPoint && selectedPoint === p) {
                     modelVisCtx.beginPath();
                     modelVisCtx.arc(xPix, yPix, 6, 0, 2 * Math.PI);
-                    modelVisCtx.strokeStyle = "black";
+                    modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "black";
                     modelVisCtx.lineWidth = 2;
                     modelVisCtx.stroke();
                 }
@@ -672,7 +674,7 @@ function drawModelVisualizer() {
                         point.x * modelVisCanvas.width,
                         point.y * modelVisCanvas.height
                     );
-                    modelVisCtx.strokeStyle = "black";
+                    modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "black";
                     modelVisCtx.stroke();
                 });
             }
@@ -918,8 +920,8 @@ function drawModelVisualizer() {
                 modelVisCtx.beginPath();
                 modelVisCtx.moveTo(x1, y1);
                 modelVisCtx.lineTo(x2, y2);
-                modelVisCtx.strokeStyle = highlight ? "blue" : "black";
-                modelVisCtx.lineWidth = highlight ? 3 : 1;
+                modelVisCtx.strokeStyle = highlight ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
+                modelVisCtx.lineWidth = highlight ? 4 : 3;
                 modelVisCtx.stroke();
             }
 
@@ -959,8 +961,8 @@ function drawModelVisualizer() {
                     modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
                     modelVisCtx.fillStyle = "#dff0ff"; //ffd700 = gold
                     modelVisCtx.fill();
-                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : "black";
-                    modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
+                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
+                    modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
                     modelVisCtx.stroke();
                     // Draw text lines, centered in the circle
                     node.lines.forEach((ln, i) => {
@@ -978,8 +980,8 @@ function drawModelVisualizer() {
                     modelVisCtx.roundRect(rx, ry, w, h, Math.min(w, h) * 0.2);
                     modelVisCtx.fillStyle = "#dff0ff";
                     modelVisCtx.fill();
-                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : "black";
-                    modelVisCtx.lineWidth = node.highlighted ? 3 : 1;
+                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
+                    modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
                     modelVisCtx.stroke();
                     // Draw text lines in the rectangle
                     node.lines.forEach((ln, i) => {
@@ -1032,11 +1034,11 @@ function drawModelVisualizer() {
             const intercept = -w[2] / w[1];
 
             modelVisCtx.lineWidth = 2;
-            drawLine(slope, intercept, "black", false); // decision boundary (solid)
+            drawLine(slope, intercept, document.body.classList.contains("dark") ? "white" : "black", false);
             const norm = Math.sqrt(w[0] * w[0] + w[1] * w[1]);
             const offset = 1 / norm;
-            drawLine(slope, intercept + offset, "black", true); // margin +
-            drawLine(slope, intercept - offset, "black", true); // margin -
+            drawLine(slope, intercept + offset, document.body.classList.contains("dark") ? "white" : "black", true);
+            drawLine(slope, intercept - offset, document.body.classList.contains("dark") ? "white" : "black", true);
 
             // Highlight support vectors
             for (let p of data) {
@@ -1051,7 +1053,7 @@ function drawModelVisualizer() {
                         0,
                         2 * Math.PI
                     );
-                    modelVisCtx.strokeStyle = "black";
+                    modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "black";
                     modelVisCtx.lineWidth = 2;
                     modelVisCtx.stroke();
                 }
@@ -1150,7 +1152,7 @@ function drawModelVisualizer() {
 
             // Draw a node in default style (grey border)
             function drawNode(node, label) {
-                drawNodeWithBorder(node, label, "grey");
+                drawNodeWithBorder(node, label, document.body.classList.contains("dark") ? "white" : "gray");
             }
 
             // Draw an arrow from (fromX, fromY) to (toX, toY) using a given color
@@ -1208,7 +1210,7 @@ function drawModelVisualizer() {
                             inNode.y,
                             hidNode.x - nodeRadius,
                             hidNode.y,
-                            "gray"
+                            document.body.classList.contains("dark") ? "white" : "gray"
                         );
                     });
                 });
@@ -1219,7 +1221,7 @@ function drawModelVisualizer() {
                         hidNode.y,
                         activationNode.x - nodeRadius,
                         activationNode.y,
-                        "gray"
+                        document.body.classList.contains("dark") ? "white" : "gray"
                     );
                 });
                 // activation->output
@@ -1228,7 +1230,7 @@ function drawModelVisualizer() {
                     activationNode.y,
                     outputNode.x - nodeRadius,
                     outputNode.y,
-                    "gray"
+                    document.body.classList.contains("dark") ? "white" : "gray"
                 );
             }
 
@@ -1399,7 +1401,7 @@ function drawModelVisualizer() {
                 ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
                 ctx.fillStyle = fillColor;
                 ctx.fill();
-                ctx.strokeStyle = "grey";
+                ctx.strokeStyle = document.body.classList.contains("dark") ? "white" : "gray";
                 ctx.stroke();
 
                 if (node.label) {
@@ -1417,7 +1419,7 @@ function drawModelVisualizer() {
             /********************************
              * 3) Helper: draw an arrow line
              ********************************/
-            function drawArrow(ctx, x1, y1, x2, y2, color = "gray") {
+            function drawArrow(ctx, x1, y1, x2, y2, color = document.body.classList.contains("dark") ? "white" : "gray") {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
@@ -1455,7 +1457,7 @@ function drawModelVisualizer() {
                     label: m.name
                 }, nodeRadius);
                 if (selectedPoint && typeof m.vote === "number") {
-                    modelVisCtx.fillStyle = "black";
+                    modelVisCtx.fillStyle = document.body.classList.contains("dark") ? "white" : "black"
                     modelVisCtx.textAlign = "center";
                     modelVisCtx.textBaseline = "middle";
                     modelVisCtx.font = "14px Arial";
@@ -1491,7 +1493,7 @@ function drawModelVisualizer() {
     // For example, a placeholder text:
     modelVisCtx.save();
     modelVisCtx.resetTransform();
-    modelVisCtx.fillStyle = "black";
+    modelVisCtx.fillStyle = document.body.classList.contains("dark") ? "white" : "black";
     modelVisCtx.font = "16px Arial";
     modelVisCtx.textAlign = "left";
     modelVisCtx.textBaseline = "top";

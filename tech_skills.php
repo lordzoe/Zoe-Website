@@ -136,7 +136,7 @@
                     <div class="tech-text">
                         <h2>Machine Learning</h2>
                         <p>
-                        <!-- Put any short description here -->
+
                         </p>
                     </div>
                     <div class="tech-skills">
@@ -151,16 +151,17 @@
                         </ul>
                     </div>
                 </div>
-
-                <!-- The "preview" area for your logistic regression demo -->
-                <div class="tech-media demo-preview" 
-                    onclick="expandDemoBox('ml_demo.html')" 
-                    style="position: relative;">
-                <!-- A simple background or partial placeholder where you might 
-                    also place a small screenshot if you wish -->
-                <div class="demo-preview-overlay">
-                    <span>Click Here to Play the Demo</span>
-                </div>
+                <div class="tech-media" onclick="expandDemoBox('ml_demo.html')" style="position: relative; cursor: pointer;">
+                    <div class="tech-gallery">
+                        <div class="gallery-items">
+                            <img src="images/headshot_image.webp" alt="Demo Preview" style="width: 100%;">
+                            <div  style="position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);">
+                                <a href="javascript:void(0)" class="index-button" style="text-align: center;" onclick="expandDemoBox('ml_demo.html')">
+                                    Click Here to Play the Interactive Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

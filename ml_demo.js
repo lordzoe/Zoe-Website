@@ -1578,7 +1578,8 @@ function expandDemoBox(url) {
     // using an <iframe> or AJAX. 
     // 
     // 1) Using an iframe approach:
-    content.innerHTML = '<iframe src="' + url + '" width="100%" height="600px" frameborder="0"></iframe>';
+    content.innerHTML = `<iframe src="${url}" style="width: 100%; height: 100%;" frameborder="0"></iframe>`;
+
 
     overlay.classList.add("active");
   }

@@ -1,3 +1,4 @@
+// Global variables
 const canvas = document.getElementById("modelCanvas");
 const ctx = canvas.getContext("2d");
 const modelVisCanvas = document.getElementById("modelVisCanvas");
@@ -16,18 +17,24 @@ const depthValue = document.getElementById("depthValue");
 let data = [];
 let selectedPoint = null;
 
-let perceptronWeights = Array.from({
-    length: 6
-}, () => Math.random() - 0.5);
-let perceptronHiddenWeights = Array.from({
-    length: 6
-}, () => Math.random() - 0.5);
+let perceptronWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
+let perceptronHiddenWeights = Array.from({ length: 6 }, () => Math.random() - 0.5);
 let dtModel = null;
 let logisticWeights = [Math.random(), Math.random(), Math.random()];
 let svmWeights = [Math.random(), Math.random(), Math.random()];
 
 let perceptronInputHiddenWeights = [];
 let perceptronTopPaths = [];
+
+let perceptronInitialized = false;
+let perceptronConverged = false;
+let previousError = Infinity;
+
+let logisticConverged = false;
+let logisticPrevError = Infinity;
+
+let svmConverged = false;
+let svmPrevError = Infinity;
 
 // Decision Tree
 function updateDepth(val) {
@@ -146,6 +153,13 @@ function selectModel(model) {
 }
 
 function selectDataset(ds) {
+    perceptronConverged = false;
+    perceptronInitialized = false;
+    logisticConverged = false;
+    logisticPrevError = Infinity;
+    svmConverged = false;
+    svmPrevError = Infinity;
+
     document.querySelectorAll("#datasetButtons button").forEach(btn => {
         btn.classList.remove("active");
     });
@@ -258,51 +272,84 @@ function generateDataset() {
 
 // Training Models
 function trainPerceptron() {
+    if (perceptronConverged) return;
+  
+    let currentError = 0;
+    
     for (const point of data) {
-        const inputs = [
-            point.x,
-            point.y,
-            point.x * point.y,
-            point.x ** 2,
-            point.y ** 2,
-            1,
-        ];
-        const hidden = tanh(dot(inputs, perceptronHiddenWeights));
-        const output = sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
-        const error = point.label - output;
-        for (let i = 0; i < 5; i++) {
-            perceptronWeights[i] += 0.05 * error * hidden;
-            perceptronHiddenWeights[i] +=
-                0.05 * error * perceptronWeights[0] * (1 - hidden ** 2) * inputs[i];
-        }
-        perceptronWeights[5] += 0.05 * error;
+      const inputs = [
+        point.x,
+        point.y,
+        point.x * point.y,
+        point.x ** 2,
+        point.y ** 2,
+        1,
+      ];
+      const hidden = tanh(dot(inputs, perceptronHiddenWeights));
+      const output = sigmoid(hidden * perceptronWeights[0] + perceptronWeights[5]);
+      const error = point.label - output;
+      currentError += Math.abs(error);
+      
+      for (let i = 0; i < 5; i++) {
+        perceptronWeights[i] += 0.05 * error * hidden;
+        perceptronHiddenWeights[i] += 0.05 * error * perceptronWeights[0] * (1 - hidden ** 2) * inputs[i];
+      }
+      perceptronWeights[5] += 0.05 * error;
     }
-}
+    
+    if (Math.abs(previousError - currentError) < 0.0001) {
+      perceptronConverged = true;
+    } else {
+      previousError = currentError;
+    }
+  }
+  
 
-function trainLogistic() {
+  function trainLogistic() {
+    if (logisticConverged) return;
+    let currentError = 0;
+    
     for (const point of data) {
         const x = point.x;
         const y = point.y;
         const z = logisticWeights[0] * x + logisticWeights[1] * y + logisticWeights[2];
         const pred = sigmoid(z);
         const error = pred - point.label;
+        currentError += Math.abs(error);
         logisticWeights[0] -= 0.1 * error * x;
         logisticWeights[1] -= 0.1 * error * y;
         logisticWeights[2] -= 0.1 * error * 1;
     }
+    
+    if (Math.abs(logisticPrevError - currentError) < 0.0001) {
+        logisticConverged = true;
+    } else {
+        logisticPrevError = currentError;
+    }
 }
 
 function trainSVM() {
+    if (svmConverged) return;
+    let currentError = 0;
+    
     for (const point of data) {
         const x = point.x;
         const y = point.y;
         const label = point.label === 1 ? 1 : -1;
         const margin = label * (svmWeights[0] * x + svmWeights[1] * y + svmWeights[2]);
+        const loss = Math.max(0, 1 - margin);
+        currentError += loss;
         if (margin < 1) {
             svmWeights[0] += 0.01 * label * x;
             svmWeights[1] += 0.01 * label * y;
             svmWeights[2] += 0.01 * label;
         }
+    }
+    
+    if (Math.abs(svmPrevError - currentError) < 0.0001) {
+        svmConverged = true;
+    } else {
+        svmPrevError = currentError;
     }
 }
 
@@ -1044,11 +1091,14 @@ function drawModelVisualizer() {
             const outputLayerX = 460;
             const activationX = 360;
             const spacingY = modelVisCanvas.height / (inputCount + 1);
-            const nodeRadius = 28; 
+            const nodeRadius = 28;
           
-            perceptronInputHiddenWeights = Array.from({ length: inputCount }, () =>
-              Array.from({ length: hiddenCount }, () => Math.random() - 0.5)
-            );
+            if (!perceptronInitialized) {
+              perceptronInputHiddenWeights = Array.from({ length: inputCount }, () =>
+                Array.from({ length: hiddenCount }, () => Math.random() - 0.5)
+              );
+              perceptronInitialized = true;
+            }
           
             const activationWeight = 0.5;
           
@@ -1142,7 +1192,7 @@ function drawModelVisualizer() {
                 drawNode(n, inputLabels[i]);
               });
               hiddenNodes.forEach((n, j) => {
-                drawNode(n, "h" + (j + 1)); 
+                drawNode(n, "h" + (j + 1));
               });
               drawNode(activationNode, "σ");
               drawNode(outputNode, "Output");
@@ -1190,7 +1240,7 @@ function drawModelVisualizer() {
                 true
               );
           
-              drawNodeWithBorder(hiddenNodes[j], "h" + (j + 1), color); 
+              drawNodeWithBorder(hiddenNodes[j], "h" + (j + 1), color);
               drawArrowWithColor(
                 hiddenNodes[j].x + nodeRadius,
                 hiddenNodes[j].y,
@@ -1203,20 +1253,23 @@ function drawModelVisualizer() {
           
             function drawLayerBorder(layerX, label) {
               const margin = 10;
-              const firstY = spacingY; 
+              const firstY = spacingY;
               const lastY = spacingY * inputCount;
               const rectX = layerX - nodeRadius - margin;
               const rectY = firstY - nodeRadius - margin;
               const rectWidth = 2 * nodeRadius + 2 * margin;
               const rectHeight = (lastY - firstY) + 2 * nodeRadius + 2 * margin;
               const borderColor = document.body.classList.contains("dark") ? "white" : "black";
-              
-              //modelVisCtx.save();
-              //modelVisCtx.setLineDash([5, 5]);
-              //modelVisCtx.strokeStyle = borderColor;
-              //modelVisCtx.lineWidth = 2;
-              //modelVisCtx.strokeRect(rectX, rectY, rectWidth, rectHeight);
-              //modelVisCtx.restore();
+          
+              // Uncomment these lines if you want a dashed border rectangle:
+              // modelVisCtx.save();
+              // modelVisCtx.setLineDash([5, 5]);
+              // modelVisCtx.strokeStyle = borderColor;
+              // modelVisCtx.lineWidth = 2;
+              // modelVisCtx.strokeRect(rectX, rectY, rectWidth, rectHeight);
+              // modelVisCtx.restore();
+          
+              // Draw the layer label
               modelVisCtx.fillStyle = borderColor;
               modelVisCtx.textAlign = "center";
               modelVisCtx.textBaseline = "top";
@@ -1277,7 +1330,7 @@ function drawModelVisualizer() {
           
             break;
           }
-
+          
         case "ensemble": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 

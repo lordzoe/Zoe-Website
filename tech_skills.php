@@ -39,8 +39,9 @@
                         <ul class="skills-list">
                             <li>Virtual Reality (VR)</li>
                             <li>Extended Reality (XR)</li>
-                            <li>Unity Engine</li>
+                            <li>Unity Gaming Engine</li>
                             <li>C#</li>
+                            <li>Lab Streaming Layer (LSL) Library</li>
                         </ul>
                     </div>
                 </div>
@@ -73,11 +74,10 @@
                         <ul class="skills-list">
                             <li>functional Near-Infrared Spectroscopy (fNIRS)</li>
                             <li>Cognitive Load</li>
-                            <li>OxySoft</li>
-                            <li>PsychoPy</li>
-                            <li>Python</li>
+                            <li>OxySoft Software</li>
+                            <li>PsychoPy Software</li>
                             <li>MATLAB</li>
-                            <li>FieldTrip</li>
+                            <li>FieldTrip Toolbox</li>
                         </ul>
                     </div>
                 </div>
@@ -109,9 +109,9 @@
                         <ul class="skills-list">
                             <li>Eye-Tracking</li>
                             <li>Cognitive Load</li>
-                            <li>SRanipal Runtime</li>
+                            <li>IBM SPSS Statistics Software</li>
                             <li>Python</li>
-                            <li>IBM SPSS Statistics</li>
+                            <li>SRanipal Runtime SDK</li>
                         </ul>
                     </div>
                 </div>
@@ -142,12 +142,11 @@
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
                         <ul class="skills-list">
-                        <li>Random Forest</li>
-                        <li>Support Vector Machine (SVM)</li>
-                        <li>Linear Regression</li>
-                        <li>Linear Discriminant Analysis (LDA)</li>
-                        <li>Convolutional Neural Networks (CNNs)</li>
-                        <li>Recurrent Neural Networks (RNNs)</li>
+                            <li>Data Preprocessing</li>
+                            <li>Feature Engineering</li>
+                            <li>Cross-Validation</li>
+                            <li>Hyperparameter Tuning</li>
+                            <li>Advanced Ensemble Methods</li>
                         </ul>
                     </div>
                 </div>
@@ -181,12 +180,10 @@
                         <ul class="skills-list">
                             <li>Cardiopulmonary Rescuscitation (CPR)</li>
                             <li>Cardiovascular Fluid Dynamics</li>
-                            <li>FISO Pressure Transducer</li>
+                            <li>Catheter Pressure Transducer</li>
                             <li>Electric Linear Actuator</li>
-                            <li>3D Printing</li>
-                            <li>SolidWorks</li>
-                            <li>Evolution</li>
-                            <li>Python</li>
+                            <li>3D-Printing and CAD Modeling</li>
+                            <li>SolidWorks Software</li>
                         </ul>
                     </div>
                 </div>

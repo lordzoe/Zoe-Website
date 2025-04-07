@@ -154,10 +154,10 @@
                 <div class="tech-media" onclick="expandDemoBox('ml_demo.html')" style="position: relative; cursor: pointer;">
                     <div class="tech-gallery">
                         <div class="gallery-items">
-                            <img src="images/ml_demo.webp" alt="Demo Preview" style="width: 100%;">
+                            <img src="images/ml_demo.webp" alt="Demo Preview" style="width: 100%; object-fit: fill;">
                             <div  style="position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);">
                                 <a href="javascript:void(0)" class="index-button" style="text-align: center;" onclick="expandDemoBox('ml_demo.html')">
-                                    Click Here to Play the Interactive Demo
+                                    Click Here to Try the Interactive Demo!
                                 </a>
                             </div>
                         </div>

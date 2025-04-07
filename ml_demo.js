@@ -386,9 +386,18 @@ function drawDecisionBoundary() {
             const normY = y / H;
             const prediction = predict(normX, normY);
             ctx.fillStyle = prediction > 0.5 ? "#90ee90" : "#ffb6b6";
-            ctx.fillRect(x, y, 4, 4);
+            ctx.fillRect(x, y, 4, 4);    
         }
     }
+    ctx.strokeStyle = document.body.classList.contains("dark") ? "#555" : "#eee";
+    ctx.beginPath();
+    ctx.moveTo(W / 2, 0);
+    ctx.lineTo(W / 2, H);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, H / 2);
+    ctx.lineTo(W, H / 2);
+    ctx.stroke();
 }
 
 // Metrics
@@ -424,7 +433,6 @@ function computeMetrics() {
         f1
     };
 }
-
 
 function colorTPorTN(value) {
     // from 0..60 => green
@@ -507,7 +515,7 @@ function convexHull(points) {
 
 function drawModelVisualizer() {
     modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-
+    
     switch (currentModel) {
 
         case "logistic": {
@@ -518,21 +526,22 @@ function drawModelVisualizer() {
             const centerX = canvasW / 2;
             const centerY = canvasH / 2;
             
-            const gridColor = document.body.classList.contains("dark") ? "#555" : "#eee";
+            const gridColor = document.body.classList.contains("dark") ? "#555" : "#eee";  
 
             modelVisCtx.strokeStyle = gridColor;
-            for (let i = 0; i <= canvasW; i += 50) {
+            modelVisCtx.lineWidth = 1;
+            
+            // Vertical line (x = 0)
             modelVisCtx.beginPath();
-            modelVisCtx.moveTo(i, 0);
-            modelVisCtx.lineTo(i, canvasH);
+            modelVisCtx.moveTo(centerX, 0);
+            modelVisCtx.lineTo(centerX, canvasH);
             modelVisCtx.stroke();
-            }
-            for (let j = 0; j <= canvasH; j += 50) {
+            
+            // Horizontal line (y = 0)
             modelVisCtx.beginPath();
-            modelVisCtx.moveTo(0, j);
-            modelVisCtx.lineTo(canvasW, j);
+            modelVisCtx.moveTo(0, centerY);
+            modelVisCtx.lineTo(canvasW, centerY);
             modelVisCtx.stroke();
-            }
 
             modelVisCtx.beginPath();
             for (let xVal = -20; xVal <= 20; xVal += 0.1) {
@@ -571,6 +580,20 @@ function drawModelVisualizer() {
         }
 
         case "knn": {
+            modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+
+            const canvasW = modelVisCanvas.width;
+            const canvasH = modelVisCanvas.height;
+            modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "#555" : "#eee";
+            modelVisCtx.lineWidth = 1;
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(0, canvasH / 2);
+            modelVisCtx.lineTo(canvasW, canvasH / 2);
+            modelVisCtx.stroke();
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(canvasW / 2, 0);
+            modelVisCtx.lineTo(canvasW / 2, canvasH);
+            modelVisCtx.stroke();
             const drawCluster = (label, color, fillColor) => {
                 const clusterPoints = data
                     .filter((p) => p.label === label)
@@ -929,7 +952,7 @@ function drawModelVisualizer() {
         }
         case "svm": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-
+            
             for (let p of data) {
                 modelVisCtx.beginPath();
                 modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
@@ -940,6 +963,16 @@ function drawModelVisualizer() {
             const w = svmWeights;
             const canvasW = modelVisCanvas.width;
             const canvasH = modelVisCanvas.height;
+            modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "#555" : "#eee";
+            modelVisCtx.lineWidth = 1;
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(0, canvasH / 2);
+            modelVisCtx.lineTo(canvasW, canvasH / 2);
+            modelVisCtx.stroke();
+            modelVisCtx.beginPath();
+            modelVisCtx.moveTo(canvasW / 2, 0);
+            modelVisCtx.lineTo(canvasW / 2, canvasH);
+            modelVisCtx.stroke();
 
             function toCanvasCoords(x, y) {
                 return [x * canvasW, y * canvasH];
@@ -1247,7 +1280,7 @@ function drawModelVisualizer() {
             const finalNode = {
                 x: 250,
                 y: 325,
-                label: "final vote:\n0.00"
+                label: "Final Vote:\n0.00"
             };
             const predictionNode = {
                 x: 250,
@@ -1268,10 +1301,10 @@ function drawModelVisualizer() {
                 subModels[2].vote = svm;
 
                 const average = (logistic + knn + svm) / 3;
-                finalNode.label = `final vote:\n${average.toFixed(2)}`;
+                finalNode.label = `Final Vote:\n${average.toFixed(2)}`;
                 predictionNode.label = `Prediction:\n ${average > 0.5 ? 1 : 0}`;
             } else {
-                finalNode.label = "final vote:\n0.00";
+                finalNode.label = "Final Vote:\n0.00";
                 predictionNode.label = "Prediction:\n ?";
             }
 
@@ -1334,7 +1367,7 @@ function drawModelVisualizer() {
                     modelVisCtx.textAlign = "center";
                     modelVisCtx.textBaseline = "middle";
                     modelVisCtx.font = "14px Arial";
-                    modelVisCtx.fillText(`vote = ${m.vote.toFixed(2)}`, m.x, m.y + nodeRadius + 15);
+                    modelVisCtx.fillText(`Vote = ${m.vote.toFixed(2)}`, m.x, m.y + nodeRadius + 15);
                 }
             });
 
@@ -1439,11 +1472,31 @@ function expandDemoBox(url) {
     const overlay = document.getElementById("expanded-overlay");
     const content = document.getElementById("expanded-box-content");
   
-    content.innerHTML = `
-      <iframe src="${url}" frameborder="0"></iframe>
-    `;
+    content.innerHTML = "";
+  
+    const loadingDiv = document.createElement("div");
+    loadingDiv.className = "loading";
+    loadingDiv.textContent = "Loading...";
+    content.appendChild(loadingDiv);
+    console.log("Loading message displayed");
+  
+    const iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.frameBorder = "0";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.display = "none"; 
+  
+    content.appendChild(iframe);
+  
+    iframe.addEventListener("load", function() {
+      console.log("Iframe load event fired");
+      loadingDiv.remove();
+      iframe.style.display = "block";
+    });
+  
     overlay.classList.add("active");
-  }
+  }  
   
   function closeDemoBox() {
     const overlay = document.getElementById("expanded-overlay");
@@ -1451,7 +1504,6 @@ function expandDemoBox(url) {
     overlay.classList.remove("active");
     content.innerHTML = "";
   }
-  
 
 selectDataset("A");
 selectModel("logistic");

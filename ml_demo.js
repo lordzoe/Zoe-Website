@@ -321,7 +321,7 @@ function trainPerceptron() {
         logisticWeights[2] -= 0.1 * error * 1;
     }
     
-    if (Math.abs(logisticPrevError - currentError) < 0.0001) {
+    if (Math.abs(logisticPrevError - currentError) < 0.0005) {
         logisticConverged = true;
     } else {
         logisticPrevError = currentError;
@@ -1138,18 +1138,23 @@ function drawModelVisualizer() {
             };
           
             function drawNodeWithBorder(node, label, borderColor = "black") {
-              modelVisCtx.beginPath();
-              modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
-              modelVisCtx.fillStyle = "#cce5ff";
-              modelVisCtx.fill();
-              modelVisCtx.strokeStyle = borderColor;
-              modelVisCtx.stroke();
-              if (label) {
-                modelVisCtx.fillStyle = "black";
-                modelVisCtx.textAlign = "center";
-                modelVisCtx.textBaseline = "middle";
-                modelVisCtx.fillText(label, node.x, node.y);
-              }
+                modelVisCtx.beginPath();
+                modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+                modelVisCtx.fillStyle = "#cce5ff";
+                modelVisCtx.fill();
+                modelVisCtx.strokeStyle = borderColor;
+                modelVisCtx.stroke();
+                if (label) {
+                    const lines = label.split("\n");
+                    modelVisCtx.fillStyle = "black";
+                    modelVisCtx.textAlign = "center";
+                    modelVisCtx.textBaseline = "middle";
+                    const lineHeight = 16;
+                    const startY = node.y - ((lines.length - 1) * lineHeight) / 2;
+                    lines.forEach((line, i) => {
+                        modelVisCtx.fillText(line, node.x, startY + i * lineHeight);
+                    });
+                }
             }
           
             function drawNode(node, label) {
@@ -1194,8 +1199,20 @@ function drawModelVisualizer() {
               hiddenNodes.forEach((n, j) => {
                 drawNode(n, "h" + (j + 1));
               });
+          
               drawNode(activationNode, "σ");
-              drawNode(outputNode, "Output");
+          
+              let outputLabel = "Output:\n?";
+              if (selectedPoint) {
+                  const xVal = selectedPoint.x;
+                  const yVal = selectedPoint.y;
+                  const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+                  const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
+                  const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]);
+                  outputLabel = `Output:\n${prediction > 0.5 ? 1 : 0}`;
+              }
+
+              drawNode(outputNode, outputLabel);
           
               inputNodes.forEach((inNode) => {
                 hiddenNodes.forEach((hidNode) => {
@@ -1314,7 +1331,7 @@ function drawModelVisualizer() {
           
               drawAllGray();
               if (perceptronTopPaths.length > 0) {
-                highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "blue");
+                highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "purple");
               }
               if (perceptronTopPaths.length > 1) {
                 highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "purple");
@@ -1329,8 +1346,8 @@ function drawModelVisualizer() {
             drawNetwork();
           
             break;
-          }
-          
+        }
+                  
         case "ensemble": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 
@@ -1517,15 +1534,18 @@ function updateParameterDisplay() {
         .join(", ")}\n`;
         text += `Hidden Weights:\n${perceptronHiddenWeights
         .map((w) => w.toFixed(3))
-        .join(", ")}`;
+        .join(", ")}\n`;
     } else if (currentModel === "logistic") {
         text += `\nLR Weights:\n${logisticWeights
         .map((w) => w.toFixed(3))
-        .join(", ")}`;
+        .join(", ")}\n`;
     } else if (currentModel === "svm") {
-        text += `\nSVM Weights:\n${svmWeights.map((w) => w.toFixed(3)).join(", ")}`;
+        text += `\nSVM Weights:\n${svmWeights.map((w) => w.toFixed(3)).join(", ")}\n`;
     } else if (currentModel === "dt") {
-        text += `\nDT Structure:\n` + JSON.stringify(dtModel, null, 2);
+        text += `\nDT Structure:\n` + JSON.stringify(dtModel, null, 2) + `\n`;
+    }
+    else if (currentModel === "ensemble") {
+        text += `Training the LR and SVM models will improve performance 😊\n`;
     }
 
     // Metrics
@@ -1539,11 +1559,11 @@ function updateParameterDisplay() {
         recall,
         f1
     } = computeMetrics();
-    text += `\n\nPerformance Metrics:\n`;
+    text += `\nPerformance Metrics:\n`;
     text += `Accuracy: ${(accuracy * 100).toFixed(2)}%\n`;
     text += `Precision: ${(precision * 100).toFixed(2)}%\n`;
     text += `Recall: ${(recall * 100).toFixed(2)}%\n`;
-    text += `F1 Score: ${(f1 * 100).toFixed(2)}%\n`;
+    text += `F1 Score: ${(f1 * 100).toFixed(2)}%`;
 
     const cmHTML = buildConfusionMatrixHTML(TP, TN, FP, FN);
 
@@ -1553,39 +1573,41 @@ function updateParameterDisplay() {
 function expandDemoBox(url) {
     const overlay = document.getElementById("expanded-overlay");
     const content = document.getElementById("expanded-box-content");
-  
+
     content.innerHTML = "";
-  
+
     const loadingDiv = document.createElement("div");
     loadingDiv.className = "loading";
     loadingDiv.textContent = "Loading...";
     content.appendChild(loadingDiv);
     console.log("Loading message displayed");
-  
+
     const iframe = document.createElement("iframe");
     iframe.src = url;
     iframe.frameBorder = "0";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.display = "none"; 
-  
+
     content.appendChild(iframe);
-  
+
     iframe.addEventListener("load", function() {
       console.log("Iframe load event fired");
       loadingDiv.remove();
       iframe.style.display = "block";
     });
-  
+
     overlay.classList.add("active");
-  }  
-  
-  function closeDemoBox() {
+    document.body.style.overflow = "hidden";
+}  
+
+function closeDemoBox() {
     const overlay = document.getElementById("expanded-overlay");
     const content = document.getElementById("expanded-box-content");
     overlay.classList.remove("active");
     content.innerHTML = "";
-  }
+    document.body.style.overflow = "";
+}
 
 selectDataset("A");
 selectModel("logistic");

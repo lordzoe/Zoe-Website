@@ -1266,8 +1266,10 @@ function drawModelVisualizer() {
                 color,
                 true
               );
+
+              drawNodeWithBorder(activationNode, "σ", color);
             }
-          
+            
             function drawLayerBorder(layerX, label) {
               const margin = 10;
               const firstY = spacingY;
@@ -1294,53 +1296,72 @@ function drawModelVisualizer() {
             }
           
             function drawNetwork() {
-              modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-          
-              if (!selectedPoint) {
+                modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+            
+                if (!selectedPoint) {
+                    drawLayerBorder(inputLayerX, "Input Layer");
+                    drawLayerBorder(hiddenLayerX, "Hidden Layer");
+                    drawAllGray();
+                    return;
+                }
+            
+                const xVal = selectedPoint.x;
+                const yVal = selectedPoint.y;
+                const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+            
+                const hiddenActivations = [];
+                for (let j = 0; j < hiddenCount; j++) {
+                    let sum = 0;
+                    for (let i = 0; i < inputCount; i++) {
+                        sum += features[i] * perceptronInputHiddenWeights[i][j];
+                    }
+                    hiddenActivations[j] = tanh(sum);
+                }
+            
+                const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
+                const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]) > 0.5 ? 1 : 0;
+            
+                let pathScores = [];
+                for (let i = 0; i < inputCount; i++) {
+                    for (let j = 0; j < hiddenCount; j++) {
+                        const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
+                        const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
+                        const scoreAO = Math.abs(activationWeight);
+                        const totalScore = scoreIH + scoreHA + scoreAO;
+                        pathScores.push({ i, j, score: totalScore });
+                    }
+                }
+            
+                pathScores.sort((a, b) => b.score - a.score);
+            
+                drawAllGray();
+                if (perceptronTopPaths.length > 0) {
+                    highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "purple");
+                }
+                if (perceptronTopPaths.length > 1) {
+                    highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "purple");
+                }
+                if (perceptronTopPaths.length > 2) {
+                    highlightPartialPath(perceptronTopPaths[2].i, perceptronTopPaths[2].j, "purple");
+                }
+            
+                drawNodeWithBorder(activationNode, "σ", "purple");
+            
+                const arrowColor = prediction === 1 ? "green" : "red";
+                drawArrowWithColor(
+                    activationNode.x + nodeRadius,
+                    activationNode.y,
+                    outputNode.x - nodeRadius,
+                    outputNode.y,
+                    arrowColor,
+                    true
+                );
+            
+                const outputBorderColor = prediction === 1 ? "green" : "red";
+                drawNodeWithBorder(outputNode, `Output:\n${prediction}`, outputBorderColor);
+            
                 drawLayerBorder(inputLayerX, "Input Layer");
                 drawLayerBorder(hiddenLayerX, "Hidden Layer");
-                drawAllGray();
-                return;
-              }
-          
-              const xVal = selectedPoint.x;
-              const yVal = selectedPoint.y;
-              const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
-          
-              const hiddenActivations = [];
-              for (let j = 0; j < hiddenCount; j++) {
-                let sum = 0;
-                for (let i = 0; i < inputCount; i++) {
-                  sum += features[i] * perceptronInputHiddenWeights[i][j];
-                }
-                hiddenActivations[j] = tanh(sum);
-              }
-          
-              let pathScores = [];
-              for (let i = 0; i < inputCount; i++) {
-                for (let j = 0; j < hiddenCount; j++) {
-                  const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
-                  const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
-                  const scoreAO = Math.abs(activationWeight);
-                  const totalScore = scoreIH + scoreHA + scoreAO;
-                  pathScores.push({ i, j, score: totalScore });
-                }
-              }
-          
-              pathScores.sort((a, b) => b.score - a.score);
-          
-              drawAllGray();
-              if (perceptronTopPaths.length > 0) {
-                highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "purple");
-              }
-              if (perceptronTopPaths.length > 1) {
-                highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "purple");
-              }
-              if (perceptronTopPaths.length > 2) {
-                highlightPartialPath(perceptronTopPaths[2].i, perceptronTopPaths[2].j, "purple");
-              }
-              drawLayerBorder(inputLayerX, "Input Layer");
-              drawLayerBorder(hiddenLayerX, "Hidden Layer");
             }
           
             drawNetwork();

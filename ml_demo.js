@@ -13,11 +13,9 @@ let maxTreeDepth = 2;
 const depthSlider = document.getElementById("depthSlider");
 const depthValue = document.getElementById("depthValue");
 
-// The dataset we train/predict on
 let data = [];
 let selectedPoint = null;
 
-// Weights for different models
 let perceptronWeights = Array.from({
     length: 6
 }, () => Math.random() - 0.5);
@@ -31,12 +29,7 @@ let svmWeights = [Math.random(), Math.random(), Math.random()];
 let perceptronInputHiddenWeights = [];
 let perceptronTopPaths = [];
 
-
-/***********************
- * Decision Tree Setup *
- ***********************/
-
-// 1) Slider callback
+// Decision Tree
 function updateDepth(val) {
     maxTreeDepth = parseInt(val);
     depthValue.textContent = val;
@@ -48,7 +41,6 @@ function updateDepth(val) {
     }
 }
 
-// 2) Convert the tree structure to text
 function stringifyTree(node, indent = 0) {
     if (typeof node === "number") {
         return " ".repeat(indent) + `Leaf: ${node}\n`;
@@ -60,9 +52,7 @@ function stringifyTree(node, indent = 0) {
     return str;
 }
 
-// 3) Build the tree
 function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
-    // If we are at or beyond max depth or have few data => leaf
     if (depth >= maxDepth || dataset.length < 4) {
         const majority =
             dataset.reduce((acc, p) => acc + p.label, 0) / dataset.length > 0.5 ?
@@ -72,7 +62,6 @@ function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
     }
     const split = getBestSplit(dataset);
     const [left, right] = splitData(dataset, split.feature, split.threshold);
-    // Recurse
     return {
         feature: split.feature,
         threshold: split.threshold,
@@ -81,12 +70,10 @@ function buildSimpleTree(dataset, depth = 0, maxDepth = 2) {
     };
 }
 
-// 4) Actually train on the entire dataset (no random subset)
 function trainDecisionTree() {
     dtModel = buildSimpleTree(data, 0, maxTreeDepth);
 }
 
-// 5) Find best split
 function getBestSplit(dataset) {
     const classValues = [...new Set(dataset.map((p) => p.label))];
     let bestGini = Infinity;
@@ -133,16 +120,13 @@ function giniImpurity(groups, classes) {
     return gini;
 }
 
-/*********************
- * Model & Data Setup
- *********************/
+// Model and Dataset Functions
 function selectModel(model) {
     const modelButtons = document.querySelectorAll(".sidebar button[onclick^='selectModel']");
     modelButtons.forEach(btn => {
         btn.classList.remove("active");
     });
 
-    // Add 'active' to the button corresponding to model
     const activeModelBtn = document.querySelector(`.sidebar button[onclick="selectModel('${model}')"]`);
     if (activeModelBtn) {
         activeModelBtn.classList.add("active");
@@ -211,9 +195,6 @@ function selectDataset(ds) {
 }
 
 
-/*********************
- * Generate Datasets
- *********************/
 function generateDatasetA() {
     data = [];
     for (let i = 0; i < 100; i++) {
@@ -275,9 +256,7 @@ function generateDataset() {
     else generateDatasetC();
 }
 
-/***********************
- * Train Other Models
- ***********************/
+// Training Models
 function trainPerceptron() {
     for (const point of data) {
         const inputs = [
@@ -327,9 +306,7 @@ function trainSVM() {
     }
 }
 
-/****************
- *  Prediction  *
- ****************/
+// Model Predictions
 function evaluateDecisionTree(x, y, node = dtModel) {
     if (typeof node === "number") return node;
     const val = node.feature === "x" ? x : y;
@@ -368,9 +345,7 @@ function predict(x, y) {
     }
 }
 
-/************************
- *   Utility Functions
- ************************/
+// Utitlity Functions
 function sigmoid(z) {
     return 1 / (1 + Math.exp(-z));
 }
@@ -394,9 +369,7 @@ function knnPredict(x, y, k = 3) {
         .reduce((sum, p) => sum + p.label, 0) / k;
 }
 
-/************************
- *   Drawing & UI
- ************************/
+// Draw Functions
 function drawDataset() {
     for (const point of data) {
         ctx.beginPath();
@@ -418,10 +391,7 @@ function drawDecisionBoundary() {
     }
 }
 
-/***********************************************
- *  Metrics: F1, Accuracy, Precision, Recall
- *  + Confusion Matrix
- ***********************************************/
+// Metrics
 function computeMetrics() {
     let TP = 0,
         TN = 0,
@@ -503,9 +473,6 @@ function buildConfusionMatrixHTML(TP, TN, FP, FN) {
 `;
 }
 
-/*****************************
- *  reset & re-draw pipeline
- *****************************/
 function resetAndVisualize() {
     generateDataset();
     if (currentModel === "dt") {
@@ -539,23 +506,20 @@ function convexHull(points) {
 }
 
 function drawModelVisualizer() {
-    // 1) Clear the modelVisCanvas
     modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-
-    // Inside drawModelVisualizer(), AFTER clearing the canvas, insert:
 
     switch (currentModel) {
 
         case "logistic": {
             const canvasW = modelVisCanvas.width;
             const canvasH = modelVisCanvas.height;
-            const scaleX = canvasW / 40; // now -10 to +10 range
-            const scaleY = canvasH * 0.8; // compress vertically
+            const scaleX = canvasW / 40;
+            const scaleY = canvasH * 0.8;
             const centerX = canvasW / 2;
             const centerY = canvasH / 2;
             
             const gridColor = document.body.classList.contains("dark") ? "#555" : "#eee";
-            // Draw grid
+
             modelVisCtx.strokeStyle = gridColor;
             for (let i = 0; i <= canvasW; i += 50) {
             modelVisCtx.beginPath();
@@ -570,8 +534,6 @@ function drawModelVisualizer() {
             modelVisCtx.stroke();
             }
 
-
-            // Sigmoid curve from x = -10 to 10
             modelVisCtx.beginPath();
             for (let xVal = -20; xVal <= 20; xVal += 0.1) {
                 const yVal = 1 / (1 + Math.exp(-xVal));
@@ -584,7 +546,6 @@ function drawModelVisualizer() {
             modelVisCtx.lineWidth = 2;
             modelVisCtx.stroke();
 
-            // Data points in model space (clamped to [-20, 20])
             data.forEach((p) => {
                 const score = logisticWeights[0] * p.x + logisticWeights[1] * p.y + logisticWeights[2];
                 const sigmoidVal = 1 / (1 + Math.exp(-score));
@@ -592,13 +553,11 @@ function drawModelVisualizer() {
                 const xPix = centerX + clampedScore * scaleX;
                 const yPix = centerY - (sigmoidVal - 0.5) * scaleY;
 
-                // Fill point
                 modelVisCtx.beginPath();
                 modelVisCtx.arc(xPix, yPix, 4, 0, 2 * Math.PI);
                 modelVisCtx.fillStyle = p.label === 1 ? "green" : "red";
                 modelVisCtx.fill();
 
-                // Highlight if selected
                 if (selectedPoint && selectedPoint === p) {
                     modelVisCtx.beginPath();
                     modelVisCtx.arc(xPix, yPix, 6, 0, 2 * Math.PI);
@@ -687,7 +646,6 @@ function drawModelVisualizer() {
                 break;
             }
 
-            // Optional roundRect polyfill
             if (!CanvasRenderingContext2D.prototype.roundRect) {
                 CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
                     if (typeof radius === "number") {
@@ -723,10 +681,10 @@ function drawModelVisualizer() {
                 };
             }
 
-            // ---- Helpers ----
+            // ---- Helpers for decision tree ----
             function parseLabel(label) {
                 if (!label.includes(" ≤ ")) {
-                    return [label]; // e.g. "Leaf: 1"
+                    return [label];
                 }
                 const [feat, thr] = label.split(" ≤ ");
                 return [feat + " ≤", thr];
@@ -752,30 +710,21 @@ function drawModelVisualizer() {
                 }
             }
 
-            // Which nodes/edges are highlighted?
             let highlightPath = [];
             if (selectedPoint) {
                 highlightPath = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
             }
 
-            // ---- 1) Abstract Layout ----
             const layoutNodes = [];
             const depth = getTreeDepth(dtModel);
             const totalLeaves = countLeaves(dtModel);
 
-            // We'll define an "abstract" fontSize. Each node can have lines of text.
-            // The node's height in abstract space = (number of lines * abstractFontSize) + padding.
             const abstractFontSize = 20;
             const padding = 10; // extra vertical padding
-            // Horizontal spacing per leaf
             const leafWidth = 100;
-            // Vertical spacing between levels
             const verticalGap = 120;
-            // Root starts at y=0 in abstract space
             const topMargin = 0;
 
-            // We'll store in each layout node:
-            // { x, y, lines, isLeaf, highlighted, leftChildIdx, rightChildIdx, width, height, path }
             function layoutDecisionTree(node, level, leftBoundary, path) {
                 const isLeaf = typeof node === "number";
                 const label = isLeaf ?
@@ -783,17 +732,13 @@ function drawModelVisualizer() {
                     `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
 
                 const lines = parseLabel(label);
-                // For example, for "x ≤ 0.37", lines = ["x ≤", "0.37"]
-                // For "Leaf: 1", lines = ["Leaf: 1"]
 
                 const isHighlighted =
                     highlightPath.length &&
                     highlightPath[0].length >= path.length &&
                     path.every((step, i) => highlightPath[0][i] === step);
 
-                // Define the size in abstract space:
                 const nodeHeight = lines.length * abstractFontSize + padding;
-                // For leaves, use a circle (use height as width) else a rectangle (fixed multiple)
                 const nodeWidth = isLeaf ? nodeHeight : 3 * abstractFontSize;
 
                 if (isLeaf) {
@@ -859,9 +804,8 @@ function drawModelVisualizer() {
                 }
             }
 
-            layoutDecisionTree(dtModel, 0, 0, []); // root at x=0
+            layoutDecisionTree(dtModel, 0, 0, []);
 
-            // ---- 2) Compute bounding box of abstract layout ----
             let minX = Infinity,
                 maxX = -Infinity;
             let minY = Infinity,
@@ -872,7 +816,7 @@ function drawModelVisualizer() {
                 if (n.y < minY) minY = n.y;
                 if (n.y > maxY) maxY = n.y;
             }
-            // Expand bounding box to include node widths and heights
+
             for (const n of layoutNodes) {
                 const halfW = n.width / 2;
                 const topY = n.y;
@@ -885,7 +829,6 @@ function drawModelVisualizer() {
             const boundingWidth = maxX - minX || 1;
             const boundingHeight = maxY - minY || 1;
 
-            // 3) Scale to fit the canvas
             const margin = 20;
             const availW = modelVisCanvas.width - 2 * margin;
             const availH = modelVisCanvas.height - 2 * margin;
@@ -893,7 +836,6 @@ function drawModelVisualizer() {
             const scaleY = availH / boundingHeight;
             const scale = Math.min(scaleX, scaleY);
 
-            // 4) Transform each node into final canvas coordinates
             for (const n of layoutNodes) {
                 n.canvasX = margin + (n.x - minX) * scale;
                 n.canvasY = margin + (n.y - minY) * scale;
@@ -901,21 +843,16 @@ function drawModelVisualizer() {
                 n.canvasHeight = n.height * scale;
             }
 
-            // ---- NEW: Increase node sizes vertically as tree depth increases ----
-            // Use the slider value (maxTreeDepth) to compute a multiplier.
             const nodeScaleMultiplier = 1 + (maxTreeDepth - 1) * 0.3;
 
-            // Define base font size (from our abstract font size scaled)
             const baseFontSize = abstractFontSize * scale;
 
             function getFontSize() {
                 return Math.max(10, baseFontSize * nodeScaleMultiplier); // never below 10px
             }
 
-            // ---- 5) Draw the tree ----
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 
-            // Draw edges first
             function drawConnection(x1, y1, x2, y2, highlight) {
                 modelVisCtx.beginPath();
                 modelVisCtx.moveTo(x1, y1);
@@ -944,7 +881,6 @@ function drawModelVisualizer() {
                 }
             }
 
-            // Draw nodes (and text) with increased vertical size via nodeScaleMultiplier
             function drawNode(node) {
                 const fontSize = getFontSize();
                 modelVisCtx.font = `${fontSize}px Arial`;
@@ -952,26 +888,23 @@ function drawModelVisualizer() {
                 modelVisCtx.textBaseline = "middle";
 
                 if (node.isLeaf) {
-                    // For leaves, scale the drawn circle dimensions
                     const scaledWidth = node.canvasWidth * nodeScaleMultiplier;
                     const scaledHeight = node.canvasHeight * nodeScaleMultiplier;
                     const r = Math.min(scaledWidth, scaledHeight) / 2;
                     modelVisCtx.beginPath();
-                    // Adjust circle so its center is at (node.canvasX, node.canvasY + r)
                     modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
-                    modelVisCtx.fillStyle = "#dff0ff"; //ffd700 = gold
+                    modelVisCtx.fillStyle = "#dff0ff";
                     modelVisCtx.fill();
                     modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
                     modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
                     modelVisCtx.stroke();
-                    // Draw text lines, centered in the circle
+
                     node.lines.forEach((ln, i) => {
                         const offsetY = (i - (node.lines.length - 1) / 2) * (fontSize + 2);
                         modelVisCtx.fillStyle = "black";
                         modelVisCtx.fillText(ln, node.canvasX, node.canvasY + r + offsetY);
                     });
                 } else {
-                    // For decision nodes, scale rectangle dimensions
                     const w = node.canvasWidth * nodeScaleMultiplier;
                     const h = node.canvasHeight * nodeScaleMultiplier;
                     const rx = node.canvasX - w / 2;
@@ -983,7 +916,6 @@ function drawModelVisualizer() {
                     modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
                     modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
                     modelVisCtx.stroke();
-                    // Draw text lines in the rectangle
                     node.lines.forEach((ln, i) => {
                         const offsetY = (i + 0.75) * fontSize + i * 2;
                         modelVisCtx.fillStyle = "black";
@@ -998,7 +930,6 @@ function drawModelVisualizer() {
         case "svm": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 
-            // Draw all data points
             for (let p of data) {
                 modelVisCtx.beginPath();
                 modelVisCtx.arc(p.x * modelVisCanvas.width, p.y * modelVisCanvas.height, 5, 0, 2 * Math.PI);
@@ -1040,7 +971,6 @@ function drawModelVisualizer() {
             drawLine(slope, intercept + offset, document.body.classList.contains("dark") ? "white" : "black", true);
             drawLine(slope, intercept - offset, document.body.classList.contains("dark") ? "white" : "black", true);
 
-            // Highlight support vectors
             for (let p of data) {
                 const label = p.label === 1 ? 1 : -1;
                 const margin = label * (w[0] * p.x + w[1] * p.y + w[2]);
@@ -1064,11 +994,9 @@ function drawModelVisualizer() {
         }
 
         case "perceptron": {
-            // Clear the canvas
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
             modelVisCtx.font = "16px Arial";
 
-            // Constants for node layout
             const inputCount = 6;
             const hiddenCount = 6;
             const inputLayerX = 80;
@@ -1076,10 +1004,8 @@ function drawModelVisualizer() {
             const outputLayerX = 460;
             const activationX = 360;
             const spacingY = modelVisCanvas.height / (inputCount + 1);
-            const nodeRadius = 28; // Increased for better readability
+            const nodeRadius = 28; 
 
-            // Example weight arrays:
-            // A 2D array for input->hidden connections (6x6)
             perceptronInputHiddenWeights = Array.from({
                     length: inputCount
                 }, () =>
@@ -1088,19 +1014,14 @@ function drawModelVisualizer() {
                 }, () => Math.random() - 0.5)
             );
 
-            // A 1D array for hidden->activation connections (6 weights)
-            //perceptronWeights = Array.from({ length: hiddenCount }, () => Math.random() - 0.5);
-            // Activation->output weight (single value)
             const activationWeight = 0.5;
 
-            // Build node arrays
             let inputNodes = [];
             let hiddenNodes = [];
             let activationNode, outputNode;
 
             const inputLabels = ["x", "y", "x*y", "x^2", "y^2", "bias"];
 
-            // Calculate positions for input nodes
             for (let i = 0; i < inputCount; i++) {
                 inputNodes.push({
                     x: inputLayerX,
@@ -1110,7 +1031,6 @@ function drawModelVisualizer() {
                 });
             }
 
-            // Calculate positions for hidden nodes
             for (let j = 0; j < hiddenCount; j++) {
                 hiddenNodes.push({
                     x: hiddenLayerX,
@@ -1120,7 +1040,6 @@ function drawModelVisualizer() {
                 });
             }
 
-            // Position of activation and output node
             activationNode = {
                 x: activationX,
                 y: modelVisCanvas.height / 2,
@@ -1132,9 +1051,6 @@ function drawModelVisualizer() {
                 type: "output"
             };
 
-            // --- Helper functions ---
-
-            // Draw a circle node with a given border color
             function drawNodeWithBorder(node, label, borderColor = "black") {
                 modelVisCtx.beginPath();
                 modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
@@ -1150,12 +1066,10 @@ function drawModelVisualizer() {
                 }
             }
 
-            // Draw a node in default style (grey border)
             function drawNode(node, label) {
                 drawNodeWithBorder(node, label, document.body.classList.contains("dark") ? "white" : "gray");
             }
 
-            // Draw an arrow from (fromX, fromY) to (toX, toY) using a given color
             function drawArrowWithColor(fromX, fromY, toX, toY, color) {
                 const headLength = 10;
                 const dx = toX - fromX;
@@ -1166,7 +1080,7 @@ function drawModelVisualizer() {
                 modelVisCtx.lineTo(toX, toY);
                 modelVisCtx.strokeStyle = color;
                 modelVisCtx.stroke();
-                // arrowhead
+
                 modelVisCtx.beginPath();
                 modelVisCtx.moveTo(toX, toY);
                 modelVisCtx.lineTo(
@@ -1182,27 +1096,20 @@ function drawModelVisualizer() {
                 modelVisCtx.fill();
             }
 
-            // Tanh utility
             function tanh(z) {
                 return Math.tanh(z);
             }
 
-            // Draw everything in the default (black/gray) style, ignoring highlight
             function drawAllGray() {
-                // 1) Input nodes in black border, hidden nodes in black border
                 inputNodes.forEach((n, i) => {
                     drawNode(n, inputLabels[i]);
                 });
                 hiddenNodes.forEach((n) => {
                     drawNode(n, "");
                 });
-                // Activation node + output node also in black
                 drawNode(activationNode, "σ");
                 drawNode(outputNode, "Output");
 
-                // 2) Arrows: input->hidden in gray, hidden->activation in gray,
-                //    activation->output in gray
-                // input->hidden
                 inputNodes.forEach((inNode) => {
                     hiddenNodes.forEach((hidNode) => {
                         drawArrowWithColor(
@@ -1214,7 +1121,7 @@ function drawModelVisualizer() {
                         );
                     });
                 });
-                // hidden->activation
+
                 hiddenNodes.forEach((hidNode) => {
                     drawArrowWithColor(
                         hidNode.x + nodeRadius,
@@ -1224,7 +1131,7 @@ function drawModelVisualizer() {
                         document.body.classList.contains("dark") ? "white" : "gray"
                     );
                 });
-                // activation->output
+
                 drawArrowWithColor(
                     activationNode.x + nodeRadius,
                     activationNode.y,
@@ -1234,15 +1141,10 @@ function drawModelVisualizer() {
                 );
             }
 
-            // Highlight the input node, the arrow input->hidden, the hidden node,
-            // and the arrow hidden->activation with a given color.
-            // We do NOT highlight the activation node or arrow activation->output.
             function highlightPartialPath(i, j, color) {
-                // 1) highlight input node i
+
                 let inNode = inputNodes[i];
                 drawNodeWithBorder(inNode, inputLabels[i], color);
-
-                // 2) highlight arrow input->hidden
                 drawArrowWithColor(
                     inNode.x + nodeRadius,
                     inNode.y,
@@ -1251,10 +1153,7 @@ function drawModelVisualizer() {
                     color
                 );
 
-                // 3) highlight hidden node j
                 drawNodeWithBorder(hiddenNodes[j], "", color);
-
-                // 4) highlight arrow hidden->activation
                 drawArrowWithColor(
                     hiddenNodes[j].x + nodeRadius,
                     hiddenNodes[j].y,
@@ -1262,24 +1161,20 @@ function drawModelVisualizer() {
                     activationNode.y,
                     color
                 );
-                // do NOT highlight activation node or arrow activation->output
             }
 
             function drawNetwork() {
                 modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
 
-                // If no selectedPoint => everything is default
                 if (!selectedPoint) {
                     drawAllGray();
                     return;
                 }
 
-                // 1) compute features + hiddenActivations
                 const xVal = selectedPoint.x;
                 const yVal = selectedPoint.y;
                 const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
 
-                // hiddenActivations
                 const hiddenActivations = [];
                 for (let j = 0; j < hiddenCount; j++) {
                     let sum = 0;
@@ -1289,10 +1184,6 @@ function drawModelVisualizer() {
                     hiddenActivations[j] = tanh(sum);
                 }
 
-                // We'll define path score from input->hidden->activation->output
-                // but only highlight input->hidden->activation portion.
-                // pathScore(i, j) = sum of absolute contributions
-                //   (|f[i] * w_{i,j}| + |hiddenActivations[j] * perceptronWeights[j]| + |activationWeight|)
                 let pathScores = [];
                 for (let i = 0; i < inputCount; i++) {
                     for (let j = 0; j < hiddenCount; j++) {
@@ -1307,15 +1198,10 @@ function drawModelVisualizer() {
                         });
                     }
                 }
-                // Sort descending
+
                 pathScores.sort((a, b) => b.score - a.score);
 
-                // The top path is green, the second & third are blue
-                // all others remain default gray
-                // => we first draw everything in gray
                 drawAllGray();
-
-                // highlight top 3 if exist
                 if (perceptronTopPaths.length > 0) {
                     highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "blue");
                 }
@@ -1327,7 +1213,6 @@ function drawModelVisualizer() {
                 }
             }
 
-            // Finally, draw
             drawNetwork();
 
             break;
@@ -1370,9 +1255,6 @@ function drawModelVisualizer() {
                 label: "Prediction:\n?"
             };
 
-            /********************************************
-             * 1) Compute sub-model votes and prediction
-             ********************************************/
             if (selectedPoint) {
                 const x = selectedPoint.x;
                 const y = selectedPoint.y;
@@ -1393,9 +1275,6 @@ function drawModelVisualizer() {
                 predictionNode.label = "Prediction:\n ?";
             }
 
-            /********************************
-             * 2) Helper: draw a circle node
-             ********************************/
             function drawNode(ctx, node, radius, fillColor = "#cce5ff") {
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
@@ -1416,9 +1295,6 @@ function drawModelVisualizer() {
                 }
             }
 
-            /********************************
-             * 3) Helper: draw an arrow line
-             ********************************/
             function drawArrow(ctx, x1, y1, x2, y2, color = document.body.classList.contains("dark") ? "white" : "gray") {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
@@ -1445,9 +1321,6 @@ function drawModelVisualizer() {
                 ctx.fill();
             }
 
-            /**********************************************
-             * 4) Draw the ensemble diagram (real-time)
-             **********************************************/
             drawNode(modelVisCtx, inputNode, nodeRadius);
 
             subModels.forEach((m) => {
@@ -1486,11 +1359,9 @@ function drawModelVisualizer() {
 
 
         default:
-            // No special visualization for other models
             break;
     }
 
-    // For example, a placeholder text:
     modelVisCtx.save();
     modelVisCtx.resetTransform();
     modelVisCtx.fillStyle = document.body.classList.contains("dark") ? "white" : "black";
@@ -1505,11 +1376,7 @@ function drawModelVisualizer() {
     }
 }
 
-/*****************************
- *  Animation loop
- *****************************/
 function loop() {
-    // Train only these models in real time
     if (currentModel === "perceptron") trainPerceptron();
     if (currentModel === "logistic") trainLogistic();
     if (currentModel === "svm") trainSVM();
@@ -1545,7 +1412,6 @@ function updateParameterDisplay() {
     } else if (currentModel === "dt") {
         text += `\nDT Structure:\n` + JSON.stringify(dtModel, null, 2);
     }
-    // Add code if you want other models to show weights, etc.
 
     // Metrics
     const {
@@ -1564,7 +1430,6 @@ function updateParameterDisplay() {
     text += `Recall: ${(recall * 100).toFixed(2)}%\n`;
     text += `F1 Score: ${(f1 * 100).toFixed(2)}%\n`;
 
-    // Confusion matrix
     const cmHTML = buildConfusionMatrixHTML(TP, TN, FP, FN);
 
     paramBox.innerHTML = text.replace(/\n/g, "<br>") + cmHTML;
@@ -1588,14 +1453,10 @@ function expandDemoBox(url) {
   }
   
 
-// Initialize with dataset A by default
 selectDataset("A");
 selectModel("logistic");
 loop();
 
-
-
-// Fix: Call drawModelVisualizer immediately after click
 modelVisCanvas.addEventListener("click", function(event) {
     const rect = modelVisCanvas.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
@@ -1612,7 +1473,7 @@ modelVisCanvas.addEventListener("click", function(event) {
         }
     }
     selectedPoint = chosen;
-    drawModelVisualizer(); // <<< force redraw so lines appear
+    drawModelVisualizer();
 });
 
 canvas.addEventListener("click", function(event) {
@@ -1620,7 +1481,6 @@ canvas.addEventListener("click", function(event) {
     const clickX = event.clientX - rect.left;
     const clickY = event.clientY - rect.top;
 
-    // Find which data point (if any) was clicked
     let nearest = null,
         minDist = Infinity;
     for (const p of data) {
@@ -1633,7 +1493,6 @@ canvas.addEventListener("click", function(event) {
         }
     }
 
-    // If close enough, show how the current model interprets that point:
     if (minDist < 25) {
         selectedPoint = nearest;
 
@@ -1666,9 +1525,9 @@ canvas.addEventListener("click", function(event) {
                 }
             }
             perceptronTopPaths.sort((a, b) => b.score - a.score);
-            perceptronTopPaths = perceptronTopPaths.slice(0, 3); // keep top 3
+            perceptronTopPaths = perceptronTopPaths.slice(0, 3);
         }
-        drawModelVisualizer(); // Redraw visualizer
+        drawModelVisualizer();
     }
 
     

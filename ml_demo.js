@@ -1573,26 +1573,20 @@ function updateParameterDisplay() {
 function expandDemoBox(url) {
     const overlay = document.getElementById("expanded-overlay");
     const content = document.getElementById("expanded-box-content");
-
-    // Load the entire ml_demo.html into the overlay
-    // using an <iframe> or AJAX. 
-    // 
-    // 1) Using an iframe approach:
-    content.innerHTML = `<iframe src="${url}" style="width: 100%; height: 100%;" frameborder="0"></iframe>`;
-
-
+  
+    content.innerHTML = `
+      <iframe src="${url}" frameborder="0"></iframe>
+    `;
     overlay.classList.add("active");
   }
-
+  
   function closeDemoBox() {
     const overlay = document.getElementById("expanded-overlay");
     const content = document.getElementById("expanded-box-content");
-
-    // hide overlay
     overlay.classList.remove("active");
-    // clear the content => unload the script
     content.innerHTML = "";
   }
+  
 
 // Initialize with dataset A by default
 selectDataset("A");

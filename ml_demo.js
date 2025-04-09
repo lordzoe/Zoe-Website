@@ -181,13 +181,8 @@ function selectDataset(ds) {
         // hidden = 5 * ( (x-0.5)^2 + (y-0.5)^2 - 0.04 )
         //        = 5x^2 + 5y^2 - 5x - 5y + 2.3
         const baseHiddenWeights = [-5, -5, 0, 5, 5, 2.3];
-
-        // Output = sigmoid( -10 * hidden + 5 )
-        // Inside circle => hidden < 0 => output ~ 1
-        // Outside circle => hidden > 0 => output ~ 0
         const baseOutputWeights = [-10, 0, 0, 0, 0, 5];
 
-        // Add a tiny amount of noise to each weight
         const noiseScale = 0.05;
         perceptronHiddenWeights = baseHiddenWeights.map(
             w => w + (Math.random() - 0.5) * noiseScale
@@ -196,7 +191,6 @@ function selectDataset(ds) {
             w => w + (Math.random() - 0.5) * noiseScale
         );
     } else {
-        // Default random initialization for other datasets
         perceptronHiddenWeights = Array.from({
             length: 6
         }, () => Math.random() - 0.5);
@@ -214,7 +208,6 @@ function generateDatasetA() {
     for (let i = 0; i < 100; i++) {
         const x = Math.random();
         const y = Math.random();
-        // label=1 if y>x
         const label = y > x ? 1 : 0;
         data.push({
             x,
@@ -226,7 +219,6 @@ function generateDatasetA() {
 
 function generateDatasetB() {
     data = [];
-    // center class
     for (let i = 0; i < 50; i++) {
         const r = Math.random() * 0.15;
         const angle = Math.random() * 2 * Math.PI;
@@ -236,7 +228,6 @@ function generateDatasetB() {
             label: 1,
         });
     }
-    // ring class
     for (let i = 0; i < 50; i++) {
         const r = 0.25 + Math.random() * 0.15;
         const angle = Math.random() * 2 * Math.PI;
@@ -254,7 +245,6 @@ function generateDatasetC() {
         const x = Math.random();
         const y = Math.random();
         const ideal = y > x ? 1 : 0;
-        // 20% chance to flip
         const label = Math.random() < 0.2 ? 1 - ideal : ideal;
         data.push({
             x,
@@ -493,7 +483,6 @@ function computeMetrics() {
 }
 
 function colorTPorTN(value) {
-    // from 0..60 => green
     const v = Math.min(value, 60);
     const ratio = v / 60;
     const r = Math.floor(255 * (1 - ratio));
@@ -502,7 +491,6 @@ function colorTPorTN(value) {
 }
 
 function colorFPorFN(value) {
-    // from 0..30 => red
     const v = Math.min(value, 30);
     const ratio = v / 30;
     const r = Math.floor(255 * ratio);
@@ -606,7 +594,7 @@ function drawModelVisualizer() {
                 if (xVal === -20) modelVisCtx.moveTo(xPix, yPix);
                 else modelVisCtx.lineTo(xPix, yPix);
             }
-            modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "blue";
+            modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "#007BFF";
             modelVisCtx.lineWidth = 2;
             modelVisCtx.stroke();
 
@@ -697,7 +685,7 @@ function drawModelVisualizer() {
                         point: p,
                     }))
                     .sort((a, b) => a.dist - b.dist)
-                    .slice(1, k + 1); // skip self
+                    .slice(1, k + 1); 
 
                 distances.forEach(({
                     point
@@ -712,6 +700,7 @@ function drawModelVisualizer() {
                         point.y * modelVisCanvas.height
                     );
                     modelVisCtx.strokeStyle = document.body.classList.contains("dark") ? "white" : "black";
+                    modelVisCtx.lineWidth = 2;
                     modelVisCtx.stroke();
                 });
             }
@@ -720,290 +709,340 @@ function drawModelVisualizer() {
 
         case "dt": {
             if (!dtModel) {
-                modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-                break;
+              modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+              break;
             }
-
+          
             if (!CanvasRenderingContext2D.prototype.roundRect) {
-                CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
-                    if (typeof radius === "number") {
-                        radius = {
-                            tl: radius,
-                            tr: radius,
-                            br: radius,
-                            bl: radius
-                        };
-                    } else {
-                        const defaultRadius = {
-                            tl: 0,
-                            tr: 0,
-                            br: 0,
-                            bl: 0
-                        };
-                        for (let side in defaultRadius) {
-                            radius[side] = radius[side] || defaultRadius[side];
-                        }
-                    }
-                    this.beginPath();
-                    this.moveTo(x + radius.tl, y);
-                    this.lineTo(x + width - radius.tr, y);
-                    this.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-                    this.lineTo(x + width, y + height - radius.br);
-                    this.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-                    this.lineTo(x + radius.bl, y + height);
-                    this.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-                    this.lineTo(x, y + radius.tl);
-                    this.quadraticCurveTo(x, y, x + radius.tl, y);
-                    this.closePath();
-                    return this;
-                };
-            }
-
-            function parseLabel(label) {
-                if (!label.includes(" ≤ ")) {
-                    return [label];
-                }
-                const [feat, thr] = label.split(" ≤ ");
-                return [feat + " ≤", thr];
-            }
-
-            function countLeaves(node) {
-                if (typeof node === "number") return 1;
-                return countLeaves(node.left) + countLeaves(node.right);
-            }
-
-            function getTreeDepth(node) {
-                if (typeof node === "number") return 1;
-                return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
-            }
-
-            function traceDecisionPath(node, xVal, yVal, path = []) {
-                if (typeof node === "number") return [path];
-                const val = node.feature === "x" ? xVal : yVal;
-                if (val <= node.threshold) {
-                    return traceDecisionPath(node.left, xVal, yVal, path.concat("L"));
+              CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                if (typeof radius === "number") {
+                  radius = { tl: radius, tr: radius, br: radius, bl: radius };
                 } else {
-                    return traceDecisionPath(node.right, xVal, yVal, path.concat("R"));
+                  const defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 };
+                  for (let side in defaultRadius) {
+                    radius[side] = radius[side] || defaultRadius[side];
+                  }
                 }
+                this.beginPath();
+                this.moveTo(x + radius.tl, y);
+                this.lineTo(x + width - radius.tr, y);
+                this.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+                this.lineTo(x + width, y + height - radius.br);
+                this.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+                this.lineTo(x + radius.bl, y + height);
+                this.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+                this.lineTo(x, y + radius.tl);
+                this.quadraticCurveTo(x, y, x + radius.tl, y);
+                this.closePath();
+                return this;
+              };
             }
-
+          
+            function parseLabel(label) {
+              if (!label.includes(" ≤ ")) {
+                return [label];
+              }
+              const [feat, thr] = label.split(" ≤ ");
+              return [feat + " ≤", thr];
+            }
+          
+            function countLeaves(node) {
+              if (typeof node === "number") return 1;
+              return countLeaves(node.left) + countLeaves(node.right);
+            }
+          
+            function getTreeDepth(node) {
+              if (typeof node === "number") return 1;
+              return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
+            }
+          
+            function traceDecisionPath(node, xVal, yVal, path = []) {
+              if (typeof node === "number") return [path];
+              const val = node.feature === "x" ? xVal : yVal;
+              if (val <= node.threshold) {
+                return traceDecisionPath(node.left, xVal, yVal, path.concat("L"));
+              } else {
+                return traceDecisionPath(node.right, xVal, yVal, path.concat("R"));
+              }
+            }
+          
             let highlightPath = [];
             if (selectedPoint) {
-                highlightPath = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
+              highlightPath = traceDecisionPath(dtModel, selectedPoint.x, selectedPoint.y);
             }
-
+          
             const layoutNodes = [];
             const depth = getTreeDepth(dtModel);
             const totalLeaves = countLeaves(dtModel);
-
             const abstractFontSize = 20;
             const padding = 10; 
             const leafWidth = 100;
             const verticalGap = 120;
             const topMargin = 0;
-
+          
             function layoutDecisionTree(node, level, leftBoundary, path) {
-                const isLeaf = typeof node === "number";
-                const label = isLeaf ?
-                    `${node}` :
-                    `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
-
-                const lines = parseLabel(label);
-
-                const isHighlighted =
-                    highlightPath.length &&
-                    highlightPath[0].length >= path.length &&
-                    path.every((step, i) => highlightPath[0][i] === step);
-
-                const nodeHeight = lines.length * abstractFontSize + padding;
-                const nodeWidth = isLeaf ? nodeHeight : 3 * abstractFontSize;
-
-                if (isLeaf) {
-                    const centerX = leftBoundary + leafWidth / 2;
-                    const yPos = topMargin + level * verticalGap;
-                    const idx = layoutNodes.length;
-                    layoutNodes.push({
-                        x: centerX,
-                        y: yPos,
-                        lines,
-                        isLeaf: true,
-                        highlighted: isHighlighted,
-                        leftChildIdx: null,
-                        rightChildIdx: null,
-                        path: [...path],
-                        width: nodeWidth,
-                        height: nodeHeight
-                    });
-                    return {
-                        idx,
-                        leaves: 1,
-                        centerX
-                    };
-                } else {
-                    const leftLeaves = countLeaves(node.left);
-                    const rightLeaves = countLeaves(node.right);
-
-                    const leftInfo = layoutDecisionTree(
-                        node.left,
-                        level + 1,
-                        leftBoundary,
-                        path.concat("L")
-                    );
-                    const rightStart = leftBoundary + leftLeaves * leafWidth;
-                    const rightInfo = layoutDecisionTree(
-                        node.right,
-                        level + 1,
-                        rightStart,
-                        path.concat("R")
-                    );
-
-                    const subTreeLeaves = leftLeaves + rightLeaves;
-                    const parentX = (leftInfo.centerX + rightInfo.centerX) / 2;
-                    const yPos = topMargin + level * verticalGap;
-                    const idx = layoutNodes.length;
-                    layoutNodes.push({
-                        x: parentX,
-                        y: yPos,
-                        lines,
-                        isLeaf: false,
-                        highlighted: isHighlighted,
-                        leftChildIdx: leftInfo.idx,
-                        rightChildIdx: rightInfo.idx,
-                        path: [...path],
-                        width: nodeWidth,
-                        height: nodeHeight
-                    });
-                    return {
-                        idx,
-                        leaves: subTreeLeaves,
-                        centerX: parentX
-                    };
-                }
+              const isLeaf = typeof node === "number";
+              const label = isLeaf
+                ? String(node)
+                : `${node.feature} ≤ ${node.threshold.toFixed(2)}`;
+          
+              const lines = parseLabel(label);
+              const isHighlighted =
+                highlightPath.length &&
+                highlightPath[0].length >= path.length &&
+                path.every((step, i) => highlightPath[0][i] === step);
+          
+              const nodeHeight = lines.length * abstractFontSize + padding;
+              const nodeWidth = isLeaf ? nodeHeight : 3 * abstractFontSize;
+          
+              if (isLeaf) {
+                const centerX = leftBoundary + leafWidth / 2;
+                const yPos = topMargin + level * verticalGap;
+                const idx = layoutNodes.length;
+                layoutNodes.push({
+                  x: centerX,
+                  y: yPos,
+                  lines,
+                  isLeaf: true,
+                  highlighted: isHighlighted,
+                  leftChildIdx: null,
+                  rightChildIdx: null,
+                  path: [...path],
+                  width: nodeWidth,
+                  height: nodeHeight
+                });
+                return { idx, leaves: 1, centerX };
+              } else {
+                const leftLeaves = countLeaves(node.left);
+                const rightLeaves = countLeaves(node.right);
+          
+                const leftInfo = layoutDecisionTree(
+                  node.left,
+                  level + 1,
+                  leftBoundary,
+                  path.concat("L")
+                );
+                const rightStart = leftBoundary + leftLeaves * leafWidth;
+                const rightInfo = layoutDecisionTree(
+                  node.right,
+                  level + 1,
+                  rightStart,
+                  path.concat("R")
+                );
+          
+                const subTreeLeaves = leftLeaves + rightLeaves;
+                const parentX = (leftInfo.centerX + rightInfo.centerX) / 2;
+                const yPos = topMargin + level * verticalGap;
+                const idx = layoutNodes.length;
+                layoutNodes.push({
+                  x: parentX,
+                  y: yPos,
+                  lines,
+                  isLeaf: false,
+                  highlighted: isHighlighted,
+                  leftChildIdx: leftInfo.idx,
+                  rightChildIdx: rightInfo.idx,
+                  path: [...path],
+                  width: nodeWidth,
+                  height: nodeHeight
+                });
+                return { idx, leaves: subTreeLeaves, centerX: parentX };
+              }
             }
-
+          
             layoutDecisionTree(dtModel, 0, 0, []);
-
-            let minX = Infinity,
-                maxX = -Infinity;
-            let minY = Infinity,
-                maxY = -Infinity;
+          
+            let minX = Infinity, maxX = -Infinity;
+            let minY = Infinity, maxY = -Infinity;
             for (const n of layoutNodes) {
-                if (n.x < minX) minX = n.x;
-                if (n.x > maxX) maxX = n.x;
-                if (n.y < minY) minY = n.y;
-                if (n.y > maxY) maxY = n.y;
+              if (n.x < minX) minX = n.x;
+              if (n.x > maxX) maxX = n.x;
+              if (n.y < minY) minY = n.y;
+              if (n.y > maxY) maxY = n.y;
             }
-
             for (const n of layoutNodes) {
-                const halfW = n.width / 2;
-                const topY = n.y;
-                const bottomY = n.y + n.height;
-                if (n.x - halfW < minX) minX = n.x - halfW;
-                if (n.x + halfW > maxX) maxX = n.x + halfW;
-                if (topY < minY) minY = topY;
-                if (bottomY > maxY) maxY = bottomY;
+              const halfW = n.width / 2;
+              const topY = n.y;
+              const bottomY = n.y + n.height;
+              if (n.x - halfW < minX) minX = n.x - halfW;
+              if (n.x + halfW > maxX) maxX = n.x + halfW;
+              if (topY < minY) minY = topY;
+              if (bottomY > maxY) maxY = bottomY;
             }
             const boundingWidth = maxX - minX || 1;
             const boundingHeight = maxY - minY || 1;
-
+          
             const margin = 20;
             const availW = modelVisCanvas.width - 2 * margin;
             const availH = modelVisCanvas.height - 2 * margin;
             const scaleX = availW / boundingWidth;
             const scaleY = availH / boundingHeight;
             const scale = Math.min(scaleX, scaleY);
-
+          
             for (const n of layoutNodes) {
-                n.canvasX = margin + (n.x - minX) * scale;
-                n.canvasY = margin + (n.y - minY) * scale;
-                n.canvasWidth = n.width * scale;
-                n.canvasHeight = n.height * scale;
+              n.canvasX = margin + (n.x - minX) * scale;
+              n.canvasY = margin + (n.y - minY) * scale;
+              n.canvasWidth = n.width * scale;
+              n.canvasHeight = n.height * scale;
             }
-
+          
+            const totalTreeWidth = boundingWidth * scale;
+            const centerOfTreeInCanvas = margin + totalTreeWidth / 2;
+            const centerOfCanvas = modelVisCanvas.width / 2;
+            const shiftX = centerOfCanvas - centerOfTreeInCanvas;
+            for (const n of layoutNodes) {
+              n.canvasX += shiftX;
+            }
+          
             const nodeScaleMultiplier = 1 + (maxTreeDepth - 1) * 0.3;
-
             const baseFontSize = abstractFontSize * scale;
-
             function getFontSize() {
-                return Math.max(10, baseFontSize * nodeScaleMultiplier);
+              return Math.max(10, baseFontSize * nodeScaleMultiplier);
             }
-
+          
+            const arrowScale = Math.max(0.8, scale / (1 + (nodeScaleMultiplier - 1) * 0.5));
+          
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-
-            function drawConnection(x1, y1, x2, y2, highlight) {
+          
+            let connections = [];
+          
+            function drawArrowBody(fromX, fromY, toX, toY, color, highlight) {
+              modelVisCtx.save();
+              modelVisCtx.beginPath();
+              modelVisCtx.moveTo(fromX, fromY);
+              modelVisCtx.lineTo(toX, toY);
+              modelVisCtx.strokeStyle = color;
+              const baseWidth = highlight ? 4 : 3;
+              modelVisCtx.lineWidth = Math.max(1, baseWidth * arrowScale);
+              modelVisCtx.stroke();
+              modelVisCtx.restore();
+            }
+          
+            function drawArrowHead(fromX, fromY, toX, toY, color) {
+                const headLength = 10 * arrowScale; 
+                const offsetFactor = 1.02; 
+            
+                const dx = toX - fromX;
+                const dy = toY - fromY;
+                const angle = Math.atan2(dy, dx);
+            
+                const adjustedToX = fromX + dx * offsetFactor;
+                const adjustedToY = fromY + dy * offsetFactor;
+            
+                modelVisCtx.save();
                 modelVisCtx.beginPath();
-                modelVisCtx.moveTo(x1, y1);
-                modelVisCtx.lineTo(x2, y2);
-                modelVisCtx.strokeStyle = highlight ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
-                modelVisCtx.lineWidth = highlight ? 4 : 3;
-                modelVisCtx.stroke();
+                modelVisCtx.moveTo(adjustedToX, adjustedToY);
+                modelVisCtx.lineTo(
+                    adjustedToX - headLength * Math.cos(angle - Math.PI / 6),
+                    adjustedToY - headLength * Math.sin(angle - Math.PI / 6)
+                );
+                modelVisCtx.lineTo(
+                    adjustedToX - headLength * Math.cos(angle + Math.PI / 6),
+                    adjustedToY - headLength * Math.sin(angle + Math.PI / 6)
+                );
+                modelVisCtx.lineTo(adjustedToX, adjustedToY);
+                modelVisCtx.fillStyle = color;
+                modelVisCtx.fill();
+                modelVisCtx.restore();
             }
-
+          
             for (const n of layoutNodes) {
-                if (n.leftChildIdx !== null) {
-                    const child = layoutNodes[n.leftChildIdx];
-                    const edgeHighlight =
-                        highlightPath.length &&
-                        highlightPath[0][n.path.length] === "L" &&
-                        n.path.every((step, idx) => step === highlightPath[0][idx]);
-                    drawConnection(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, edgeHighlight);
-                }
-                if (n.rightChildIdx !== null) {
-                    const child = layoutNodes[n.rightChildIdx];
-                    const edgeHighlight =
-                        highlightPath.length &&
-                        highlightPath[0][n.path.length] === "R" &&
-                        n.path.every((step, idx) => step === highlightPath[0][idx]);
-                    drawConnection(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, edgeHighlight);
-                }
+              if (n.leftChildIdx !== null) {
+                const child = layoutNodes[n.leftChildIdx];
+                const isHighlighted =
+                  highlightPath.length &&
+                  highlightPath[0][n.path.length] === "L" &&
+                  n.path.every((step, idx) => step === highlightPath[0][idx]);
+                const arrowColor = isHighlighted
+                  ? "#007BFF" // 
+                  : document.body.classList.contains("dark") ? "white" : "black";
+          
+                drawArrowBody(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, arrowColor, isHighlighted);
+                connections.push({
+                  fromX: n.canvasX,
+                  fromY: n.canvasY + 5,
+                  toX: child.canvasX,
+                  toY: child.canvasY - 5,
+                  color: arrowColor
+                });
+              }
+              if (n.rightChildIdx !== null) {
+                const child = layoutNodes[n.rightChildIdx];
+                const isHighlighted =
+                  highlightPath.length &&
+                  highlightPath[0][n.path.length] === "R" &&
+                  n.path.every((step, idx) => step === highlightPath[0][idx]);
+                const arrowColor = isHighlighted
+                  ? "#007BFF"
+                  : document.body.classList.contains("dark") ? "white" : "black";
+          
+                drawArrowBody(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, arrowColor, isHighlighted);
+                connections.push({
+                  fromX: n.canvasX,
+                  fromY: n.canvasY + 5,
+                  toX: child.canvasX,
+                  toY: child.canvasY - 5,
+                  color: arrowColor
+                });
+              }
             }
-
+          
             function drawNode(node) {
-                const fontSize = getFontSize();
-                modelVisCtx.font = `${fontSize}px Arial, sans-serif`;
-                modelVisCtx.textAlign = "center";
-                modelVisCtx.textBaseline = "middle";
-
-                if (node.isLeaf) {
-                    const scaledWidth = node.canvasWidth * nodeScaleMultiplier;
-                    const scaledHeight = node.canvasHeight * nodeScaleMultiplier;
-                    const r = Math.min(scaledWidth, scaledHeight) / 2;
-                    modelVisCtx.beginPath();
-                    modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
-                    modelVisCtx.fillStyle = "#dff0ff";
-                    modelVisCtx.fill();
-                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
-                    modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
-                    modelVisCtx.stroke();
-
-                    node.lines.forEach((ln, i) => {
-                        const offsetY = (i - (node.lines.length - 1) / 2) * (fontSize + 2);
-                        modelVisCtx.fillStyle = "black";
-                        modelVisCtx.fillText(ln, node.canvasX, node.canvasY + r + offsetY);
-                    });
-                } else {
-                    const w = node.canvasWidth * nodeScaleMultiplier;
-                    const h = node.canvasHeight * nodeScaleMultiplier;
-                    const rx = node.canvasX - w / 2;
-                    const ry = node.canvasY;
-                    modelVisCtx.beginPath();
-                    modelVisCtx.roundRect(rx, ry, w, h, Math.min(w, h) * 0.2);
-                    modelVisCtx.fillStyle = "#dff0ff";
-                    modelVisCtx.fill();
-                    modelVisCtx.strokeStyle = node.highlighted ? "blue" : (document.body.classList.contains("dark") ? "white" : "black");
-                    modelVisCtx.lineWidth = node.highlighted ? 3 : 2;
-                    modelVisCtx.stroke();
-                    node.lines.forEach((ln, i) => {
-                        const offsetY = (i + 0.75) * fontSize + i * 2;
-                        modelVisCtx.fillStyle = "black";
-                        modelVisCtx.fillText(ln, node.canvasX, ry + offsetY);
-                    });
-                }
+              const fontSize = getFontSize();
+              modelVisCtx.font = `${fontSize}px Arial, sans-serif`;
+              modelVisCtx.textAlign = "center";
+              modelVisCtx.textBaseline = "middle";
+          
+              if (node.isLeaf) {
+                const scaledWidth = node.canvasWidth * nodeScaleMultiplier;
+                const scaledHeight = node.canvasHeight * nodeScaleMultiplier;
+                const r = Math.min(scaledWidth, scaledHeight) / 2;
+                modelVisCtx.beginPath();
+                modelVisCtx.arc(node.canvasX, node.canvasY + r, r, 0, 2 * Math.PI);
+                modelVisCtx.fillStyle = "#cce5ff";
+                modelVisCtx.fill();
+                modelVisCtx.strokeStyle = node.highlighted
+                  ? "#007BFF"
+                  : document.body.classList.contains("dark") ? "white" : "black";
+                modelVisCtx.lineWidth = node.highlighted ? 4 : 3;
+                modelVisCtx.stroke();
+          
+                node.lines.forEach((ln, i) => {
+                  const offsetY = (i - (node.lines.length - 1) / 2) * (fontSize + 2);
+                  modelVisCtx.fillStyle = "black";
+                  modelVisCtx.fillText(ln, node.canvasX, node.canvasY + r + offsetY);
+                });
+              } else {
+                const w = node.canvasWidth * nodeScaleMultiplier;
+                const h = node.canvasHeight * nodeScaleMultiplier;
+                const rx = node.canvasX - w / 2;
+                const ry = node.canvasY;
+                modelVisCtx.beginPath();
+                modelVisCtx.roundRect(rx, ry, w, h, Math.min(w, h) * 0.2);
+                modelVisCtx.fillStyle = "#cce5ff";
+                modelVisCtx.fill();
+                modelVisCtx.strokeStyle = node.highlighted
+                  ? "#007BFF"
+                  : document.body.classList.contains("dark") ? "white" : "black";
+                modelVisCtx.lineWidth = node.highlighted ? 4 : 3;
+                modelVisCtx.stroke();
+          
+                node.lines.forEach((ln, i) => {
+                  const offsetY = (i + 0.75) * fontSize + i * 2;
+                  modelVisCtx.fillStyle = "black";
+                  modelVisCtx.fillText(ln, node.canvasX, ry + offsetY);
+                });
+              }
             }
-
-            layoutNodes.forEach((n) => drawNode(n));
+            layoutNodes.forEach(drawNode);
+          
+            connections.forEach(conn => {
+              drawArrowHead(conn.fromX, conn.fromY, conn.toX, conn.toY, conn.color);
+            });
+            
             break;
-        }
+          }
+                                     
         case "svm": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
             
@@ -1045,7 +1084,7 @@ function drawModelVisualizer() {
                 modelVisCtx.strokeStyle = color;
                 modelVisCtx.setLineDash(dashed ? [5, 5] : []);
                 modelVisCtx.stroke();
-                modelVisCtx.setLineDash([]); // reset for next line
+                modelVisCtx.setLineDash([]);
             }
 
             const slope = -w[0] / w[1];
@@ -1137,28 +1176,29 @@ function drawModelVisualizer() {
               type: "output"
             };
           
-            function drawNodeWithBorder(node, label, borderColor = "black") {
-                modelVisCtx.beginPath();
-                modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
-                modelVisCtx.fillStyle = "#cce5ff";
-                modelVisCtx.fill();
-                modelVisCtx.strokeStyle = borderColor;
-                modelVisCtx.stroke();
-                if (label) {
-                    const lines = label.split("\n");
-                    modelVisCtx.fillStyle = "black";
-                    modelVisCtx.textAlign = "center";
-                    modelVisCtx.textBaseline = "middle";
-                    const lineHeight = 16;
-                    const startY = node.y - ((lines.length - 1) * lineHeight) / 2;
-                    lines.forEach((line, i) => {
-                        modelVisCtx.fillText(line, node.x, startY + i * lineHeight);
-                    });
-                }
+            function drawNodeWithBorder(node, label, borderColor = "black", highlight = false) {
+              modelVisCtx.beginPath();
+              modelVisCtx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+              modelVisCtx.fillStyle = "#cce5ff";
+              modelVisCtx.fill();
+              modelVisCtx.strokeStyle = borderColor;
+              modelVisCtx.lineWidth = highlight ? 4 : 3;
+              modelVisCtx.stroke();
+              if (label) {
+                const lines = label.split("\n");
+                modelVisCtx.fillStyle = "black";
+                modelVisCtx.textAlign = "center";
+                modelVisCtx.textBaseline = "middle";
+                const lineHeight = 16;
+                const startY = node.y - ((lines.length - 1) * lineHeight) / 2;
+                lines.forEach((line, i) => {
+                  modelVisCtx.fillText(line, node.x, startY + i * lineHeight);
+                });
+              }
             }
           
             function drawNode(node, label) {
-              drawNodeWithBorder(node, label, document.body.classList.contains("dark") ? "white" : "gray");
+              drawNodeWithBorder(node, label, document.body.classList.contains("dark") ? "white" : "black");
             }
           
             function drawArrowWithColor(fromX, fromY, toX, toY, color, highlight = false) {
@@ -1204,14 +1244,13 @@ function drawModelVisualizer() {
           
               let outputLabel = "Output:\n?";
               if (selectedPoint) {
-                  const xVal = selectedPoint.x;
-                  const yVal = selectedPoint.y;
-                  const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
-                  const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
-                  const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]);
-                  outputLabel = `Output:\n${prediction > 0.5 ? 1 : 0}`;
+                const xVal = selectedPoint.x;
+                const yVal = selectedPoint.y;
+                const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+                const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
+                const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]);
+                outputLabel = `Output:\n${prediction > 0.5 ? 1 : 0}`;
               }
-
               drawNode(outputNode, outputLabel);
           
               inputNodes.forEach((inNode) => {
@@ -1221,7 +1260,7 @@ function drawModelVisualizer() {
                     inNode.y,
                     hidNode.x - nodeRadius,
                     hidNode.y,
-                    document.body.classList.contains("dark") ? "white" : "gray"
+                    document.body.classList.contains("dark") ? "white" : "black"
                   );
                 });
               });
@@ -1232,7 +1271,7 @@ function drawModelVisualizer() {
                   hidNode.y,
                   activationNode.x - nodeRadius,
                   activationNode.y,
-                  document.body.classList.contains("dark") ? "white" : "gray"
+                  document.body.classList.contains("dark") ? "white" : "black"
                 );
               });
           
@@ -1241,13 +1280,13 @@ function drawModelVisualizer() {
                 activationNode.y,
                 outputNode.x - nodeRadius,
                 outputNode.y,
-                document.body.classList.contains("dark") ? "white" : "gray"
+                document.body.classList.contains("dark") ? "white" : "black"
               );
             }
           
             function highlightPartialPath(i, j, color) {
               let inNode = inputNodes[i];
-              drawNodeWithBorder(inNode, inputLabels[i], color);
+              drawNodeWithBorder(inNode, inputLabels[i], color, true);
               drawArrowWithColor(
                 inNode.x + nodeRadius,
                 inNode.y,
@@ -1257,7 +1296,7 @@ function drawModelVisualizer() {
                 true
               );
           
-              drawNodeWithBorder(hiddenNodes[j], "h" + (j + 1), color);
+              drawNodeWithBorder(hiddenNodes[j], "h" + (j + 1), color, true);
               drawArrowWithColor(
                 hiddenNodes[j].x + nodeRadius,
                 hiddenNodes[j].y,
@@ -1266,8 +1305,8 @@ function drawModelVisualizer() {
                 color,
                 true
               );
-
-              drawNodeWithBorder(activationNode, "σ", color);
+          
+              drawNodeWithBorder(activationNode, "σ", color, true);
             }
             
             function drawLayerBorder(layerX, label) {
@@ -1280,7 +1319,6 @@ function drawModelVisualizer() {
               const rectHeight = (lastY - firstY) + 2 * nodeRadius + 2 * margin;
               const borderColor = document.body.classList.contains("dark") ? "white" : "black";
           
-              // Uncomment these lines if you want a dashed border rectangle:
               // modelVisCtx.save();
               // modelVisCtx.setLineDash([5, 5]);
               // modelVisCtx.strokeStyle = borderColor;
@@ -1288,7 +1326,6 @@ function drawModelVisualizer() {
               // modelVisCtx.strokeRect(rectX, rectY, rectWidth, rectHeight);
               // modelVisCtx.restore();
           
-              // Draw the layer label
               modelVisCtx.fillStyle = borderColor;
               modelVisCtx.textAlign = "center";
               modelVisCtx.textBaseline = "top";
@@ -1296,78 +1333,80 @@ function drawModelVisualizer() {
             }
           
             function drawNetwork() {
-                modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
-            
-                if (!selectedPoint) {
-                    drawLayerBorder(inputLayerX, "Input Layer");
-                    drawLayerBorder(hiddenLayerX, "Hidden Layer");
-                    drawAllGray();
-                    return;
-                }
-            
-                const xVal = selectedPoint.x;
-                const yVal = selectedPoint.y;
-                const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
-            
-                const hiddenActivations = [];
-                for (let j = 0; j < hiddenCount; j++) {
-                    let sum = 0;
-                    for (let i = 0; i < inputCount; i++) {
-                        sum += features[i] * perceptronInputHiddenWeights[i][j];
-                    }
-                    hiddenActivations[j] = tanh(sum);
-                }
-            
-                const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
-                const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]) > 0.5 ? 1 : 0;
-            
-                let pathScores = [];
-                for (let i = 0; i < inputCount; i++) {
-                    for (let j = 0; j < hiddenCount; j++) {
-                        const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
-                        const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
-                        const scoreAO = Math.abs(activationWeight);
-                        const totalScore = scoreIH + scoreHA + scoreAO;
-                        pathScores.push({ i, j, score: totalScore });
-                    }
-                }
-            
-                pathScores.sort((a, b) => b.score - a.score);
-            
-                drawAllGray();
-                if (perceptronTopPaths.length > 0) {
-                    highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "purple");
-                }
-                if (perceptronTopPaths.length > 1) {
-                    highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "purple");
-                }
-                if (perceptronTopPaths.length > 2) {
-                    highlightPartialPath(perceptronTopPaths[2].i, perceptronTopPaths[2].j, "purple");
-                }
-            
-                drawNodeWithBorder(activationNode, "σ", "purple");
-            
-                const arrowColor = prediction === 1 ? "green" : "red";
-                drawArrowWithColor(
-                    activationNode.x + nodeRadius,
-                    activationNode.y,
-                    outputNode.x - nodeRadius,
-                    outputNode.y,
-                    arrowColor,
-                    true
-                );
-            
-                const outputBorderColor = prediction === 1 ? "green" : "red";
-                drawNodeWithBorder(outputNode, `Output:\n${prediction}`, outputBorderColor);
-            
+              modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
+          
+              if (!selectedPoint) {
                 drawLayerBorder(inputLayerX, "Input Layer");
                 drawLayerBorder(hiddenLayerX, "Hidden Layer");
+                drawAllGray();
+                return;
+              }
+          
+              const xVal = selectedPoint.x;
+              const yVal = selectedPoint.y;
+              const features = [xVal, yVal, xVal * yVal, xVal ** 2, yVal ** 2, 1];
+          
+              const hiddenActivations = [];
+              for (let j = 0; j < hiddenCount; j++) {
+                let sum = 0;
+                for (let i = 0; i < inputCount; i++) {
+                  sum += features[i] * perceptronInputHiddenWeights[i][j];
+                }
+                hiddenActivations[j] = tanh(sum);
+              }
+          
+              const hiddenVal = tanh(dot(features, perceptronHiddenWeights));
+              const prediction = sigmoid(hiddenVal * perceptronWeights[0] + perceptronWeights[5]) > 0.5 ? 1 : 0;
+          
+              let pathScores = [];
+              for (let i = 0; i < inputCount; i++) {
+                for (let j = 0; j < hiddenCount; j++) {
+                  const scoreIH = Math.abs(features[i] * perceptronInputHiddenWeights[i][j]);
+                  const scoreHA = Math.abs(hiddenActivations[j] * perceptronWeights[j]);
+                  const scoreAO = Math.abs(activationWeight);
+                  const totalScore = scoreIH + scoreHA + scoreAO;
+                  pathScores.push({ i, j, score: totalScore });
+                }
+              }
+          
+              pathScores.sort((a, b) => b.score - a.score);
+          
+              perceptronTopPaths = pathScores.slice(0, 3);
+          
+              drawAllGray();
+              if (perceptronTopPaths.length > 0) {
+                highlightPartialPath(perceptronTopPaths[0].i, perceptronTopPaths[0].j, "#007BFF");
+              }
+              if (perceptronTopPaths.length > 1) {
+                highlightPartialPath(perceptronTopPaths[1].i, perceptronTopPaths[1].j, "#007BFF");
+              }
+              if (perceptronTopPaths.length > 2) {
+                highlightPartialPath(perceptronTopPaths[2].i, perceptronTopPaths[2].j, "#007BFF");
+              }
+          
+              drawNodeWithBorder(activationNode, "σ", "#007BFF", true);
+          
+              const arrowColor = "#007BFF";
+              drawArrowWithColor(
+                activationNode.x + nodeRadius,
+                activationNode.y,
+                outputNode.x - nodeRadius,
+                outputNode.y,
+                arrowColor,
+                true
+              );
+          
+              const outputBorderColor = "#007BFF";
+              drawNodeWithBorder(outputNode, `Output:\n${prediction}`, outputBorderColor, true);
+          
+              drawLayerBorder(inputLayerX, "Input Layer");
+              drawLayerBorder(hiddenLayerX, "Hidden Layer");
             }
           
             drawNetwork();
           
             break;
-        }
+          }          
                   
         case "ensemble": {
             modelVisCtx.clearRect(0, 0, modelVisCanvas.width, modelVisCanvas.height);
@@ -1431,7 +1470,7 @@ function drawModelVisualizer() {
                 ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
                 ctx.fillStyle = fillColor;
                 ctx.fill();
-                ctx.strokeStyle = document.body.classList.contains("dark") ? "white" : "gray";
+                ctx.strokeStyle = document.body.classList.contains("dark") ? "white" : "black";
                 ctx.stroke();
 
                 if (node.label) {
@@ -1446,7 +1485,7 @@ function drawModelVisualizer() {
                 }
             }
 
-            function drawArrow(ctx, x1, y1, x2, y2, color = document.body.classList.contains("dark") ? "white" : "gray", lineWidth = 3) {
+            function drawArrow(ctx, x1, y1, x2, y2, color = document.body.classList.contains("dark") ? "white" : "black", lineWidth = 3) {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);

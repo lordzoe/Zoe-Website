@@ -32,8 +32,6 @@
 
                     <p>Zoé holds an academic background in Behavioural Neuroscience (2019), Chemistry, and Biology (2022). She is currently pursuing her Ph.D. at Queen’s University, where her research investigates cognitive load in virtual reality environments. By integrating brain activity and eye-tracking with machine learning, her research aims to personalize VR learning experiences based on the user’s cognitive state. In 2023, Zoé joined the International Institute for Astronautical Sciences, where she concurrently completed her studies in Bioastronautics with a concentration in EVA Space Suit Evaluation.</p>
 
-                    <p>Zoé is also dedicated to community engagement. She actively contributes to initiatives supporting STEM education, space exploration, and science outreach through interactive and hands-on learning experiences. Beyond outreach, she delivered presentations at local and international conferences and has been featured on podcast platforms. Through these opportunities, she continues to bridge the gap between academia and the public with the aspiration of building greater accessibility and appreciation for STEM.</p>
-
                     <p>The road to Zoé’s accomplishments has been an unconventional journey. In her lifelong commitment to learning, discovery, and exploration, she hopes to inspire others to pursue knowledge with curiosity and resolve.</p>
                 </div>
             </div>

@@ -263,7 +263,7 @@
         </section>
     </main>
 
-    <!-- Dedicated Overlay for Expanded Content -->
+    <!-- Overlay for Expanded Content -->
     <div class="expanded-overlay" id="expanded-overlay">
       <div class="expanded-content">
           <span class="expanded-close" onclick="closeBox()">×</span>

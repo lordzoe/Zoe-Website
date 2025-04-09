@@ -88,10 +88,10 @@
         border: 1px solid;
       }
 
-      /* Light theme */
-      body.light {
-        background-color: #fff;
-        color: #000;
+      /* Light Theme */
+      body.light{
+        background-color: #0f4c75; 
+        color: #fff;
       }
 
       .sidebar.light {
@@ -103,9 +103,17 @@
         color: #000;
       }
 
+      body.light #themeText {
+        color: #000;
+      }
+
       #right-panel.light {
         background: #fff;
         color: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 1;
       }
 
       .parameters.light {
@@ -123,7 +131,7 @@
         border-color: #aaa;
       }
 
-      /* Dark theme */
+      /* Dark Theme */
       body.dark {
         background-color: #0f4c75; 
         color: #fff;
@@ -211,7 +219,6 @@
       .toggle-label span {
         margin-left: 5px;
       }
-
     </style>
   </head>
   <body class="dark">
@@ -227,14 +234,13 @@
             <span id="themeIcon">🌙</span>
           </div>
         </div>
-      
         <h3>Select Dataset</h3>
         <div id="datasetButtons">
           <button onclick="selectDataset('A')">Dataset A (Linear)</button>
           <button onclick="selectDataset('B')">Dataset B (Circular)</button>
           <button onclick="selectDataset('C')">Dataset C (Noisy)</button>
         </div>
-
+        <br>
         <h3>Select Model</h3>
         <div id="modelButtons">
           <button onclick="selectModel('logistic')">Logistic Regression (LR)</button>
@@ -245,7 +251,6 @@
           <button onclick="selectModel('ensemble')">Ensemble</button>
         </div>
       </div>
-
       <div id="right-panel" class="dark">
         <div id="canvas-row">
           <canvas
@@ -276,7 +281,6 @@
         <div id="parameterBox" class="parameters dark"></div>
       </div>
     </div>
-
     <div
       id="demo-copyright"
       style="
@@ -291,7 +295,10 @@
       Copyright © 2025 Zoé Victoria Lord
     </div>
 
+    <!-- JavaScript -->
     <script src="ml_demo.js"></script>
+
+    <!-- Toggle Theme -->
     <script>
       const themeToggle = document.getElementById("themeToggle");
       const body = document.body;

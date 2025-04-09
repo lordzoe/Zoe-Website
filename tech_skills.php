@@ -317,7 +317,7 @@
             </div>
         </section>
 
-        <!-- Dedicated Overlay for expanded content -->
+        <!-- Overlay for Expanded Content -->
         <div class="expanded-overlay" id="expanded-overlay">
             <div class="expanded-content">
                 <span class="expanded-close" onclick="closeDemoBox()">×</span>

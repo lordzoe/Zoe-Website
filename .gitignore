@@ -1,3 +1,5 @@
 images/*
 videos/*
-*favicon*
+favicon.*
+convert_to_webp.py
+serve_pdf.php

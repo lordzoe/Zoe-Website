@@ -81,15 +81,16 @@
                         </ul>
                     </div>
                 </div>
-                <div class="tech-media"> 
-                    <!-- <div class="tech-media"> 
-                        <div class="tech-gallery">
-                            <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
-                            <div class="gallery-items">
-                            </div>
-                            <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
+                <div class="tech-media">
+                    <div class="tech-gallery">
+                        <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
+                        <div class="gallery-items">
+                            <video autoplay muted loop style="object-fit: contain; background-color: #BABCB8;">
+                                <source src="videos/tech_skills_neuro_1.mp4" type="video/mp4">
+                            </video>
                         </div>
-                    </div> -->
+                        <!-- <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button> -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -319,7 +320,7 @@
 
         <!-- Overlay for Expanded Content -->
         <div class="expanded-overlay" id="expanded-overlay">
-            <div class="expanded-content">
+            <div class="expanded-content-ml-demo">
                 <span class="expanded-close" onclick="closeDemoBox()">×</span>
                 <div id="expanded-box-content"></div>
             </div>

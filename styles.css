@@ -312,7 +312,7 @@ footer {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  height: 85vh;
+  max-height: 85vh;
   overflow-y: auto; 
   background-color: #222;
   border-radius: 10px;
@@ -1195,6 +1195,21 @@ footer {
   color: #fff;
   text-align: center;
   padding: 20px;
+}
+
+.expanded-content-ml-demo {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 85vh;
+  overflow-y: auto; 
+  background-color: #222;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  text-align: center;
 }
 
 /* Responsive Styles Mobile */

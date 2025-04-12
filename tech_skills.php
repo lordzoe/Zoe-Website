@@ -212,7 +212,7 @@
         </section>
 
         <!-- Section 6 -->
-        <section class="tech-section" style="background-image: url('images/section_6_image.webp'); background-size: cover;">">
+        <section class="tech-section" style="background-image: url('images/section_6_image.webp'); background-size: cover;">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">

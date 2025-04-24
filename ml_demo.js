@@ -894,7 +894,7 @@ function drawModelVisualizer() {
                   highlightPath[0][n.path.length] === "L" &&
                   n.path.every((step, idx) => step === highlightPath[0][idx]);
                 const arrowColor = isHighlighted
-                  ? "#007BFF" // 
+                  ? "#007BFF"
                   : document.body.classList.contains("dark") ? "white" : "black";
                 drawArrowBody(n.canvasX, n.canvasY + 5, child.canvasX, child.canvasY - 5, arrowColor, isHighlighted);
                 connections.push({
@@ -1547,22 +1547,43 @@ selectModel("logistic");
 loop();
 
 modelVisCanvas.addEventListener("click", function(event) {
-    const rect = modelVisCanvas.getBoundingClientRect();
-    const clickX = event.clientX - rect.left;
-    const clickY = event.clientY - rect.top;
-    let minDist = Infinity;
-    let chosen = null;
-    for (const p of data) {
-        const dx = p.x * modelVisCanvas.width - clickX;
-        const dy = p.y * modelVisCanvas.height - clickY;
-        const dist = dx * dx + dy * dy;
-        if (dist < minDist && dist < 400) {
-            minDist = dist;
-            chosen = p;
-        }
+  if (currentModel === "ensemble" || currentModel==="dt" || currentModel==="perceptron") return;
+  const rect    = modelVisCanvas.getBoundingClientRect();
+  const clickX  = event.clientX - rect.left;
+  const clickY  = event.clientY - rect.top;
+  let   minDist = Infinity;
+  let   chosen  = null;
+  const W       = modelVisCanvas.width;
+  const H       = modelVisCanvas.height;
+  const centerX = W / 2;
+  const centerY = H / 2;
+  const scaleX  = W / 40;
+  const scaleY  = H * 0.8;
+  for (const p of data) {
+    let px, py;
+    if (currentModel === "logistic") {
+      const score      = logisticWeights[0]*p.x
+                         + logisticWeights[1]*p.y
+                         + logisticWeights[2];
+      const clamped    = Math.max(-20, Math.min(20, score));
+      px = centerX + clamped * scaleX;
+      const sigmoidVal = 1 / (1 + Math.exp(-score));
+      py = centerY - (sigmoidVal - 0.5) * scaleY;
+    } else {
+      px = p.x * W;
+      py = p.y * H;
     }
-    selectedPoint = chosen;
-    drawModelVisualizer();
+    const dx   = px - clickX;
+    const dy   = py - clickY;
+    const dist = dx*dx + dy*dy;
+    if (dist < minDist && dist < 400) {
+      minDist = dist;
+      chosen  = p;
+    }
+  }
+  if (!chosen) return;
+  selectedPoint = chosen;
+  drawModelVisualizer();
 });
 
 canvas.addEventListener("click", function(event) {

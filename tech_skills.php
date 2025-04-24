@@ -334,6 +334,5 @@
     <!-- JavaScript -->
     <script src="script.js"></script>
     <script src="ml_demo.js"></script>
-
 </body>
 </html>

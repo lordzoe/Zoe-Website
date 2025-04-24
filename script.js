@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 0; i < numOrbs; i++) {
           const distance = Math.random() * canvas.width * 0.5;
           const angle = Math.random() * Math.PI * 2;
-
           orbs.push({
               x: canvas.width / 2 + Math.cos(angle) * distance,
               y: canvas.height / 2 + Math.sin(angle) * distance,
@@ -85,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (orb.opacity <= 0) {
             const distance = Math.random() * canvas.width * 0.5;
             const angle = Math.random() * Math.PI * 2;
-
             orbs[index] = {
                 x: centerX + Math.cos(angle) * distance,
                 y: centerY + Math.sin(angle) * distance,
@@ -162,7 +160,6 @@ function expandBox(box) {
   overlay.classList.add('active');
   document.body.classList.add('no-scroll-content');
 
-  // Initial HTML for overlay content
   overlayContent.innerHTML = `
       <div class="overlay-image">${mainImageHtml}</div>
       <div class="overlay-details">
@@ -192,12 +189,9 @@ function expandBox(box) {
   function renderContent(html) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-
-      // Separate paragraph and media elements
       const paragraph = doc.querySelector('p')?.outerHTML || '<p>No text available.</p>';
-      const media = doc.querySelector('.image-mosaic')?.outerHTML || '<div>No images available.</div>';
+      const media = doc.querySelector('.image-mosaic')?.outerHTML || '';
 
-      // Inject parsed content into overlay
       overlayContent.querySelector('.overlay-details').innerHTML = `
           ${paragraph}
           <div class="image-placeholder">${media}</div>

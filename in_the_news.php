@@ -28,6 +28,17 @@
         <!-- Content Boxes Section -->
         <section class="content-container">
 
+            <!-- Content Box 21 -->
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/alumni_medal_2025.html" style=object-fit: fill>
+                <div class="content-image">
+                    <img data-src="images/alumni_medal_2025_1.webp" alt="Alumni Medal 2025" class="lazyload" style=object-fit: fill;>
+                </div>
+                <div class="content-info">
+                    <h2>Receiving the Alumna Medal from Concordia University</h2>
+                    <p>May 2025</p>
+                </div>
+            </div>
+
             <!-- Content Box 20 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/GRC_2025.html">
                 <div class="content-image">

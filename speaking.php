@@ -30,6 +30,16 @@
 
             <ul class="speaking-list">
                 <li>
+                    <img src="images/alumni_medal_2025_3.webp" alt="Event Icon" class="speaking-img">
+                    <a href="https://youtu.be/m7M-7bndYXs" target="_blank">
+                        <p><strong>[ May 2025 ] Montréal, Québec, Canada</strong></p>
+                        <p><strong>Acceptance Speech at Concordia University's Alumni Recognition Awards</strong></p> 
+                        <p><em>John F. Lemieux Young Alumna Medal: The Science of Not Giving Up</em></p>
+                    </a>
+                </li>
+
+            <ul class="speaking-list">
+                <li>
                     <img src="images/iac_2024_6.webp" alt="Event Icon" class="speaking-img">
                     <a href="https://iafastro.directory/iac/paper/id/86069/abstract-pdf/IAC-24,A1,7,4,x86069.brief.pdf?2024-03-26.17:16:15" target="_blank">
                         <p><strong>[ October 2024 ] Milano, Italia</strong></p>
@@ -95,7 +105,7 @@
                 <li>
                     <img src="images/getoriented_podcast.webp" alt="Event Icon" class="speaking-img">
                     <a href="https://www.youtube.com/watch?v=YVphJZj-sdE&ab_channel=CUBCAPS" target="_blank">
-                        <p><strong>[ May 2022 ] Montreal, Québec, Canada</strong></p>
+                        <p><strong>[ May 2022 ] Montréal, Québec, Canada</strong></p>
                         <p><strong>Host on the <em>Get Oriented!</em> Podcast with Special Guest Dr. Pat Forgione</strong></p>
                         <p><em>Exploring the Intersection of Medicine and Chemistry</em></p>
                     </a>

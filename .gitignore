@@ -1,5 +1,6 @@
 images/*
 videos/*
+vitae/*
 favicon.*
 convert_to_webp.py
 serve_pdf.php

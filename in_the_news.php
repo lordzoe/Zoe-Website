@@ -28,6 +28,17 @@
         <!-- Content Boxes Section -->
         <section class="content-container">
 
+            <!-- Content Box 22 -->
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/SGAC_2025.html" style=object-fit: fill>
+                <div class="content-image">
+                    <img data-src="images/SGAC_2025_1.webp" alt="SGAC 2025" class="lazyload" style=object-fit: fill;>
+                </div>
+                <div class="content-info">
+                    <h2>Attending the SGAC Event at the Canadian Space Agency</h2>
+                    <p>May 2025</p>
+                </div>
+            </div>
+
             <!-- Content Box 21 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/alumni_medal_2025.html" style=object-fit: fill>
                 <div class="content-image">

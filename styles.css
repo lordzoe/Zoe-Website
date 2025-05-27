@@ -1080,7 +1080,6 @@ footer {
 /* Tech Gallery */
 .tech-gallery {
   position: relative;
-  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
@@ -1089,7 +1088,6 @@ footer {
   overflow: hidden;
   background: #000; 
 }
-
 /* Perovskite Hover Animation */
 @keyframes vibrateGlow {
   0%, 100% {

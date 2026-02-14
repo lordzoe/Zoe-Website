@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="16x16">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>News - Zoé Victoria Lord</title>
+    <meta name="description" content="Zoe Victoria Lord, also known as Zoe Lord, is a Canadian researcher in STEM, space medicine, and cognitive load.">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
@@ -27,6 +30,17 @@
 
         <!-- Content Boxes Section -->
         <section class="content-container">
+
+            <!-- Content Box 23 -->
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/CSChE_2025.html" style=object-fit: fill>
+                <div class="content-image">
+                    <img data-src="images/CSChE_2025_1.webp" alt="CSChE 2025" class="lazyload" style=object-fit: fill;>
+                </div>
+                <div class="content-info">
+                    <h2>Attending the IJCAI and CSChE Conference</h2>
+                    <p>October 2025</p>
+                </div>
+            </div>
 
             <!-- Content Box 22 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/SGAC_2025.html" style=object-fit: fill>
@@ -76,6 +90,7 @@
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/eva_2024.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
+                        <source data-src="videos/eva_2024_1.webm" type="video/webm">
                         <source data-src="videos/eva_2024_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -103,7 +118,7 @@
                     <img data-src="images/science_rendezvous_2024_1.webp" alt="Science Rendezvous 2" class="lazyload">
                 </div>
                 <div class="content-info">
-                    <h2>Science Rendezvous!</h2>
+                    <h2>Science Rendezvous! 2024</h2>
                     <p>May 2024</p>
                 </div>
             </div>
@@ -261,6 +276,7 @@
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/research_assistant_2022.html">
                 <div class="content-image">
                     <video class="lazyload" muted loop playsinline>
+                        <source data-src="videos/research_assistant_2022_1.webm" type="video/webm">
                         <source data-src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

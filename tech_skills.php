@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="16x16">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Technical Skills - Zoé Victoria Lord</title>
+    <meta name="description" content="Zoe Victoria Lord, also known as Zoe Lord, is a Canadian researcher in STEM, space medicine, and cognitive load.">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
@@ -50,6 +53,7 @@
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
                             <video autoplay muted loop style="object-fit: fill;"> 
+                                <source src="videos/cognitive_load_2023_4.webm" type="video/webm">
                                 <source src="videos/cognitive_load_2023_4.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -86,6 +90,7 @@
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
                             <video autoplay muted loop style="object-fit: contain; background-color: #BABCB8;">
+                                <source src="videos/tech_skills_neuro_1.webm" type="video/webm">
                                 <source src="videos/tech_skills_neuro_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -121,6 +126,7 @@
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
                             <video autoplay muted loop style="object-fit: fill;">
+                                <source src="videos/tech_skills_human-computer_1.webm" type="video/webm">
                                 <source src="videos/tech_skills_human-computer_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -193,6 +199,7 @@
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
                             <video autoplay muted loop>
+                                <source src="videos/research_assistant_2022_1.webm" type="video/webm">
                                 <source src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                             </video>
                             <img src="images/tech_skills_biomechanical_2.webp" alt="Biomechanical 2">
@@ -202,6 +209,7 @@
                             <img src="images/tech_skills_biomechanical_6.webp" alt="Biomechanical 6" style="object-fit: fill;">
                             <img src="images/tech_skills_biomechanical_7.webp" alt="Biomechanical 7" style="object-fit: fill;">
                             <video autoplay muted loop>
+                                <source src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
                                 <source src="videos/tech_skills_biomechanical_8.mp4" type="video/mp4">
                             </video>
                         </div>

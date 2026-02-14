@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="16x16">
-    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Events - Zoé Victoria Lord</title>
+    <meta name="description" content="Zoe Victoria Lord, also known as Zoe Lord, is a Canadian researcher in STEM, space medicine, and cognitive load.">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -30,6 +33,14 @@
 
             <ul class="speaking-list">
                 <li>
+                    <img src="images/CSChE_2025_1.webp" alt="Event Icon" class="speaking-img">
+                    <a href="https://www.xcdsystem.com/cic/program/0CzMEbA/index.cfm?pgid=3111&sid=30445&abid=117671" target="_blank">
+                        <p><strong>[ October 2025 ] Montréal, Québec, Canada</strong></p>
+                        <p><strong>Oral Presentation at the Canadian Society for Chemical Engineering Conference (CSChE 2025)</strong></p> 
+                        <p><em>Multimodal Classification of Cognitive Load in Virtual Reality Environments for Chemical Engineering Education</em></p>
+                    </a>
+                </li>
+
                     <img src="images/alumni_medal_2025_3.webp" alt="Event Icon" class="speaking-img">
                     <a href="https://youtu.be/m7M-7bndYXs" target="_blank">
                         <p><strong>[ May 2025 ] Montréal, Québec, Canada</strong></p>
@@ -38,7 +49,6 @@
                     </a>
                 </li>
 
-            <ul class="speaking-list">
                 <li>
                     <img src="images/iac_2024_6.webp" alt="Event Icon" class="speaking-img">
                     <a href="https://iafastro.directory/iac/paper/id/86069/abstract-pdf/IAC-24,A1,7,4,x86069.brief.pdf?2024-03-26.17:16:15" target="_blank">

@@ -1588,7 +1588,7 @@ footer {
     align-items: center;
     overflow: hidden;
   }
-  
+
   .tech-box {
     flex-direction: column !important;
     align-items: flex-start; 

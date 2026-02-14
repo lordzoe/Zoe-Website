@@ -365,7 +365,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .tech-box {
@@ -453,6 +453,10 @@
     scroll-snap-align: start;
     -webkit-scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+
+  .tech-gallery video {
+    pointer-events: none;
   }
 
   .tech-section:nth-child(even) .tech-box,

@@ -74,6 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(section);
   });
 
+  const galleryVideos = document.querySelectorAll('.tech-gallery video');
+  galleryVideos.forEach((video) => {
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = true;
+    video.autoplay = true;
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  });
+
   const galleries = document.querySelectorAll('.tech-gallery');
 
   function initGallery(gallery) {
@@ -96,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
           snapContainer(container);
         } else {
           slide.addEventListener('loadedmetadata', () => snapContainer(container), { once: true });
+          slide.addEventListener('loadeddata', () => snapContainer(container), { once: true });
         }
       }
     });
@@ -109,4 +122,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   galleries.forEach((gallery) => initGallery(gallery));
+
+  function configureMlDemoLink() {
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const demoContainers = document.querySelectorAll('[onclick*="expandDemoBox"]');
+    const demoLinks = document.querySelectorAll('a[onclick*="expandDemoBox"]');
+
+    if (isMobile) {
+      demoContainers.forEach((el) => el.removeAttribute('onclick'));
+      demoLinks.forEach((link) => {
+        link.removeAttribute('onclick');
+        link.setAttribute('href', 'ml_demo.html');
+      });
+    }
+  }
+
+  configureMlDemoLink();
+  window.addEventListener('resize', configureMlDemoLink);
+  window.addEventListener('orientationchange', configureMlDemoLink);
 });

@@ -61,7 +61,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop style="object-fit: fill;">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: fill;">
                                 <?php if (!$is_ios): ?>
                                   <source src="videos/cognitive_load_2023_4.webm" type="video/webm">
                                 <?php endif; ?>
@@ -98,7 +98,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop style="object-fit: contain; background-color: #BABCB8;">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: contain; background-color: #BABCB8;">
                                 <?php if (!$is_ios): ?>
                                   <source src="videos/tech_skills_neuro_1.webm" type="video/webm">
                                 <?php endif; ?>
@@ -134,7 +134,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop style="object-fit: fill;">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: fill;">
                                 <?php if (!$is_ios): ?>
                                   <source src="videos/tech_skills_human-computer_1.webm" type="video/webm">
                                 <?php endif; ?>
@@ -205,7 +205,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <video autoplay muted loop>
+                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                                 <?php if (!$is_ios): ?>
                                   <source src="videos/research_assistant_2022_1.webm" type="video/webm">
                                 <?php endif; ?>
@@ -219,7 +219,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                             <img src="images/tech_skills_biomechanical_6.webp" alt="Biomechanical 6" style="object-fit: fill;">
                             <img src="images/tech_skills_biomechanical_7.webp" alt="Biomechanical 7" style="object-fit: fill;">
 
-                            <video autoplay muted loop>
+                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                                 <?php if (!$is_ios): ?>
                                   <source src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
                                 <?php endif; ?>

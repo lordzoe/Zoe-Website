@@ -1,0 +1,62 @@
+.expanded-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.expanded-overlay.active {
+  display: block;
+}
+
+.expanded-close {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  color: #ddd;
+  font-size: 5rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), -2px -2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+}
+
+.expanded-close:hover {
+  color: #f39c12;
+}
+
+#expanded-box-content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#expanded-box-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (max-width: 600px) {
+  .expanded-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+    overflow-y: auto;
+    z-index: 9999;
+  }
+
+  .expanded-overlay:hover {
+    transform: none;
+  }
+}

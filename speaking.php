@@ -10,7 +10,10 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Events - Zoé Victoria Lord</title>
     <meta name="description" content="Zoe Victoria Lord, also known as Zoe Lord, is a Canadian researcher in STEM, space medicine, and cognitive load.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/footer.css">
+    <link rel="stylesheet" href="styles/speaking.css">
 </head>
 
 <body>

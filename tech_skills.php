@@ -1,3 +1,9 @@
+<?php
+// iOS detection (runs once per request)
+$is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i', $_SERVER['HTTP_USER_AGENT']);
+// (Optional but good if you use caching/CDN)
+// header('Vary: User-Agent');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,9 +39,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Virtual Reality Gaming Development</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -52,8 +56,10 @@
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop style="object-fit: fill;"> 
-                                <source src="videos/cognitive_load_2023_4.webm" type="video/webm">
+                            <video autoplay muted loop style="object-fit: fill;">
+                                <?php if (!$is_ios): ?>
+                                  <source src="videos/cognitive_load_2023_4.webm" type="video/webm">
+                                <?php endif; ?>
                                 <source src="videos/cognitive_load_2023_4.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -63,15 +69,13 @@
             </div>
         </section>
 
-        <!-- Section 2 -->->
+        <!-- Section 2 -->
         <section class="tech-section" style="background-image: url('images/section_2_image.webp');">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Neuroimaging and Cognitive Science</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -90,7 +94,9 @@
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
                             <video autoplay muted loop style="object-fit: contain; background-color: #BABCB8;">
-                                <source src="videos/tech_skills_neuro_1.webm" type="video/webm">
+                                <?php if (!$is_ios): ?>
+                                  <source src="videos/tech_skills_neuro_1.webm" type="video/webm">
+                                <?php endif; ?>
                                 <source src="videos/tech_skills_neuro_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -106,9 +112,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Human-Computer Interactions</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -126,7 +130,9 @@
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
                             <video autoplay muted loop style="object-fit: fill;">
-                                <source src="videos/tech_skills_human-computer_1.webm" type="video/webm">
+                                <?php if (!$is_ios): ?>
+                                  <source src="videos/tech_skills_human-computer_1.webm" type="video/webm">
+                                <?php endif; ?>
                                 <source src="videos/tech_skills_human-computer_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -142,9 +148,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Machine Learning</h2>
-                        <p>
-
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -178,9 +182,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Biomechanical Testing Platforms</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -199,17 +201,23 @@
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
                             <video autoplay muted loop>
-                                <source src="videos/research_assistant_2022_1.webm" type="video/webm">
+                                <?php if (!$is_ios): ?>
+                                  <source src="videos/research_assistant_2022_1.webm" type="video/webm">
+                                <?php endif; ?>
                                 <source src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                             </video>
+
                             <img src="images/tech_skills_biomechanical_2.webp" alt="Biomechanical 2">
                             <img src="images/tech_skills_biomechanical_3.webp" alt="Biomechanical 3">
                             <img src="images/tech_skills_biomechanical_4.webp" alt="Biomechanical 4">
                             <img src="images/tech_skills_biomechanical_5.webp" alt="Biomechanical 5">
                             <img src="images/tech_skills_biomechanical_6.webp" alt="Biomechanical 6" style="object-fit: fill;">
                             <img src="images/tech_skills_biomechanical_7.webp" alt="Biomechanical 7" style="object-fit: fill;">
+
                             <video autoplay muted loop>
-                                <source src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
+                                <?php if (!$is_ios): ?>
+                                  <source src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
+                                <?php endif; ?>
                                 <source src="videos/tech_skills_biomechanical_8.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -225,9 +233,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Biomonitoring and Microcontroller Systems</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -265,9 +271,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Perovskite Nanoparticle Synthesis</h2>
-                        <p>
-                            
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -303,9 +307,7 @@
                 <div class="tech-box">
                     <div class="tech-text">
                         <h2>Web Development and Backend Design</h2>
-                        <p>
-                        
-                        </p>
+                        <p></p>
                     </div>
                     <div class="tech-skills">
                         <div class="skill-divider"></div>
@@ -315,14 +317,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="tech-media"> 
-                    <div class="tech-gallery">
-                        <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> 
-                        <div class="gallery-items">
-                        </div>
-                        <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
-                    </div>
-                </div> -->
+                <!-- No video in this section -->
             </div>
         </section>
 

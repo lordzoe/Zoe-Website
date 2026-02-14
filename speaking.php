@@ -33,22 +33,15 @@
 
             <ul class="speaking-list">
                 <li>
-                    <img src="images/CSChE_2025_1.webp" alt="Event Icon" class="speaking-img">
-                    <a href="https://www.xcdsystem.com/cic/program/0CzMEbA/index.cfm?pgid=3111&sid=30445&abid=117671" target="_blank">
-                        <p><strong>[ October 2025 ] Montréal, Québec, Canada</strong></p>
-                        <p><strong>Oral Presentation at the Canadian Society for Chemical Engineering Conference (CSChE 2025)</strong></p> 
-                        <p><em>Multimodal Classification of Cognitive Load in Virtual Reality Environments for Chemical Engineering Education</em></p>
-                    </a>
-                </li>
-
                     <img src="images/alumni_medal_2025_3.webp" alt="Event Icon" class="speaking-img">
-                    <a href="https://youtu.be/m7M-7bndYXs" target="_blank">
+                    <a href="https://youtu.be/SDZVZr8LMO0" target="_blank">
                         <p><strong>[ May 2025 ] Montréal, Québec, Canada</strong></p>
                         <p><strong>Acceptance Speech at Concordia University's Alumni Recognition Awards</strong></p> 
                         <p><em>John F. Lemieux Young Alumna Medal: The Science of Not Giving Up</em></p>
                     </a>
                 </li>
 
+            <ul class="speaking-list">
                 <li>
                     <img src="images/iac_2024_6.webp" alt="Event Icon" class="speaking-img">
                     <a href="https://iafastro.directory/iac/paper/id/86069/abstract-pdf/IAC-24,A1,7,4,x86069.brief.pdf?2024-03-26.17:16:15" target="_blank">

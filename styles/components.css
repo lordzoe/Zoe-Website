@@ -1,0 +1,23 @@
+.index-button {
+  justify-content: center;
+  align-items: center;
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  background: #f39c12;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.index-button:hover {
+  background: #d87f0f;
+}
+
+@media (max-width: 600px) {
+  .index-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/navbar.css">
     <link rel="stylesheet" href="styles/footer.css">
+    <link rel="stylesheet" href="styles/components.css">
     <link rel="stylesheet" href="styles/index.css">
 </head>
 

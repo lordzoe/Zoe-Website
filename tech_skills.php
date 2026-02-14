@@ -340,7 +340,8 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
     <?php include 'footer.html'; ?>
     
     <!-- JavaScript -->
-    <script src="script.js"></script>
+    <script src="scripts/orbs.js"></script>
+    <script src="scripts/tech.js"></script>
     <script src="ml_demo.js"></script>
 </body>
 </html>

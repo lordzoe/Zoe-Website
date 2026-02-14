@@ -46,5 +46,8 @@
 
     <!-- Footer -->
     <?php include 'footer.html'; ?>
+
+    <!-- JavaScript -->
+    <script src="scripts/orbs.js"></script>
 </body>
 </html>

@@ -325,7 +325,8 @@
 
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
-    <script src="script.js"></script>
+    <script src="scripts/orbs.js"></script>
+    <script src="scripts/news.js"></script>
 
     <?php include 'footer.html'; ?>
 </body>

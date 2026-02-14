@@ -22,7 +22,8 @@ function moveGallery(button, direction) {
 
   galleryItems.dataset.currentIndex = currentIndex;
 
-  const itemWidth = gallery.offsetWidth;
+  const firstItem = items[0];
+  const itemWidth = firstItem ? firstItem.getBoundingClientRect().width : gallery.offsetWidth;
   const newOffset = -(itemWidth * currentIndex);
   galleryItems.style.transition = 'transform 0.5s ease-in-out';
   galleryItems.style.transform = `translateX(${newOffset}px)`;

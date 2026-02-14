@@ -42,8 +42,8 @@
 }
 
 .index-content.with-image::before {
-  background-image: url('images/homepage_image.webp');
-  animation: fadeInImage 10s linear forwards;
+  background-image: url('../images/homepage_image.webp');
+  animation: fadeInImage 8s linear forwards;
 }
 
 .index-content::after {

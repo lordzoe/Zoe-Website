@@ -30,6 +30,7 @@ p {
 
 .nav-open {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 #orb-canvas {

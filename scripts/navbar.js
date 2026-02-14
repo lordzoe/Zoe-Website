@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isActive = menuIcon.classList.toggle('active');
       fullscreenNav.classList.toggle('active', isActive);
       document.body.classList.toggle('nav-open', isActive);
+      document.documentElement.classList.toggle('nav-open', isActive);
     });
   }
 

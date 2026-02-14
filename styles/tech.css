@@ -434,13 +434,25 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 0px;
   }
 
-  .tech-gallery .gallery-items img,
-  .tech-gallery .gallery-items video {
-    border-radius: 8px;
+  .gallery-items img,
+  .gallery-items video {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    -webkit-scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   .tech-section:nth-child(even) .tech-box,

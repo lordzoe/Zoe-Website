@@ -7,8 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  let lastWidth = window.innerWidth;
+  let lastHeight = window.innerHeight;
+  canvas.width = lastWidth;
+  canvas.height = lastHeight;
 
   const orbs = [];
   const numOrbs = 150;
@@ -88,11 +90,42 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(animateOrbs);
   }
 
+  function handleResize(force = false) {
+    const nextWidth = window.innerWidth;
+    const nextHeight = window.innerHeight;
+    const widthDelta = Math.abs(nextWidth - lastWidth);
+    const heightDelta = Math.abs(nextHeight - lastHeight);
+
+    // Ignore small viewport changes (mobile address bar) to prevent resets.
+    if (!force && widthDelta < 80 && heightDelta < 80) {
+      return;
+    }
+
+    const scaleX = lastWidth ? nextWidth / lastWidth : 1;
+    const scaleY = lastHeight ? nextHeight / lastHeight : 1;
+
+    canvas.width = nextWidth;
+    canvas.height = nextHeight;
+
+    if (Number.isFinite(scaleX) && Number.isFinite(scaleY)) {
+      orbs.forEach((orb) => {
+        orb.x *= scaleX;
+        orb.y *= scaleY;
+      });
+    }
+
+    lastWidth = nextWidth;
+    lastHeight = nextHeight;
+  }
+
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    orbs.length = 0;
-    createOrbs();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => handleResize(false), 150);
+  });
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => handleResize(true), 150);
   });
 
   createOrbs();

@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (menuIcon && fullscreenNav) {
     menuIcon.addEventListener('click', () => {
-      menuIcon.classList.toggle('active');
-      fullscreenNav.classList.toggle('active');
+      const isActive = menuIcon.classList.toggle('active');
+      fullscreenNav.classList.toggle('active', isActive);
+      document.body.classList.toggle('nav-open', isActive);
     });
   }
 

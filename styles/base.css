@@ -28,6 +28,10 @@ p {
   overflow: hidden;
 }
 
+.nav-open {
+  overflow: hidden;
+}
+
 #orb-canvas {
   position: fixed;
   top: 0;

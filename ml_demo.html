@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="favicon.png" type="image/png" sizes="16x16" />
     <link rel="icon" href="favicon.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="favicon.png" />
@@ -41,6 +42,7 @@
         margin: 5px 0;
         padding: 10px;
         font-size: 14px;
+        border-radius: 4px;
       }
 
       .sidebar button.active {
@@ -67,6 +69,7 @@
       .parameters {
         width: 500px;
         margin-top: 10px;
+        margin-bottom: 10px;
         padding: 10px;
         font-family: monospace;
         font-size: 13px;
@@ -219,6 +222,38 @@
       .toggle-label span {
         margin-left: 5px;
       }
+
+      @media (max-width: 768px) {
+        #datasetButtons button,
+        #modelButtons button {
+          border-radius: 4px;
+        }
+
+        body {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        #modelVisCanvas,
+        #modelCanvas,
+        #parameterBox {
+          width: 500px;
+          height: 500px;
+          box-sizing: border-box;
+        }
+
+        #parameterBox {
+          overflow: auto;
+          margin-bottom:10px;
+        }
+
+        #demo-copyright {
+          width: 100svh;
+          margin-left: calc(100% - 50vw);
+          text-align: center;
+        }
+      }
+      
     </style>
   </head>
   <body class="dark">
@@ -287,7 +322,7 @@
         font-family: Arial, sans-serif;
         text-align: center;
         font-size: 1rem;
-        margin: 5px 0;
+        margin: 0 0;
         padding: 20px 20px;
         letter-spacing: 1px;
       "

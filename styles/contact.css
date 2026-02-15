@@ -1,27 +1,40 @@
 /* Contact Page */
+.contact-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.contact-page footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .contact-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 50px;
-  padding-top: 110px;
+  margin: 0;
+  padding: 120px 40px 90px;
   box-sizing: border-box;
   animation: aboutFadeIn 1s ease both;
+  min-height: 100vh;
 }
 
 .contact-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 50px;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1200px;
 }
 
 .contact-image {
-  width: 500px;
-  height: 500px;
+  width: min(35vw, 420px);
+  height: min(35vw, 420px);
   border-radius: 50%;
   border: 8px solid #ffffff;
   overflow: hidden;
@@ -57,7 +70,7 @@
 
 .contact-box {
   text-align: justify;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #ddd;
   line-height: 1.6;
   margin-bottom: 10px;
@@ -82,8 +95,8 @@
 }
 
 .contact-social-logo {
-  width: 65px;
-  height: 65px;
+  width: clamp(44px, 4vw, 65px);
+  height: clamp(44px, 4vw, 65px);
   transition: transform 0.3s ease;
 }
 
@@ -92,9 +105,21 @@
 }
 
 @media (max-width: 600px) {
+  .contact-page {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contact-page footer {
+    position: static;
+  }
+
   .contact-container {
     margin: 20px;
-    padding-top: 100px;
+    padding: 100px 20px 80px;
   }
 
   .contact-content {
@@ -111,12 +136,12 @@
 
   .contact-header h1 {
     font-size: 2.5rem;
-    padding: 0px 20px;
+    padding: 0;
   }
 
   .contact-box {
-    font-size: 1.2rem;
-    padding: 0px 20px;
+    font-size: 1.1rem;
+    padding: 0;
   }
 
   .contact-box p strong {
@@ -124,9 +149,9 @@
   }
 
   .contact-social-logo {
-    width: 50px;
-    height: 50px;
-    padding: 0px 20px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
     transition: transform 0.3s ease;
   }
 

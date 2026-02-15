@@ -42,7 +42,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   padding-left: 10%;
-  padding-top: 10%;
+  padding-top: 12vh;
+  padding-bottom: 40px;
   transform: translateY(-100%);
   opacity: 0;
   visibility: hidden;
@@ -51,6 +52,7 @@
   overflow-x: hidden;
   overscroll-behavior-x: none;
   touch-action: pan-y;
+  box-sizing: border-box;
   z-index: 5;
 }
 
@@ -202,5 +204,12 @@
 
   .nav-links a {
     font-size: 1.6rem;
+  }
+}
+
+@media (max-height: 500px) {
+  .fullscreen-nav {
+    padding-top: 60px;
+    padding-bottom: 20px;
   }
 }

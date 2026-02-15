@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/contact.css">
 </head>
 
-<body>
+<body class="contact-page nav-scroll-override">
     <!-- Navigation -->
     <?php include 'navigation.html'; ?>
 

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="styles/index.css">
 </head>
 
-<body>
+<body class="nav-scroll-override">
     <!-- Navigation -->
     <?php include 'navigation.html'; ?>
 

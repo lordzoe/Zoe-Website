@@ -29,8 +29,29 @@ p {
 }
 
 .nav-open {
-  overflow: hidden;
   overscroll-behavior: none;
+}
+
+html.nav-open {
+  overflow-y: scroll;
+}
+
+html.nav-open.nav-hide-scroll {
+  overflow: hidden;
+}
+
+body.nav-open {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: var(--scroll-lock-top, 0px);
+}
+
+@media (min-width: 601px) {
+  .nav-scroll-override.nav-open {
+    overflow: hidden;
+  }
 }
 
 #orb-canvas {

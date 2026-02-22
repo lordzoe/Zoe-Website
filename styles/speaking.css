@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  background-color: #1d1d1d;
+  background-color: #061338;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
@@ -126,7 +126,6 @@
   }
 
   .speaking-list li {
-    background-color: #0e0e0e;
     align-items: center;
     flex-direction: column;
     justify-content: left;

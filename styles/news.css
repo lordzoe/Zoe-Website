@@ -41,7 +41,7 @@
   position: relative;
   height: 400px;
   overflow: hidden;
-  background-color: #222;
+  background-color: #061338;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, background-color 0.3s ease;
@@ -52,7 +52,7 @@
 
 .content-box:hover {
   transform: scale(1.05);
-  background-color: #333;
+  background-color: #030814;
 }
 
 .content-image {
@@ -93,7 +93,7 @@
   width: 80%;
   max-height: 85vh;
   overflow-y: auto;
-  background-color: #222;
+  background-color: #030814;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -276,13 +276,13 @@
     height: auto;
     min-height: 300px;
     margin: 0 auto;
-    background-color: #0e0e0e;
+    background-color: #061338;
     overflow: hidden;
   }
 
   .content-box:hover {
     transform: scale(1.02);
-    background-color: #1b1b1b;
+    background-color: #030814;
   }
 
   .content-info h2 {

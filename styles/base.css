@@ -4,7 +4,13 @@ html, body {
   height: 100%;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  background-color: #111;
+  background-color: #02030a;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(31, 79, 191, 0.2), rgba(31, 79, 191, 0) 40%),
+    radial-gradient(circle at 80% 35%, rgba(13, 43, 115, 0.24), rgba(13, 43, 115, 0) 48%),
+    linear-gradient(180deg, #02030a 0%, #061338 42%, #030814 78%, #010207 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body {
@@ -14,6 +20,8 @@ body {
 
 main {
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 p {

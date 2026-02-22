@@ -152,7 +152,7 @@ button, input, select, textarea {
 
 .footer {
   position: relative;
-  margin-top: -60px; /* negative value of footer height */
+  margin-top: -60px;
   height: 60px;
   clear:both;
   text-align: center;

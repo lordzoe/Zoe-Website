@@ -380,6 +380,16 @@
     width: 100%;
   }
 
+  .biomonitoring-section .tech-skills {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .webdev-section .tech-skills {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
   .tech-text h1 {
     font-size: 2rem;
   }
@@ -398,10 +408,10 @@
     display: flex;
     align-items: center;
     font-size: 1rem;
-    margin: 5px 10px;
+    margin: 5px 0;
     text-align: left !important;
     position: relative;
-    padding-left: 5px;
+    padding-left: 10px;
   }
 
   .skills-list li::after {

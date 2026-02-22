@@ -1,5 +1,26 @@
 // Tech skills page interactions
 
+function isTechMobileViewport() {
+  return window.matchMedia('(max-width: 900px)').matches;
+}
+
+function primeTechGalleryVideo(video) {
+  if (!video || !isTechMobileViewport()) return;
+  video.muted = true;
+  video.playsInline = true;
+  video.loop = true;
+  video.autoplay = true;
+  video.controls = false;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
+  video.setAttribute('autoplay', '');
+  const playPromise = video.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {});
+  }
+}
+
 function getSlides(container) {
   return Array.from(container.querySelectorAll(':scope > img, :scope > video'));
 }
@@ -76,14 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const galleryVideos = document.querySelectorAll('.tech-gallery video');
   galleryVideos.forEach((video) => {
-    video.muted = true;
-    video.playsInline = true;
-    video.loop = true;
-    video.autoplay = true;
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {});
-    }
+    primeTechGalleryVideo(video);
+    video.addEventListener('loadeddata', () => {
+      primeTechGalleryVideo(video);
+    }, { once: true });
   });
 
   const galleries = document.querySelectorAll('.tech-gallery');
@@ -140,4 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
   configureMlDemoLink();
   window.addEventListener('resize', configureMlDemoLink);
   window.addEventListener('orientationchange', configureMlDemoLink);
+  window.addEventListener('resize', () => {
+    galleryVideos.forEach((video) => primeTechGalleryVideo(video));
+  });
+  window.addEventListener('orientationchange', () => {
+    galleryVideos.forEach((video) => primeTechGalleryVideo(video));
+  });
 });

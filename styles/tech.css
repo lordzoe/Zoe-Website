@@ -467,6 +467,28 @@
 
   .tech-gallery video {
     pointer-events: none;
+    -webkit-user-select: none;
+  }
+
+  .gallery-items video::-webkit-media-controls {
+    display: none !important;
+  }
+
+  .gallery-items video::-webkit-media-controls-enclosure {
+    display: none !important;
+  }
+
+  .gallery-items video::-webkit-media-controls-panel {
+    display: none !important;
+  }
+
+  .gallery-items video::-webkit-media-controls-play-button {
+    display: none !important;
+  }
+
+  .gallery-items video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
   }
 
   .tech-section:nth-child(even) .tech-box,

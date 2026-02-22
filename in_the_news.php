@@ -93,7 +93,7 @@
             <!-- Content Box 18 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/eva_2024.html">
                 <div class="content-image">
-                    <video class="lazyload" muted loop playsinline>
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/eva_2024_1.webm" type="video/webm">
                         <source data-src="videos/eva_2024_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
@@ -174,7 +174,7 @@
             <!-- Content Box 11 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CAN-RGX_2023.html">
                 <div class="content-image">
-                    <video class="lazyload" muted loop playsinline>
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/CAN-RGX_2023_1.webm" type="video/webm">
                         <source data-src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
@@ -211,7 +211,7 @@
             <!-- Content Box 8 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/science_rendezvous_2023.html">
                 <div class="content-image">
-                    <video class="lazyload" muted loop playsinline>
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/science_rendezvous_2023_1.webm" type="video/webm">
                         <source data-src="videos/science_rendezvous_2023_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
@@ -281,7 +281,7 @@
             <!-- Content Box 2 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/research_assistant_2022.html">
                 <div class="content-image">
-                    <video class="lazyload" muted loop playsinline>
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/research_assistant_2022_1.webm" type="video/webm">
                         <source data-src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.

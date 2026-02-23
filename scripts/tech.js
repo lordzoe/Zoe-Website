@@ -1,4 +1,4 @@
-// Tech skills page interactions
+// Tech Skills Page Interactions
 
 function isTechMobileViewport() {
   return window.matchMedia('(max-width: 900px)').matches;
@@ -42,7 +42,6 @@ function moveGallery(button, direction) {
   const slides = getSlides(container);
   if (slides.length <= 1) return;
 
-  // Ensure we start on a clean snap point before moving.
   snapContainer(container);
 
   const width = container.clientWidth;
@@ -111,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = getSlides(container);
     if (slides.length <= 1) return;
 
-    // Snap to the first slide on init.
     container.scrollLeft = 0;
     snapContainer(container);
 

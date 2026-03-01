@@ -45,12 +45,10 @@
   padding-top: 12vh;
   padding-bottom: 40px;
   transform: translateY(-100%);
-  opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
     transform 0.5s ease,
-    opacity 0.5s ease,
     visibility 0s linear 0.5s;
   overflow-x: hidden;
   overscroll-behavior-x: none;
@@ -108,10 +106,9 @@
 
 .fullscreen-nav.active {
   transform: translateY(0);
-  opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition-delay: 0s, 0s, 0s;
+  transition-delay: 0s, 0s;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;

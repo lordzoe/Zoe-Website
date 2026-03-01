@@ -36,7 +36,7 @@
 
             <ul class="pub-list">
                 <li>
-                    <img src="images/alumni_medal_2025_3.webp" alt="Event Icon" class="pub-img">
+                    <img src="images/npj_microgravity_2025_1.webp" alt="Event Icon" class="pub-img">
                     <a href="https://doi.org/10.1038/s41526-026-00577-1" target="_blank">
                         <p><strong>Lord, Z. <em>et al.</em> A high-fidelity simulator for evaluation of hemodynamic response during cardiopulmonary resuscitation in hypogravity environments. <em>npj Microgravity</em> (2026).</strong></p> 
                     </a>

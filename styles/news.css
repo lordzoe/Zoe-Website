@@ -302,6 +302,14 @@
     text-align: center;
   }
 
+  .content-info h2.publication-alert-title {
+    display: block;
+  }
+
+  .content-info h2.publication-alert-title i {
+    display: block;
+  }
+
   .content-info p {
     font-size: 0.9rem;
     margin: 6px 0 0;

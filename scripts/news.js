@@ -4,6 +4,22 @@ function isNewsMobileViewport() {
   return window.matchMedia('(max-width: 600px)').matches;
 }
 
+function isElementMostlyVisible(element, minimumRatio = 0.25) {
+  if (!element) return false;
+  const rect = element.getBoundingClientRect();
+  const viewWidth = window.innerWidth || document.documentElement.clientWidth;
+  const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  if (rect.width <= 0 || rect.height <= 0) return false;
+
+  const visibleX = Math.max(0, Math.min(rect.right, viewWidth) - Math.max(rect.left, 0));
+  const visibleY = Math.max(0, Math.min(rect.bottom, viewHeight) - Math.max(rect.top, 0));
+  const visibleArea = visibleX * visibleY;
+  const totalArea = rect.width * rect.height;
+
+  return totalArea > 0 && visibleArea / totalArea >= minimumRatio;
+}
+
 function primeInlineCardVideo(video) {
   if (!video || !isNewsMobileViewport()) return;
   video.muted = true;
@@ -19,30 +35,29 @@ function primeInlineCardVideo(video) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const videos = document.querySelectorAll('.content-image video');
-  if (!videos.length) return;
-
-  videos.forEach((video) => {
-    primeInlineCardVideo(video);
-  });
-});
+function pauseInlineCardVideo(video) {
+  if (!video || video.paused) return;
+  video.pause();
+}
 
 // News Expanded Box Overlay
 const contentCache = {};
+const inFlightContentFetches = new Map();
+let overlayMediaObserver = null;
+let cardVideoObserver = null;
 
 function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
   return new Promise((resolve, reject) => {
     const attemptFetch = (n) => {
       fetch(url, options)
-        .then(response => {
+        .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           return response.text();
         })
-        .then(data => resolve(data))
-        .catch(error => {
+        .then((data) => resolve(data))
+        .catch((error) => {
           if (n > 0) {
             console.warn(`Fetch failed. Retrying in ${backoff}ms... (${n} retries left)`);
             setTimeout(() => attemptFetch(n - 1), backoff);
@@ -52,6 +67,166 @@ function fetchWithRetry(url, options = {}, retries = 3, backoff = 300) {
         });
     };
     attemptFetch(retries);
+  });
+}
+
+function fetchContentHtml(contentFile, retries = 3, backoff = 500) {
+  if (contentCache[contentFile]) {
+    return Promise.resolve(contentCache[contentFile]);
+  }
+
+  if (inFlightContentFetches.has(contentFile)) {
+    return inFlightContentFetches.get(contentFile);
+  }
+
+  const request = fetchWithRetry(contentFile, {}, retries, backoff)
+    .then((html) => {
+      contentCache[contentFile] = html;
+      return html;
+    })
+    .finally(() => {
+      inFlightContentFetches.delete(contentFile);
+    });
+
+  inFlightContentFetches.set(contentFile, request);
+  return request;
+}
+
+function disconnectOverlayMediaObserver() {
+  if (!overlayMediaObserver) return;
+  overlayMediaObserver.disconnect();
+  overlayMediaObserver = null;
+}
+
+function hydrateOverlayImage(image) {
+  if (!image) return;
+  const deferredSrc = image.getAttribute('data-src');
+  if (!deferredSrc) return;
+  image.src = deferredSrc;
+  image.removeAttribute('data-src');
+}
+
+function hydrateOverlayVideo(video) {
+  if (!video) return;
+
+  let requiresLoad = false;
+  const deferredVideoSrc = video.getAttribute('data-src');
+  if (deferredVideoSrc) {
+    video.src = deferredVideoSrc;
+    video.removeAttribute('data-src');
+    requiresLoad = true;
+  }
+
+  video.querySelectorAll('source[data-src]').forEach((source) => {
+    source.src = source.getAttribute('data-src');
+    source.removeAttribute('data-src');
+    requiresLoad = true;
+  });
+
+  if (requiresLoad) {
+    video.load();
+  }
+}
+
+function playOverlayVideo(video) {
+  if (!video) return;
+  video.muted = true;
+  video.playsInline = true;
+  video.loop = true;
+  video.autoplay = true;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('autoplay', '');
+  const playPromise = video.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {});
+  }
+}
+
+function pauseOverlayVideo(video) {
+  if (!video || video.paused) return;
+  video.pause();
+}
+
+function normalizeOverlayMediaMarkup(doc) {
+  const media = doc.querySelector('.image-mosaic');
+  if (!media) return '';
+
+  media.querySelectorAll('img').forEach((image) => {
+    const src = image.getAttribute('src');
+    if (src) {
+      image.setAttribute('data-src', src);
+      image.removeAttribute('src');
+    }
+    image.classList.add('lazyload');
+    image.setAttribute('loading', 'lazy');
+    image.setAttribute('decoding', 'async');
+  });
+
+  media.querySelectorAll('video').forEach((video) => {
+    const src = video.getAttribute('src');
+    if (src) {
+      video.setAttribute('data-src', src);
+      video.removeAttribute('src');
+    }
+    video.setAttribute('preload', 'none');
+    video.querySelectorAll('source').forEach((source) => {
+      const sourceSrc = source.getAttribute('src');
+      if (!sourceSrc) return;
+      source.setAttribute('data-src', sourceSrc);
+      source.removeAttribute('src');
+    });
+  });
+
+  return media.outerHTML;
+}
+
+function initializeOverlayMediaLazyLoading(scope) {
+  const targetScope = scope || document;
+  const overlayMedia = Array.from(targetScope.querySelectorAll(
+    '.overlay-image img[data-src], .overlay-image video, .image-mosaic img[data-src], .image-mosaic video'
+  ));
+
+  if (!overlayMedia.length) return;
+  disconnectOverlayMediaObserver();
+
+  if (!('IntersectionObserver' in window)) {
+    overlayMedia.forEach((element) => {
+      if (element.tagName === 'IMG') {
+        hydrateOverlayImage(element);
+      } else if (element.tagName === 'VIDEO') {
+        hydrateOverlayVideo(element);
+        playOverlayVideo(element);
+      }
+    });
+    return;
+  }
+
+  overlayMediaObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const element = entry.target;
+      if (entry.isIntersecting) {
+        if (element.tagName === 'IMG') {
+          hydrateOverlayImage(element);
+          overlayMediaObserver.unobserve(element);
+          return;
+        }
+
+        if (element.tagName === 'VIDEO') {
+          hydrateOverlayVideo(element);
+          playOverlayVideo(element);
+        }
+        return;
+      }
+
+      if (element.tagName === 'VIDEO') {
+        pauseOverlayVideo(element);
+      }
+    });
+  }, { root: null, rootMargin: '150px 0px', threshold: 0.2 });
+
+  overlayMedia.forEach((element) => {
+    overlayMediaObserver.observe(element);
   });
 }
 
@@ -79,31 +254,13 @@ function expandBox(box) {
       </div>
   `;
 
-  if (contentCache[contentFile]) {
-    renderContent(contentCache[contentFile]);
-    initializeMediaPlayers();
-    return;
-  }
-
-  fetchWithRetry(contentFile, {}, 3, 500)
-    .then(html => {
-      contentCache[contentFile] = html;
-      renderContent(html);
-      initializeMediaPlayers();
-    })
-    .catch(error => {
-      console.error('Error fetching content:', error);
-      const details = overlayContent.querySelector('.overlay-details');
-      if (details) {
-        details.innerHTML = '<p>Sorry, the content could not be loaded.</p>';
-      }
-    });
+  initializeOverlayMediaLazyLoading(overlayContent);
 
   function renderContent(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     const paragraph = doc.querySelector('p')?.outerHTML || '<p>No text available.</p>';
-    const media = doc.querySelector('.image-mosaic')?.outerHTML || '';
+    const media = normalizeOverlayMediaMarkup(doc);
 
     const details = overlayContent.querySelector('.overlay-details');
     if (!details) return;
@@ -112,7 +269,22 @@ function expandBox(box) {
           ${paragraph}
           <div class="image-placeholder">${media}</div>
       `;
+
+    initializeOverlayMediaLazyLoading(overlayContent);
   }
+
+  fetchContentHtml(contentFile, 3, 500)
+    .then((html) => {
+      renderContent(html);
+      initializeMediaPlayers();
+    })
+    .catch((error) => {
+      console.error('Error fetching content:', error);
+      const details = overlayContent.querySelector('.overlay-details');
+      if (details) {
+        details.innerHTML = '<p>Sorry, the content could not be loaded.</p>';
+      }
+    });
 }
 
 function closeBox() {
@@ -120,92 +292,105 @@ function closeBox() {
   const overlayContent = document.getElementById('expanded-box-content');
   if (!overlay || !overlayContent) return;
 
+  disconnectOverlayMediaObserver();
+  overlayContent.querySelectorAll('video').forEach((video) => {
+    pauseOverlayVideo(video);
+  });
   overlay.classList.remove('active');
   overlayContent.innerHTML = '';
   document.body.classList.remove('no-scroll-content');
 }
 
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
-function loadVisibleOverlayImages() {
-  const expandedContent = document.querySelector('.expanded-overlay.active #expanded-box-content');
-  if (!expandedContent) return;
-
-  const lazyElements = expandedContent.querySelectorAll('img[data-src], video[data-src]');
-
-  lazyElements.forEach(element => {
-    if (element.tagName === 'IMG') {
-      element.src = element.getAttribute('data-src');
-    } else if (element.tagName === 'VIDEO') {
-      const source = element.querySelector('source');
-      if (source) {
-        source.src = source.getAttribute('data-src');
-        element.load();
-      }
-    }
-    element.removeAttribute('data-src');
-  });
+function observeCardVideo(video) {
+  if (!video) return;
+  if (cardVideoObserver) {
+    cardVideoObserver.observe(video);
+    return;
+  }
+  primeInlineCardVideo(video);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('expanded-overlay');
   if (overlay) {
-    overlay.addEventListener('click', (e) => {
-      if (e.target.id === 'expanded-overlay') {
+    overlay.addEventListener('click', (event) => {
+      if (event.target.id === 'expanded-overlay') {
         closeBox();
       }
     });
   }
 
   const contentBoxes = document.querySelectorAll('.content-box');
-  contentBoxes.forEach(box => {
+  const prefetchedContent = new Set();
+  contentBoxes.forEach((box) => {
     const contentFile = box.getAttribute('data-content');
-    if (contentFile && !contentCache[contentFile]) {
-      box.addEventListener('mouseenter', () => {
-        fetchWithRetry(contentFile, {}, 2, 500)
-          .then(html => {
-            contentCache[contentFile] = html;
-          })
-          .catch(error => {
-            console.error('Error preloading content:', error);
-          });
+    if (!contentFile) return;
+
+    box.addEventListener('mouseenter', () => {
+      if (prefetchedContent.has(contentFile) || contentCache[contentFile]) return;
+      prefetchedContent.add(contentFile);
+      fetchContentHtml(contentFile, 2, 500).catch((error) => {
+        console.error('Error preloading content:', error);
       });
-    }
+    });
   });
 
-  window.addEventListener('scroll', debounce(() => {
-    loadVisibleOverlayImages();
-  }, 300));
+  const videos = document.querySelectorAll('.content-image video');
+  if (!videos.length) return;
+
+  if ('IntersectionObserver' in window) {
+    cardVideoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          primeInlineCardVideo(video);
+        } else {
+          pauseInlineCardVideo(video);
+        }
+      });
+    }, { root: null, threshold: 0.35 });
+
+    videos.forEach((video) => {
+      cardVideoObserver.observe(video);
+    });
+    return;
+  }
+
+  videos.forEach((video) => {
+    primeInlineCardVideo(video);
+  });
 });
 
-document.addEventListener('lazybeforeunveil', function(e) {
-  const target = e.target;
+document.addEventListener('lazybeforeunveil', (event) => {
+  const target = event.target;
+  if (target.tagName !== 'VIDEO') return;
 
-  if (target.tagName === 'VIDEO') {
-    const sources = target.querySelectorAll('source');
-    sources.forEach(source => {
-      if (source.dataset.src) {
-        source.src = source.getAttribute('data-src');
-      }
-    });
-    target.load();
-    target.addEventListener('loadeddata', () => {
-      primeInlineCardVideo(target);
-    }, { once: true });
+  const deferredVideoSrc = target.getAttribute('data-src');
+  if (deferredVideoSrc) {
+    target.src = deferredVideoSrc;
+    target.removeAttribute('data-src');
   }
+
+  target.querySelectorAll('source').forEach((source) => {
+    const sourceSrc = source.getAttribute('data-src');
+    if (!sourceSrc) return;
+    source.src = sourceSrc;
+    source.removeAttribute('data-src');
+  });
+
+  target.load();
+  observeCardVideo(target);
+  target.addEventListener('loadeddata', () => {
+    if (isElementMostlyVisible(target)) {
+      primeInlineCardVideo(target);
+    }
+  }, { once: true });
 });
 
 function initializeMediaPlayers() {
 }
 
 // News Image Lightbox
-
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.getElementById('image-lightbox');
   const lightboxClose = document.getElementById('lightbox-close');
@@ -274,8 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMediaIndex = index;
   }
 
-  document.addEventListener('click', (e) => {
-    const el = e.target;
+  document.addEventListener('click', (event) => {
+    const el = event.target;
     if (el.closest('.image-mosaic img, .image-mosaic video')) {
       const mosaic = el.closest('.image-mosaic');
       currentMediaItems = Array.from(mosaic.querySelectorAll('img, video'));
@@ -299,18 +484,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) closeLightbox();
   });
 
-  lightbox.addEventListener('touchstart', (e) => {
-    const touch = e.changedTouches[0];
+  lightbox.addEventListener('touchstart', (event) => {
+    const touch = event.changedTouches[0];
     startX = touch.pageX;
     startY = touch.pageY;
   }, { passive: true });
 
-  lightbox.addEventListener('touchend', (e) => {
-    const touch = e.changedTouches[0];
+  lightbox.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
     const endX = touch.pageX;
     const endY = touch.pageY;
 
@@ -322,10 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentMediaIndex !== null) {
           showMediaAtIndex(currentMediaIndex + 1);
         }
-      } else {
-        if (currentMediaIndex !== null) {
-          showMediaAtIndex(currentMediaIndex - 1);
-        }
+      } else if (currentMediaIndex !== null) {
+        showMediaAtIndex(currentMediaIndex - 1);
       }
     } else if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > swipeThreshold) {
       if (diffY > 0) {

@@ -75,7 +75,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 2 -->
-        <section class="tech-section" style="background-image: url('images/section_2_image.webp');">
+        <section class="tech-section" data-bg-src="images/section_2_image.webp">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -98,11 +98,11 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: contain; background-color: #BABCB8;">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: contain; background-color: #BABCB8;">
                                 <?php if (!$is_ios): ?>
-                                  <source src="videos/tech_skills_neuro_1.webm" type="video/webm">
+                                  <source data-src="videos/tech_skills_neuro_1.webm" type="video/webm">
                                 <?php endif; ?>
-                                <source src="videos/tech_skills_neuro_1.mp4" type="video/mp4">
+                                <source data-src="videos/tech_skills_neuro_1.mp4" type="video/mp4">
                             </video>
                         </div>
                         <!-- <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button> -->
@@ -112,7 +112,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 3 -->
-        <section class="tech-section" style="background-image: url('images/section_3_image.webp');">
+        <section class="tech-section" data-bg-src="images/section_3_image.webp">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -134,11 +134,11 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <!-- <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button> -->
                         <div class="gallery-items">
-                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: fill;">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" style="object-fit: fill;">
                                 <?php if (!$is_ios): ?>
-                                  <source src="videos/tech_skills_human-computer_1.webm" type="video/webm">
+                                  <source data-src="videos/tech_skills_human-computer_1.webm" type="video/webm">
                                 <?php endif; ?>
-                                <source src="videos/tech_skills_human-computer_1.mp4" type="video/mp4">
+                                <source data-src="videos/tech_skills_human-computer_1.mp4" type="video/mp4">
                             </video>
                         </div>
                         <!-- <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button> -->
@@ -148,7 +148,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 4 -->
-        <section class="tech-section" style="background-image: url('images/section_4_image.webp');">
+        <section class="tech-section" data-bg-src="images/section_4_image.webp">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -166,12 +166,12 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                         </ul>
                     </div>
                 </div>
-                <div class="tech-media" onclick="expandDemoBox('ml_demo.html')" style="position: relative; cursor: pointer;">
+                <div class="tech-media ml-demo-trigger" onclick="expandDemoBox('ml_demo.html')" style="position: relative; cursor: pointer;">
                     <div class="tech-gallery">
                         <div class="gallery-items">
-                            <img src="images/ml_demo.webp" alt="Demo Preview" style="width: 100%; object-fit: fill;">
+                            <img data-src="images/ml_demo.webp" loading="lazy" decoding="async" alt="Demo Preview" style="width: 100%; object-fit: fill;">
                             <div  style="position: absolute; top: 28%; left: 50%; transform: translate(-50%, -50%);">
-                                <a href="javascript:void(0)" class="index-button" style="text-align: center;" onclick="expandDemoBox('ml_demo.html')">
+                                <a href="javascript:void(0)" class="index-button ml-demo-trigger" style="text-align: center;" onclick="expandDemoBox('ml_demo.html')">
                                     Click Here to Try the Interactive Demo!
                                 </a>
                             </div>
@@ -182,7 +182,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 5 -->
-        <section class="tech-section" style="background-image: url('images/section_5_image.webp');">
+        <section class="tech-section" data-bg-src="images/section_5_image.webp">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -205,25 +205,25 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                                 <?php if (!$is_ios): ?>
-                                  <source src="videos/research_assistant_2022_1.webm" type="video/webm">
+                                  <source data-src="videos/research_assistant_2022_1.webm" type="video/webm">
                                 <?php endif; ?>
-                                <source src="videos/research_assistant_2022_1.mp4" type="video/mp4">
+                                <source data-src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                             </video>
 
-                            <img src="images/tech_skills_biomechanical_2.webp" alt="Biomechanical 2">
-                            <img src="images/tech_skills_biomechanical_3.webp" alt="Biomechanical 3">
-                            <img src="images/tech_skills_biomechanical_4.webp" alt="Biomechanical 4">
-                            <img src="images/tech_skills_biomechanical_5.webp" alt="Biomechanical 5">
-                            <img src="images/tech_skills_biomechanical_6.webp" alt="Biomechanical 6" style="object-fit: fill;">
-                            <img src="images/tech_skills_biomechanical_7.webp" alt="Biomechanical 7" style="object-fit: fill;">
+                            <img data-src="images/tech_skills_biomechanical_2.webp" loading="lazy" decoding="async" alt="Biomechanical 2">
+                            <img data-src="images/tech_skills_biomechanical_3.webp" loading="lazy" decoding="async" alt="Biomechanical 3">
+                            <img data-src="images/tech_skills_biomechanical_4.webp" loading="lazy" decoding="async" alt="Biomechanical 4">
+                            <img data-src="images/tech_skills_biomechanical_5.webp" loading="lazy" decoding="async" alt="Biomechanical 5">
+                            <img data-src="images/tech_skills_biomechanical_6.webp" loading="lazy" decoding="async" alt="Biomechanical 6" style="object-fit: fill;">
+                            <img data-src="images/tech_skills_biomechanical_7.webp" loading="lazy" decoding="async" alt="Biomechanical 7" style="object-fit: fill;">
 
-                            <video autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                            <video autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                                 <?php if (!$is_ios): ?>
-                                  <source src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
+                                  <source data-src="videos/tech_skills_biomechanical_8.webm" type="video/webm">
                                 <?php endif; ?>
-                                <source src="videos/tech_skills_biomechanical_8.mp4" type="video/mp4">
+                                <source data-src="videos/tech_skills_biomechanical_8.mp4" type="video/mp4">
                             </video>
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
@@ -233,7 +233,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 6 -->
-        <section class="tech-section" style="background-image: url('images/section_6_image.webp'); background-size: cover;">
+        <section class="tech-section" data-bg-src="images/section_6_image.webp" style="background-size: cover;">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -256,13 +256,13 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/tech_skills_biomonitoring_1.webp" alt="Biomonitoring 1">
-                            <img src="images/tech_skills_biomonitoring_2.webp" alt="Biomonitoring 2">
-                            <img src="images/tech_skills_biomonitoring_3.webp" alt="Biomonitoring 3">
-                            <img src="images/tech_skills_biomonitoring_4.webp" alt="Biomonitoring 4">
-                            <img src="images/tech_skills_biomonitoring_5.webp" alt="Biomonitoring 5">
-                            <img src="images/eva_2024_2.webp" alt="Biomonitoring 6">
-                            <img src="images/eva_2024_5.webp" alt="Biomonitoring 7">
+                            <img data-src="images/tech_skills_biomonitoring_1.webp" loading="lazy" decoding="async" alt="Biomonitoring 1">
+                            <img data-src="images/tech_skills_biomonitoring_2.webp" loading="lazy" decoding="async" alt="Biomonitoring 2">
+                            <img data-src="images/tech_skills_biomonitoring_3.webp" loading="lazy" decoding="async" alt="Biomonitoring 3">
+                            <img data-src="images/tech_skills_biomonitoring_4.webp" loading="lazy" decoding="async" alt="Biomonitoring 4">
+                            <img data-src="images/tech_skills_biomonitoring_5.webp" loading="lazy" decoding="async" alt="Biomonitoring 5">
+                            <img data-src="images/EVA_2024_2.webp" loading="lazy" decoding="async" alt="Biomonitoring 6">
+                            <img data-src="images/EVA_2024_5.webp" loading="lazy" decoding="async" alt="Biomonitoring 7">
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
@@ -271,7 +271,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 7 -->
-        <section class="tech-section" style="background-image: url('images/section_7_image.webp'); background-size: cover;">
+        <section class="tech-section" data-bg-src="images/section_7_image.webp" style="background-size: cover;">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -293,12 +293,12 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
                     <div class="tech-gallery perovskite">
                         <button class="gallery-arrow left-arrow" onclick="moveGallery(this, -1)">&#10094;</button>
                         <div class="gallery-items">
-                            <img src="images/undergraduate_thesis_2022_4.webp" alt="Perovskite 1">
-                            <img src="images/tech_skills_perovskite_2.webp" alt="Perovskite 2" style="object-fit: fill;">
-                            <img src="images/undergraduate_thesis_2022_5.webp" alt="Perovskite 3">
-                            <img src="images/tech_skills_perovskite_4.webp" alt="Perovskite 4" style="object-fit: fill;">
-                            <img src="images/tech_skills_perovskite_5.webp" alt="Perovskite 5" style="object-fit: fill;">
-                            <img src="images/tech_skills_perovskite_6.webp" alt="Perovskite 6" style="object-fit: fill;">
+                            <img data-src="images/undergraduate_thesis_2022_4.webp" loading="lazy" decoding="async" alt="Perovskite 1">
+                            <img data-src="images/tech_skills_perovskite_2.webp" loading="lazy" decoding="async" alt="Perovskite 2" style="object-fit: fill;">
+                            <img data-src="images/undergraduate_thesis_2022_5.webp" loading="lazy" decoding="async" alt="Perovskite 3">
+                            <img data-src="images/tech_skills_perovskite_4.webp" loading="lazy" decoding="async" alt="Perovskite 4" style="object-fit: fill;">
+                            <img data-src="images/tech_skills_perovskite_5.webp" loading="lazy" decoding="async" alt="Perovskite 5" style="object-fit: fill;">
+                            <img data-src="images/tech_skills_perovskite_6.webp" loading="lazy" decoding="async" alt="Perovskite 6" style="object-fit: fill;">
                         </div>
                         <button class="gallery-arrow right-arrow" onclick="moveGallery(this, 1)">&#10095;</button>
                     </div>
@@ -307,7 +307,7 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
         </section>
 
         <!-- Section 8 -->
-        <section class="tech-section" style="background-image: url('images/section_8_image.webp')">
+        <section class="tech-section" data-bg-src="images/section_8_image.webp">
             <div class="tech-content">
                 <div class="tech-box">
                     <div class="tech-text">
@@ -342,6 +342,5 @@ $is_ios = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|iPad|iPod/i'
     <!-- JavaScript -->
     <script src="scripts/orbs.js"></script>
     <script src="scripts/tech.js"></script>
-    <script src="ml_demo.js"></script>
 </body>
 </html>

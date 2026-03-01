@@ -35,6 +35,17 @@
         <!-- Content Boxes Section -->
         <section class="content-container">
 
+            <!-- Content Box 24 -->
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/publication_2025.html" style=object-fit: fill>
+                <div class="content-image">
+                    <img data-src="images/npj_microgravity_2025_1.webp" alt="CPR in Space" class="lazyload" style="object-fit: fill;">
+                </div>
+                <div class="content-info">
+                    <h2 class="publication-alert-title">Publication Alert in <br><i>npj Microgravity</i></h2>
+                    <p>February 2026</p>
+                </div>
+            </div>
+
             <!-- Content Box 23 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CSChE_2025.html" style=object-fit: fill>
                 <div class="content-image">
@@ -49,7 +60,7 @@
             <!-- Content Box 22 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/SGAC_2025.html" style=object-fit: fill>
                 <div class="content-image">
-                    <img data-src="images/SGAC_2025_1.webp" alt="SGAC 2025" class="lazyload" style=object-fit: fill;>
+                    <img data-src="images/SGAC_2025_1.webp" alt="Space Generation Advisory Council" class="lazyload" style=object-fit: fill;>
                 </div>
                 <div class="content-info">
                     <h2>Attending the SGAC Event at the Canadian Space Agency</h2>
@@ -71,7 +82,7 @@
             <!-- Content Box 20 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/GRC_2025.html">
                 <div class="content-image">
-                    <img data-src="images/GRC_2025_1.webp" alt="GRC 2025" class="lazyload">
+                    <img data-src="images/GRC_2025_1.webp" alt="Gravitas Research Corps" class="lazyload">
                 </div>
                 <div class="content-info">
                     <h2>Founding the Gravitas Research Corps</h2>
@@ -80,9 +91,9 @@
             </div>
 
             <!-- Content Box 19 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="content_box/iac_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/IAC_2024.html">
                 <div class="content-image">
-                    <img data-src="images/iac_2024_1.webp" alt="IAC Conference 2024" class="lazyload">
+                    <img data-src="images/IAC_2024_1.webp" alt="IAC 2024" class="lazyload">
                 </div>
                 <div class="content-info">
                     <h2>Attending the IAC Conference</h2>
@@ -91,11 +102,11 @@
             </div>
 
             <!-- Content Box 18 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="content_box/eva_2024.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/EVA_2024.html">
                 <div class="content-image">
-                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
-                        <source data-src="videos/eva_2024_1.webm" type="video/webm">
-                        <source data-src="videos/eva_2024_1.mp4" type="video/mp4">
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                        <source data-src="videos/EVA_2024_1.webm" type="video/webm">
+                        <source data-src="videos/EVA_2024_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -174,7 +185,7 @@
             <!-- Content Box 11 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CAN-RGX_2023.html">
                 <div class="content-image">
-                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/CAN-RGX_2023_1.webm" type="video/webm">
                         <source data-src="videos/CAN-RGX_2023_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
@@ -200,7 +211,7 @@
             <!-- Content Box 9 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/CSC_2023.html">
                 <div class="content-image">
-                    <img data-src="images/CSC_2023_1.webp" alt="CSC" class="lazyload">
+                    <img data-src="images/CSC_2023_1.webp" alt="CSC 2023" class="lazyload">
                 </div>
                 <div class="content-info">
                     <h2>Attending the CSC Conference</h2>
@@ -211,7 +222,7 @@
             <!-- Content Box 8 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/science_rendezvous_2023.html">
                 <div class="content-image">
-                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/science_rendezvous_2023_1.webm" type="video/webm">
                         <source data-src="videos/science_rendezvous_2023_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
@@ -235,9 +246,9 @@
             </div>
 
             <!-- Content Box 6 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="content_box/MSC_1_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/MSC_2022.html">
                 <div class="content-image">
-                    <img data-src="images/MSC_1_2022_1.webp" alt="MSC 1" class="lazyload">
+                    <img data-src="images/MSC_1_2022_1.webp" alt="Mars Society of Canada" class="lazyload">
                 </div>
                 <div class="content-info">
                     <h2>Visiting Pineview Public School</h2>
@@ -246,9 +257,9 @@
             </div>
 
             <!-- Content Box 5 -->
-            <div class="content-box" onclick="expandBox(this)" data-content="content_box/iac_2022.html">
+            <div class="content-box" onclick="expandBox(this)" data-content="content_box/IAC_2022.html">
                 <div class="content-image">
-                    <img data-src="images/iac_2022_1.webp" alt="IAC Conference 2022" class="lazyload">
+                    <img data-src="images/IAC_2022_1.webp" alt="IAC 2022" class="lazyload">
                 </div>
                 <div class="content-info">
                     <h2>Attending the IAC Conference</h2>
@@ -281,7 +292,7 @@
             <!-- Content Box 2 -->
             <div class="content-box" onclick="expandBox(this)" data-content="content_box/research_assistant_2022.html">
                 <div class="content-image">
-                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+                    <video class="lazyload" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
                         <source data-src="videos/research_assistant_2022_1.webm" type="video/webm">
                         <source data-src="videos/research_assistant_2022_1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
